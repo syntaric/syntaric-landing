@@ -256,10 +256,26 @@
         }
 
         .trust-logos {
+            overflow: hidden;
+            mask-image: linear-gradient(to right, transparent 0%, black 10%, black 90%, transparent 100%);
+            -webkit-mask-image: linear-gradient(to right, transparent 0%, black 10%, black 90%, transparent 100%);
+        }
+
+        .trust-logos-track {
             display: flex;
-            flex-wrap: wrap;
             align-items: center;
-            gap: 1.5rem 2.5rem;
+            gap: 3rem;
+            width: max-content;
+            animation: marquee 28s linear infinite;
+        }
+
+        .trust-logos-track:hover {
+            animation-play-state: paused;
+        }
+
+        @keyframes marquee {
+            from { transform: translateX(0); }
+            to   { transform: translateX(-50%); }
         }
 
         .trust-logo {
@@ -268,6 +284,15 @@
             color: var(--ink-muted);
             letter-spacing: 0.02em;
             opacity: 0.7;
+            white-space: nowrap;
+        }
+
+        .trust-logo-sep {
+            width: 4px;
+            height: 4px;
+            border-radius: 50%;
+            background: var(--border);
+            flex-shrink: 0;
         }
 
         /* ─── STATS STRIP ─────────────────────────────────────────── */
@@ -577,20 +602,18 @@
         }
 
         .openfhir-visual {
-            border-radius: var(--radius-lg);
-            overflow: hidden;
-            border: 1px solid rgba(255,255,255,0.08);
-            background: rgba(255,255,255,0.04);
-            padding: 2rem;
             display: flex;
             align-items: center;
             justify-content: center;
         }
 
-        .openfhir-visual img {
+        .openfhir-img {
             width: 100%;
             height: auto;
             display: block;
+            border-radius: var(--radius-lg);
+            box-shadow: 0 24px 64px rgba(0,0,0,0.3);
+            filter: brightness(1) invert(1);
         }
 
         /* ─── COLLABORATORS ───────────────────────────────────────── */
@@ -957,6 +980,23 @@
             background: #6da3ff;
         }
 
+        .engagement-card--wide {
+            grid-column: 1 / -1;
+            margin-top: 0.25rem;
+        }
+
+        .engagement-wide-inner {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 2rem;
+        }
+
+        @media (max-width: 640px) {
+            .engagement-wide-inner {
+                grid-template-columns: 1fr;
+            }
+        }
+
         .engagements-note {
             margin-top: 2rem;
             font-size: 0.82rem;
@@ -1088,8 +1128,8 @@
                 We help hospitals, national health programs, and health IT vendors implement FHIR, openEHR, and IHE-based architectures that scale — from regional networks to national infrastructure.
             </p>
             <div class="hero-actions animate delay-3">
-                <a href="mailto:info@syntaric.com" class="btn-primary">
-                    Start a conversation
+                <a href="#engagements" class="btn-primary">
+                    Collaborate
                     <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
                 </a>
                 <a href="#openfhir" class="btn-ghost">Explore openFHIR</a>
@@ -1097,14 +1137,77 @@
             <div class="hero-trust">
                 <p class="hero-trust-label">Trusted by teams at</p>
                 <div class="trust-logos">
-                    <span class="trust-logo">Maastricht UMC+</span>
-                    <span class="trust-logo">Firely</span>
-                    <span class="trust-logo">NHS Trusts</span>
-                    <span class="trust-logo">UMC Utrecht</span>
-                    <span class="trust-logo">Open Line</span>
-                    <span class="trust-logo">Landspítali</span>
-                    <span class="trust-logo">NJII</span>
-                    <span class="trust-logo">NUTS</span>
+                    <div class="trust-logos-track" aria-hidden="false">
+                        <span class="trust-logo">Maastricht UMC+</span>
+                        <span class="trust-logo-sep"></span>
+                        <span class="trust-logo">UMC Utrecht</span>
+                        <span class="trust-logo-sep"></span>
+                        <span class="trust-logo">Landspítali</span>
+                        <span class="trust-logo-sep"></span>
+                        <span class="trust-logo">VECOZO</span>
+                        <span class="trust-logo-sep"></span>
+                        <span class="trust-logo">RSO Zuid-Limburg</span>
+                        <span class="trust-logo-sep"></span>
+                        <span class="trust-logo">Maastro Clinic</span>
+                        <span class="trust-logo-sep"></span>
+                        <span class="trust-logo">Firely</span>
+                        <span class="trust-logo-sep"></span>
+                        <span class="trust-logo">Open Line</span>
+                        <span class="trust-logo-sep"></span>
+                        <span class="trust-logo">Tactuum</span>
+                        <span class="trust-logo-sep"></span>
+                        <span class="trust-logo">Stichting NUTS</span>
+                        <span class="trust-logo-sep"></span>
+                        <span class="trust-logo">Medblocks</span>
+                        <span class="trust-logo-sep"></span>
+                        <span class="trust-logo">HTEC</span>
+                        <span class="trust-logo-sep"></span>
+                        <span class="trust-logo">Dutch Ministry of Health</span>
+                        <span class="trust-logo-sep"></span>
+                        <span class="trust-logo">NJII</span>
+                        <span class="trust-logo-sep"></span>
+                        <span class="trust-logo">EPUT NHS Trust</span>
+                        <span class="trust-logo-sep"></span>
+                        <span class="trust-logo">West Suffolk Hospital</span>
+                        <span class="trust-logo-sep"></span>
+                        <span class="trust-logo">LPRES</span>
+                        <span class="trust-logo-sep"></span>
+                        <!-- duplicate for seamless loop -->
+                        <span class="trust-logo">Maastricht UMC+</span>
+                        <span class="trust-logo-sep"></span>
+                        <span class="trust-logo">UMC Utrecht</span>
+                        <span class="trust-logo-sep"></span>
+                        <span class="trust-logo">Landspítali</span>
+                        <span class="trust-logo-sep"></span>
+                        <span class="trust-logo">VECOZO</span>
+                        <span class="trust-logo-sep"></span>
+                        <span class="trust-logo">RSO Zuid-Limburg</span>
+                        <span class="trust-logo-sep"></span>
+                        <span class="trust-logo">Maastro Clinic</span>
+                        <span class="trust-logo-sep"></span>
+                        <span class="trust-logo">Firely</span>
+                        <span class="trust-logo-sep"></span>
+                        <span class="trust-logo">Open Line</span>
+                        <span class="trust-logo-sep"></span>
+                        <span class="trust-logo">Tactuum</span>
+                        <span class="trust-logo-sep"></span>
+                        <span class="trust-logo">Stichting NUTS</span>
+                        <span class="trust-logo-sep"></span>
+                        <span class="trust-logo">Medblocks</span>
+                        <span class="trust-logo-sep"></span>
+                        <span class="trust-logo">HTEC</span>
+                        <span class="trust-logo-sep"></span>
+                        <span class="trust-logo">Dutch Ministry of Health</span>
+                        <span class="trust-logo-sep"></span>
+                        <span class="trust-logo">NJII</span>
+                        <span class="trust-logo-sep"></span>
+                        <span class="trust-logo">EPUT NHS Trust</span>
+                        <span class="trust-logo-sep"></span>
+                        <span class="trust-logo">West Suffolk Hospital</span>
+                        <span class="trust-logo-sep"></span>
+                        <span class="trust-logo">LPRES</span>
+                        <span class="trust-logo-sep"></span>
+                    </div>
                 </div>
             </div>
         </div>
@@ -1264,6 +1367,29 @@
                     </ul>
                 </div>
 
+
+                <div class="engagement-card engagement-card--wide">
+                    <div class="engagement-num">05</div>
+                    <div class="engagement-wide-inner">
+                        <div>
+                            <h3>Software Development</h3>
+                            <p>Need something built, not just designed? We develop interoperability software directly: FHIR layers, integration components, clinical data pipelines, and custom connectors between healthcare systems.</p>
+                            <div class="engagement-meta" style="margin-top: 1rem;">
+                                <span class="engagement-tag">Time &amp; materials</span>
+                                <span class="engagement-tag">Ongoing or fixed scope</span>
+                            </div>
+                        </div>
+                        <div>
+                            <ul class="engagement-list" style="border-top: none; padding-top: 0;">
+                                <li>FHIR layers &amp; API development</li>
+                                <li>openEHR / FHIR transformation engines</li>
+                                <li>IHE profile implementations (XDS, MPI, XDW…)</li>
+                                <li>EMR integration connectors (Epic, Cerner, HiX…)</li>
+                                <li>Java / Jakarta EE / Spring · .NET · Go</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
             </div>
             <p class="engagements-note"><a href="mailto:info@syntaric.com">Get in touch</a> to discuss what fits best.</p>
         </div>
@@ -1321,7 +1447,7 @@
                 <div>
                     <p class="openfhir-tag">Our Product</p>
                     <h2>openFHIR: Bridging openEHR and FHIR</h2>
-                    <p class="openfhir-desc">As co-creators of the FHIR Connect specification and founders of openFHIR, we built a groundbreaking engine for seamless bidirectional interoperability between openEHR and HL7 FHIR — giving you the clinical richness of openEHR with the connectivity of FHIR.</p>
+                    <p class="openfhir-desc">As co-creators of the FHIR Connect specification and founders of openFHIR, we built an engine for seamless bidirectional interoperability between openEHR and HL7 FHIR — giving you the clinical richness of openEHR with the connectivity of FHIR.</p>
                     <ul class="openfhir-features">
                         <li>Bidirectional mapping between FHIR Resources and openEHR Compositions</li>
                         <li>RESTful API and message queue support for flexible integration</li>
@@ -1335,7 +1461,7 @@
                     </a>
                 </div>
                 <div class="openfhir-visual">
-                    <img src="etc/icon_only.png" alt="Syntaric Icon" style="filter: brightness(0) invert(1);">
+                    <img src="/images/openfhir-img.png" alt="openFHIR" class="openfhir-img">
                 </div>
             </div>
         </div>
