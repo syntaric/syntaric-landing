@@ -11,727 +11,1503 @@
     <link rel="manifest" href="site.webmanifest" />
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=DM+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <style>
-        * {
+        *, *::before, *::after {
             margin: 0;
             padding: 0;
             box-sizing: border-box;
         }
 
         :root {
-            --primary-color: #1e3a5f;
-            --secondary-color: #2c5f8d;
-            --accent-color: #4a90e2;
-            --text-dark: #333;
-            --text-light: #666;
-            --background-light: #f8f9fa;
-            --white: #ffffff;
+            --ink: #0d1117;
+            --ink-light: #4a5568;
+            --ink-muted: #718096;
+            --surface: #ffffff;
+            --surface-2: #f7f8fc;
+            --surface-3: #eef0f6;
+            --border: #e2e8f0;
+            --accent: #0052cc;
+            --accent-light: #e8f0fe;
+            --accent-glow: rgba(0, 82, 204, 0.12);
+            --green: #0f7b55;
+            --green-light: #e6f4f0;
+            --radius: 12px;
+            --radius-lg: 20px;
+            --shadow-sm: 0 1px 3px rgba(0,0,0,0.06), 0 1px 2px rgba(0,0,0,0.04);
+            --shadow: 0 4px 16px rgba(0,0,0,0.07), 0 1px 4px rgba(0,0,0,0.04);
+            --shadow-lg: 0 16px 48px rgba(0,0,0,0.1), 0 4px 12px rgba(0,0,0,0.06);
+            --nav-h: 68px;
+        }
+
+        html {
+            scroll-behavior: smooth;
         }
 
         body {
-            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+            color: var(--ink);
+            background: var(--surface);
             line-height: 1.6;
-            color: var(--text-dark);
+            -webkit-font-smoothing: antialiased;
         }
 
         .container {
-            max-width: 1200px;
+            max-width: 1160px;
             margin: 0 auto;
-            padding: 0 20px;
+            padding: 0 24px;
         }
 
-        /* Header */
+        /* ─── NAV ─────────────────────────────────────────────────── */
         header {
-            background: var(--white);
-            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
             position: sticky;
             top: 0;
-            z-index: 100;
+            z-index: 200;
+            background: rgba(255,255,255,0.88);
+            backdrop-filter: blur(16px);
+            -webkit-backdrop-filter: blur(16px);
+            border-bottom: 1px solid var(--border);
+            height: var(--nav-h);
         }
 
         nav {
+            height: 100%;
             display: flex;
-            justify-content: space-between;
             align-items: center;
-            padding: 1rem 0;
+            justify-content: space-between;
         }
 
         .logo {
             display: flex;
             align-items: center;
-            gap: 1rem;
+            gap: 10px;
+            text-decoration: none;
         }
 
         .logo img {
-            height: 50px;
+            height: 36px;
             width: auto;
         }
 
-        .logo-text {
-            font-size: 1.8rem;
+        .logo-name {
+            font-size: 1.2rem;
             font-weight: 700;
-            color: var(--primary-color);
+            color: var(--ink);
+            letter-spacing: -0.02em;
         }
 
         .nav-links {
             display: flex;
+            align-items: center;
             gap: 2rem;
             list-style: none;
         }
 
         .nav-links a {
-            text-decoration: none;
-            color: var(--text-dark);
+            font-size: 0.9rem;
             font-weight: 500;
-            transition: color 0.3s;
+            color: var(--ink-light);
+            text-decoration: none;
+            transition: color 0.2s;
         }
 
         .nav-links a:hover {
-            color: var(--accent-color);
+            color: var(--ink);
         }
 
-        /* Hero Section */
+        .nav-cta {
+            background: var(--ink) !important;
+            color: var(--surface) !important;
+            padding: 0.55rem 1.25rem !important;
+            border-radius: 8px !important;
+            font-size: 0.875rem !important;
+            transition: background 0.2s, opacity 0.2s !important;
+        }
+
+        .nav-cta:hover {
+            opacity: 0.85;
+        }
+
+        /* ─── HERO ────────────────────────────────────────────────── */
         .hero {
-            background: linear-gradient(135deg, rgba(30, 58, 95, 0.85) 0%, rgba(44, 95, 141, 0.85) 100%),
-                        url('https://open-fhir.com/images/openFHIR-hero-background-image.jpg') center/cover no-repeat;
-            color: var(--white);
-            padding: 6rem 0;
-            text-align: center;
+            padding: 96px 0 80px;
+            background:
+                linear-gradient(to bottom, rgba(255,255,255,0.92) 0%, rgba(255,255,255,0.82) 50%, rgba(255,255,255,0.97) 100%),
+                url('https://open-fhir.com/images/openFHIR-hero-background-image.jpg') center/cover no-repeat;
             position: relative;
+            overflow: hidden;
+        }
+
+        .hero::before {
+            content: '';
+            position: absolute;
+            top: -160px;
+            right: -200px;
+            width: 700px;
+            height: 700px;
+            background: radial-gradient(circle, rgba(0,82,204,0.07) 0%, transparent 70%);
+            pointer-events: none;
+        }
+
+        .hero-label {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 0.8rem;
+            font-weight: 600;
+            letter-spacing: 0.08em;
+            text-transform: uppercase;
+            color: var(--accent);
+            background: var(--accent-light);
+            padding: 6px 14px;
+            border-radius: 100px;
+            margin-bottom: 1.5rem;
+        }
+
+        .hero-label-dot {
+            width: 6px;
+            height: 6px;
+            border-radius: 50%;
+            background: var(--accent);
         }
 
         .hero h1 {
-            font-size: 3rem;
-            margin-bottom: 1rem;
+            font-size: clamp(2.4rem, 5vw, 3.8rem);
             font-weight: 700;
+            line-height: 1.1;
+            letter-spacing: -0.03em;
+            color: var(--ink);
+            max-width: 720px;
+            margin-bottom: 1.5rem;
         }
 
-        .hero p {
-            font-size: 1.3rem;
-            margin-bottom: 2rem;
-            opacity: 0.95;
+        .hero h1 em {
+            font-style: normal;
+            color: var(--accent);
         }
 
-        .cta-button {
-            display: inline-block;
-            background: var(--white);
-            color: var(--primary-color);
-            padding: 1rem 2.5rem;
-            text-decoration: none;
-            border-radius: 5px;
+        .hero-desc {
+            font-size: 1.125rem;
+            color: var(--ink-light);
+            max-width: 560px;
+            line-height: 1.7;
+            margin-bottom: 2.5rem;
+        }
+
+        .hero-actions {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            flex-wrap: wrap;
+        }
+
+        .btn-primary {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            background: var(--accent);
+            color: #fff;
+            padding: 0.85rem 1.8rem;
+            border-radius: 10px;
+            font-size: 0.95rem;
             font-weight: 600;
-            font-size: 1.1rem;
-            transition: transform 0.3s, box-shadow 0.3s;
+            text-decoration: none;
+            transition: box-shadow 0.2s, transform 0.2s, background 0.2s;
         }
 
-        .cta-button:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 5px 20px rgba(0,0,0,0.2);
+        .btn-primary:hover {
+            background: #003fa3;
+            box-shadow: 0 8px 24px rgba(0,82,204,0.3);
+            transform: translateY(-1px);
         }
 
-        /* Services Section */
-        .services {
-            padding: 5rem 0;
-            background: var(--background-light);
+        .btn-ghost {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            color: var(--ink-light);
+            padding: 0.85rem 1.4rem;
+            border-radius: 10px;
+            font-size: 0.95rem;
+            font-weight: 500;
+            text-decoration: none;
+            border: 1px solid var(--border);
+            transition: border-color 0.2s, color 0.2s;
         }
 
-        .section-title {
+        .btn-ghost:hover {
+            border-color: var(--ink-muted);
+            color: var(--ink);
+        }
+
+        .hero-trust {
+            margin-top: 4rem;
+            padding-top: 2rem;
+            border-top: 1px solid var(--border);
+        }
+
+        .hero-trust-label {
+            font-size: 0.78rem;
+            font-weight: 600;
+            letter-spacing: 0.06em;
+            text-transform: uppercase;
+            color: var(--ink-muted);
+            margin-bottom: 1.25rem;
+        }
+
+        .trust-logos {
+            display: flex;
+            flex-wrap: wrap;
+            align-items: center;
+            gap: 1.5rem 2.5rem;
+        }
+
+        .trust-logo {
+            font-size: 0.82rem;
+            font-weight: 600;
+            color: var(--ink-muted);
+            letter-spacing: 0.02em;
+            opacity: 0.7;
+        }
+
+        /* ─── STATS STRIP ─────────────────────────────────────────── */
+        .stats-strip {
+            background: var(--ink);
+            padding: 48px 0;
+        }
+
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 2rem;
             text-align: center;
-            font-size: 2.5rem;
-            color: var(--primary-color);
+        }
+
+        .stat-item {
+            padding: 1rem;
+        }
+
+        .stat-num {
+            font-size: 2.4rem;
+            font-weight: 700;
+            color: #fff;
+            letter-spacing: -0.03em;
+            line-height: 1;
+            margin-bottom: 0.4rem;
+        }
+
+        .stat-num span {
+            color: #6da3ff;
+        }
+
+        .stat-desc {
+            font-size: 0.85rem;
+            color: rgba(255,255,255,0.5);
+            font-weight: 400;
+        }
+
+        /* ─── SECTION SHARED ──────────────────────────────────────── */
+        section {
+            padding: 96px 0;
+        }
+
+        .section-tag {
+            font-size: 0.78rem;
+            font-weight: 600;
+            letter-spacing: 0.08em;
+            text-transform: uppercase;
+            color: var(--accent);
+            margin-bottom: 0.75rem;
+        }
+
+        .section-heading {
+            font-size: clamp(1.8rem, 3.5vw, 2.6rem);
+            font-weight: 700;
+            letter-spacing: -0.025em;
+            line-height: 1.15;
+            color: var(--ink);
+            margin-bottom: 1rem;
+        }
+
+        .section-sub {
+            font-size: 1.05rem;
+            color: var(--ink-light);
+            max-width: 540px;
+            line-height: 1.7;
+        }
+
+        /* ─── SERVICES ────────────────────────────────────────────── */
+        .services {
+            background: var(--surface-2);
+        }
+
+        .services-header {
             margin-bottom: 3rem;
         }
 
         .services-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-            gap: 2rem;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 1.5px;
+            background: var(--border);
+            border-radius: var(--radius-lg);
+            overflow: hidden;
         }
 
         .service-card {
-            background: var(--white);
-            padding: 2rem;
-            border-radius: 10px;
-            box-shadow: 0 3px 10px rgba(0,0,0,0.1);
-            transition: transform 0.3s, box-shadow 0.3s;
+            background: var(--surface);
+            padding: 2rem 2rem 2.25rem;
+            transition: background 0.2s;
+            position: relative;
         }
 
         .service-card:hover {
-            transform: translateY(-5px);
-            box-shadow: 0 5px 20px rgba(0,0,0,0.15);
+            background: var(--accent-light);
+        }
+
+        .service-card:hover .service-icon-wrap {
+            background: var(--accent);
+        }
+
+        .service-card:hover .service-icon-wrap svg {
+            stroke: #fff;
+        }
+
+        .service-icon-wrap {
+            width: 44px;
+            height: 44px;
+            border-radius: 10px;
+            background: var(--surface-3);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: 1.25rem;
+            transition: background 0.2s;
+        }
+
+        .service-icon-wrap svg {
+            width: 20px;
+            height: 20px;
+            stroke: var(--accent);
+            fill: none;
+            stroke-width: 1.75;
+            stroke-linecap: round;
+            stroke-linejoin: round;
+            transition: stroke 0.2s;
         }
 
         .service-card h3 {
-            color: var(--primary-color);
-            margin-bottom: 1rem;
-            font-size: 1.5rem;
+            font-size: 1.05rem;
+            font-weight: 600;
+            color: var(--ink);
+            margin-bottom: 0.6rem;
+            letter-spacing: -0.01em;
         }
 
         .service-card p {
-            color: var(--text-light);
-            line-height: 1.7;
+            font-size: 0.875rem;
+            color: var(--ink-light);
+            line-height: 1.65;
         }
 
-        /* Expertise Section */
+        /* ─── EXPERTISE ───────────────────────────────────────────── */
         .expertise {
-            padding: 5rem 0;
+            background: var(--surface);
         }
 
-        .expertise-content {
+        .expertise-layout {
             display: grid;
             grid-template-columns: 1fr 1fr;
-            gap: 3rem;
-            align-items: center;
+            gap: 5rem;
+            align-items: start;
         }
 
         .expertise-list {
             list-style: none;
+            display: flex;
+            flex-direction: column;
+            gap: 0;
         }
 
         .expertise-list li {
-            padding: 0.8rem 0;
-            padding-left: 2rem;
-            position: relative;
-            color: var(--text-light);
-        }
-
-        .expertise-list li:before {
-            content: "✓";
-            position: absolute;
-            left: 0;
-            color: var(--accent-color);
-            font-weight: bold;
-            font-size: 1.2rem;
-        }
-
-        .stats {
-            display: grid;
-            grid-template-columns: repeat(2, 1fr);
-            gap: 2rem;
-        }
-
-        .stat-card {
-            text-align: center;
-            padding: 2rem;
-            background: var(--background-light);
-            border-radius: 10px;
-        }
-
-        .stat-number {
-            font-size: 2.5rem;
-            font-weight: 700;
-            color: var(--accent-color);
-            display: block;
-        }
-
-        .stat-label {
-            color: var(--text-light);
-            margin-top: 0.5rem;
-        }
-
-        /* Contact Section */
-        .contact {
-            padding: 5rem 0;
-            background: var(--primary-color);
-            color: var(--white);
-        }
-
-        .contact-content {
-            text-align: center;
-        }
-
-        .contact h2 {
-            font-size: 2.5rem;
-            margin-bottom: 2rem;
-        }
-
-        .contact-info {
             display: flex;
-            justify-content: center;
-            gap: 3rem;
-            margin-top: 2rem;
-            flex-wrap: wrap;
+            align-items: flex-start;
+            gap: 12px;
+            padding: 0.9rem 0;
+            border-bottom: 1px solid var(--border);
+            font-size: 0.9rem;
+            color: var(--ink-light);
+            line-height: 1.5;
         }
 
-        .contact-item {
+        .expertise-list li:last-child {
+            border-bottom: none;
+        }
+
+        .check-icon {
+            flex-shrink: 0;
+            width: 18px;
+            height: 18px;
+            border-radius: 50%;
+            background: var(--green-light);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-top: 1px;
+        }
+
+        .check-icon svg {
+            width: 10px;
+            height: 10px;
+            stroke: var(--green);
+            stroke-width: 2.5;
+            fill: none;
+        }
+
+        .expertise-right {
             display: flex;
             flex-direction: column;
-            align-items: center;
+            gap: 1.5rem;
         }
 
-        .contact-item a {
-            color: var(--white);
-            text-decoration: none;
-            font-size: 1.1rem;
-            margin-top: 0.5rem;
-            transition: opacity 0.3s;
-        }
-
-        .contact-item a:hover {
-            opacity: 0.8;
-        }
-
-        .contact-label {
-            font-weight: 600;
-            margin-bottom: 0.5rem;
-        }
-
-        /* Footer */
-        footer {
-            background: var(--text-dark);
-            color: var(--white);
+        .arch-diagram {
+            border-radius: var(--radius);
+            overflow: hidden;
+            border: 1px solid var(--border);
+            background: var(--surface-2);
+            padding: 2rem;
             text-align: center;
-            padding: 2rem 0;
         }
 
-        footer p {
-            opacity: 0.8;
+        .arch-diagram img {
+            max-width: 100%;
+            height: auto;
         }
 
-        /* openFHIR Section */
+        /* ─── OPENFHIR ────────────────────────────────────────────── */
         .openfhir {
-            padding: 5rem 0;
-            background: var(--white);
+            background: var(--ink);
+            position: relative;
+            overflow: hidden;
         }
 
-        .openfhir-content {
+        .openfhir::before {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background: radial-gradient(ellipse at 80% 50%, rgba(0,82,204,0.18) 0%, transparent 60%);
+            pointer-events: none;
+        }
+
+        .openfhir-layout {
             display: grid;
             grid-template-columns: 1fr 1fr;
-            gap: 4rem;
+            gap: 5rem;
             align-items: center;
+            position: relative;
         }
 
-        .openfhir-text h2 {
-            font-size: 2.5rem;
-            color: var(--primary-color);
-            margin-bottom: 1.5rem;
+        .openfhir-tag {
+            font-size: 0.78rem;
+            font-weight: 600;
+            letter-spacing: 0.08em;
+            text-transform: uppercase;
+            color: #6da3ff;
+            margin-bottom: 0.75rem;
         }
 
-        .openfhir-text p {
-            color: var(--text-light);
-            margin-bottom: 1.5rem;
-            line-height: 1.8;
+        .openfhir h2 {
+            font-size: clamp(1.8rem, 3vw, 2.4rem);
+            font-weight: 700;
+            letter-spacing: -0.025em;
+            line-height: 1.15;
+            color: #fff;
+            margin-bottom: 1.25rem;
+        }
+
+        .openfhir-desc {
+            font-size: 1rem;
+            color: rgba(255,255,255,0.6);
+            line-height: 1.75;
+            margin-bottom: 2rem;
         }
 
         .openfhir-features {
             list-style: none;
-            margin: 2rem 0;
+            display: flex;
+            flex-direction: column;
+            gap: 0.6rem;
+            margin-bottom: 2.5rem;
         }
 
         .openfhir-features li {
-            padding: 0.8rem 0;
-            padding-left: 2rem;
-            position: relative;
-            color: var(--text-light);
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            font-size: 0.88rem;
+            color: rgba(255,255,255,0.75);
         }
 
-        .openfhir-features li:before {
-            content: "→";
-            position: absolute;
-            left: 0;
-            color: var(--accent-color);
-            font-weight: bold;
-            font-size: 1.2rem;
+        .openfhir-features li::before {
+            content: '';
+            width: 5px;
+            height: 5px;
+            border-radius: 50%;
+            background: #6da3ff;
+            flex-shrink: 0;
         }
 
-        .openfhir-cta {
-            display: inline-block;
-            background: var(--accent-color);
-            color: var(--white);
-            padding: 1rem 2rem;
-            text-decoration: none;
-            border-radius: 5px;
-            font-weight: 600;
-            transition: transform 0.3s, box-shadow 0.3s;
-        }
-
-        .openfhir-cta:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 5px 20px rgba(74, 144, 226, 0.3);
-        }
-
-        .openfhir-image {
-            width: 100%;
+        .btn-openfhir {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            background: #fff;
+            color: var(--ink);
+            padding: 0.85rem 1.8rem;
             border-radius: 10px;
-            box-shadow: 0 10px 40px rgba(0,0,0,0.1);
+            font-size: 0.9rem;
+            font-weight: 600;
+            text-decoration: none;
+            transition: box-shadow 0.2s, transform 0.2s;
         }
 
-        .service-card .service-icon {
-            font-size: 2.5rem;
-            margin-bottom: 1rem;
+        .btn-openfhir:hover {
+            box-shadow: 0 8px 32px rgba(255,255,255,0.15);
+            transform: translateY(-1px);
+        }
+
+        .openfhir-visual {
+            border-radius: var(--radius-lg);
+            overflow: hidden;
+            border: 1px solid rgba(255,255,255,0.08);
+            background: rgba(255,255,255,0.04);
+            padding: 2rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .openfhir-visual img {
+            width: 100%;
+            height: auto;
             display: block;
         }
 
-        .service-logo {
-            height: 50px;
-            width: auto;
-            max-width: 120px;
-            object-fit: contain;
-            margin-bottom: 1rem;
-        }
-
-        /* Collaborators Section */
+        /* ─── COLLABORATORS ───────────────────────────────────────── */
         .collaborators {
-            margin-top: 5rem;
-            padding-top: 3rem;
-            border-top: 2px solid var(--background-light);
+            background: var(--surface-2);
         }
 
-        .collaborators-grid {
+        .collab-header {
+            text-align: center;
+            max-width: 560px;
+            margin: 0 auto 3.5rem;
+        }
+
+        .collab-header .section-sub {
+            margin: 0 auto;
+        }
+
+        .collab-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-            gap: 1.5rem;
-            margin-top: 2rem;
-        }
-
-        .collaborator-card {
-            background: var(--white);
-            padding: 1.5rem;
-            border-radius: 8px;
-            border-left: 4px solid var(--accent-color);
-            box-shadow: 0 2px 8px rgba(0,0,0,0.08);
-            transition: transform 0.3s, box-shadow 0.3s;
-            display: flex;
-            flex-direction: column;
+            grid-template-columns: repeat(3, 1fr);
             gap: 1rem;
         }
 
-        .collaborator-card:hover {
-            transform: translateX(5px);
-            box-shadow: 0 4px 12px rgba(0,0,0,0.12);
+        .collab-card {
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-radius: var(--radius);
+            padding: 1.5rem;
+            transition: box-shadow 0.2s, border-color 0.2s;
+            display: flex;
+            flex-direction: column;
+            gap: 0.75rem;
         }
 
-        .collaborator-logo {
-            height: 40px;
+        .collab-card:hover {
+            box-shadow: var(--shadow);
+            border-color: #c5d5f0;
+        }
+
+        .collab-logo-wrap {
+            height: 32px;
+            display: flex;
+            align-items: center;
+        }
+
+        .collab-logo-wrap img {
+            max-height: 28px;
             width: auto;
-            max-width: 150px;
+            max-width: 120px;
             object-fit: contain;
-            object-position: left center;
+            object-position: left;
         }
 
-        .collaborator-logo.dark-bg {
-            background: #1e3a5f;
-            padding: 8px 12px;
+        .collab-logo-wrap img.on-dark {
+            background: var(--ink);
+            padding: 4px 8px;
             border-radius: 4px;
+            max-height: 36px;
         }
 
-        .collaborator-logo.orange-bg {
-            background: #ff6b35;
-            padding: 8px 12px;
-            border-radius: 4px;
-        }
-
-        .collaborator-card h4 {
-            color: var(--primary-color);
-            margin-bottom: 0.5rem;
-            font-size: 1.1rem;
-            font-weight: 600;
-        }
-
-        .collaborator-card p {
-            color: var(--text-light);
+        .collab-card h4 {
             font-size: 0.9rem;
-            line-height: 1.6;
+            font-weight: 600;
+            color: var(--ink);
         }
 
-        .collaborator-link {
-            color: var(--accent-color);
+        .collab-card p {
+            font-size: 0.8rem;
+            color: var(--ink-muted);
+            line-height: 1.6;
+            flex: 1;
+        }
+
+        .collab-link {
+            font-size: 0.78rem;
+            font-weight: 600;
+            color: var(--accent);
             text-decoration: none;
-            font-size: 0.85rem;
-            font-weight: 500;
             display: inline-flex;
             align-items: center;
-            gap: 0.3rem;
-            margin-top: auto;
+            gap: 4px;
+            margin-top: 0.25rem;
         }
 
-        .collaborator-link:hover {
+        .collab-link:hover {
             text-decoration: underline;
         }
 
-        .hero-visual {
-            margin-top: 3rem;
-            opacity: 0;
-            display: none;
+        /* ─── CONTACT ─────────────────────────────────────────────── */
+        .contact {
+            background: var(--surface);
         }
 
-        .hero-visual img {
-            display: none;
+        .contact-layout {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 5rem;
+            align-items: start;
         }
 
-        /* Responsive */
-        @media (max-width: 768px) {
-            .hero h1 {
-                font-size: 2rem;
+        .contact-card {
+            background: var(--surface-2);
+            border: 1px solid var(--border);
+            border-radius: var(--radius-lg);
+            padding: 2.5rem;
+        }
+
+        .contact-card h3 {
+            font-size: 1.1rem;
+            font-weight: 600;
+            color: var(--ink);
+            margin-bottom: 2rem;
+        }
+
+        .contact-rows {
+            display: flex;
+            flex-direction: column;
+            gap: 1.25rem;
+        }
+
+        .contact-row {
+            display: flex;
+            align-items: flex-start;
+            gap: 1rem;
+        }
+
+        .contact-icon {
+            width: 40px;
+            height: 40px;
+            border-radius: 10px;
+            background: var(--surface-3);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-shrink: 0;
+        }
+
+        .contact-icon svg {
+            width: 18px;
+            height: 18px;
+            stroke: var(--accent);
+            fill: none;
+            stroke-width: 1.75;
+            stroke-linecap: round;
+            stroke-linejoin: round;
+        }
+
+        .contact-row-label {
+            font-size: 0.75rem;
+            font-weight: 600;
+            letter-spacing: 0.04em;
+            text-transform: uppercase;
+            color: var(--ink-muted);
+            margin-bottom: 2px;
+        }
+
+        .contact-row a,
+        .contact-row span {
+            font-size: 0.9rem;
+            color: var(--ink);
+            text-decoration: none;
+            font-weight: 500;
+        }
+
+        .contact-row a:hover {
+            color: var(--accent);
+        }
+
+        .contact-cta-block {
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            gap: 1.5rem;
+        }
+
+        .contact-cta-block .section-heading {
+            margin-bottom: 0.5rem;
+        }
+
+        /* ─── FOOTER ──────────────────────────────────────────────── */
+        footer {
+            background: var(--ink);
+            padding: 32px 0;
+            border-top: 1px solid rgba(255,255,255,0.06);
+        }
+
+        .footer-inner {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            flex-wrap: wrap;
+            gap: 1rem;
+        }
+
+        .footer-left {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .footer-logo-name {
+            font-size: 0.9rem;
+            font-weight: 700;
+            color: rgba(255,255,255,0.8);
+        }
+
+        .footer-right {
+            font-size: 0.78rem;
+            color: rgba(255,255,255,0.35);
+            text-align: right;
+        }
+
+        .footer-right p + p {
+            margin-top: 2px;
+        }
+
+        /* ─── ENGAGEMENTS ─────────────────────────────────────────── */
+        .engagements {
+            background: var(--surface-2);
+        }
+
+        .engagements-header {
+            margin-bottom: 3rem;
+        }
+
+        .engagements-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 1.25rem;
+        }
+
+        .engagement-card {
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-radius: var(--radius-lg);
+            padding: 2rem 2rem 2rem;
+            display: flex;
+            flex-direction: column;
+            gap: 1rem;
+            position: relative;
+            transition: box-shadow 0.2s, border-color 0.2s;
+        }
+
+        .engagement-card:hover {
+            box-shadow: var(--shadow);
+            border-color: #c5d5f0;
+        }
+
+        .engagement-card--featured {
+            background: var(--ink);
+            border-color: var(--ink);
+        }
+
+        .engagement-card--featured:hover {
+            border-color: #2a3a52;
+            box-shadow: var(--shadow-lg);
+        }
+
+        .engagement-featured-badge {
+            position: absolute;
+            top: -1px;
+            right: 1.5rem;
+            background: var(--accent);
+            color: #fff;
+            font-size: 0.7rem;
+            font-weight: 700;
+            letter-spacing: 0.06em;
+            text-transform: uppercase;
+            padding: 4px 12px;
+            border-radius: 0 0 8px 8px;
+        }
+
+        .engagement-num {
+            font-size: 0.72rem;
+            font-weight: 700;
+            letter-spacing: 0.1em;
+            color: var(--ink-muted);
+            font-variant-numeric: tabular-nums;
+        }
+
+        .engagement-card--featured .engagement-num {
+            color: rgba(255,255,255,0.35);
+        }
+
+        .engagement-card h3 {
+            font-size: 1.15rem;
+            font-weight: 600;
+            color: var(--ink);
+            letter-spacing: -0.01em;
+            margin-top: -0.25rem;
+        }
+
+        .engagement-card--featured h3 {
+            color: #fff;
+        }
+
+        .engagement-card > p {
+            font-size: 0.875rem;
+            color: var(--ink-light);
+            line-height: 1.7;
+        }
+
+        .engagement-card--featured > p {
+            color: rgba(255,255,255,0.6);
+        }
+
+        .engagement-meta {
+            display: flex;
+            gap: 0.5rem;
+            flex-wrap: wrap;
+        }
+
+        .engagement-tag {
+            font-size: 0.72rem;
+            font-weight: 600;
+            letter-spacing: 0.04em;
+            background: var(--surface-3);
+            color: var(--ink-muted);
+            padding: 3px 10px;
+            border-radius: 100px;
+        }
+
+        .engagement-tag--light {
+            background: rgba(255,255,255,0.12);
+            color: rgba(255,255,255,0.6);
+        }
+
+        .engagement-list {
+            list-style: none;
+            display: flex;
+            flex-direction: column;
+            gap: 0.55rem;
+            margin-top: 0.25rem;
+            padding-top: 1rem;
+            border-top: 1px solid var(--border);
+        }
+
+        .engagement-card--featured .engagement-list {
+            border-top-color: rgba(255,255,255,0.1);
+        }
+
+        .engagement-list li {
+            font-size: 0.84rem;
+            color: var(--ink-light);
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .engagement-card--featured .engagement-list li {
+            color: rgba(255,255,255,0.65);
+        }
+
+        .engagement-list li::before {
+            content: '';
+            width: 5px;
+            height: 5px;
+            border-radius: 50%;
+            background: var(--accent);
+            flex-shrink: 0;
+        }
+
+        .engagement-card--featured .engagement-list li::before {
+            background: #6da3ff;
+        }
+
+        .engagements-note {
+            margin-top: 2rem;
+            font-size: 0.82rem;
+            color: var(--ink-muted);
+            text-align: center;
+        }
+
+        .engagements-note a {
+            color: var(--accent);
+            text-decoration: none;
+            font-weight: 500;
+        }
+
+        .engagements-note a:hover {
+            text-decoration: underline;
+        }
+
+        /* ─── RESPONSIVE ──────────────────────────────────────────── */
+        @media (max-width: 900px) {
+            .services-grid,
+            .engagements-grid {
+                grid-template-columns: repeat(2, 1fr);
             }
 
-            .hero p {
-                font-size: 1.1rem;
-            }
-
-            .expertise-content {
+            .expertise-layout,
+            .openfhir-layout,
+            .contact-layout {
                 grid-template-columns: 1fr;
+                gap: 2.5rem;
+            }
+
+            .stats-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+
+            .collab-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+
+            .openfhir-visual {
+                order: -1;
+            }
+        }
+
+        @media (max-width: 640px) {
+            section {
+                padding: 64px 0;
+            }
+
+            .hero {
+                padding: 64px 0 56px;
+            }
+
+            .services-grid,
+            .engagements-grid,
+            .collab-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .stats-grid {
+                grid-template-columns: repeat(2, 1fr);
             }
 
             .nav-links {
                 display: none;
             }
 
-            .stats {
-                grid-template-columns: 1fr;
+            .hero-actions {
+                flex-direction: column;
+                align-items: flex-start;
             }
 
-            .openfhir-content {
-                grid-template-columns: 1fr;
+            .footer-inner {
+                flex-direction: column;
+                align-items: flex-start;
             }
 
-            .hero {
-                padding: 4rem 0;
+            .footer-right {
+                text-align: left;
             }
         }
+
+        /* ─── ANIMATIONS ──────────────────────────────────────────── */
+        @keyframes fade-up {
+            from { opacity: 0; transform: translateY(20px); }
+            to   { opacity: 1; transform: translateY(0); }
+        }
+
+        .animate {
+            animation: fade-up 0.55s ease both;
+        }
+
+        .delay-1 { animation-delay: 0.1s; }
+        .delay-2 { animation-delay: 0.2s; }
+        .delay-3 { animation-delay: 0.3s; }
     </style>
 </head>
 <body>
-    <!-- Header -->
+
+    <!-- ─── HEADER ─── -->
     <header>
         <nav class="container">
-            <div class="logo">
-                <img src="etc/syntaric_logo_2.png" alt="Syntaric Logo">
-                <span class="logo-text">Syntaric</span>
-            </div>
+            <a href="#" class="logo">
+                <img src="etc/syntaric_logo_2.png" alt="Syntaric">
+                <span class="logo-name">Syntaric</span>
+            </a>
             <ul class="nav-links">
                 <li><a href="#services">Services</a></li>
+                <li><a href="#engagements">Engagements</a></li>
                 <li><a href="#openfhir">openFHIR</a></li>
                 <li><a href="#expertise">Expertise</a></li>
-                <li><a href="#contact">Contact</a></li>
+                <li><a href="#collaborators">Collaborators</a></li>
+                <li><a href="#contact" class="nav-cta">Contact</a></li>
             </ul>
         </nav>
     </header>
 
-    <!-- Hero Section -->
+    <!-- ─── HERO ─── -->
     <section class="hero">
         <div class="container">
-            <h1>Healthcare Interoperability Excellence</h1>
-            <p>Empowering healthcare organizations with robust, standards-based solutions for secure and scalable health information exchange</p>
-            <a href="mailto:info@syntaric.com" class="cta-button">Get in Touch</a>
-            <div class="hero-visual">
-                <img src="images/interoperability.svg" alt="Healthcare Interoperability Diagram">
+            <div class="hero-label animate">
+                <span class="hero-label-dot"></span>
+                Healthcare Interoperability Consulting
+            </div>
+            <h1 class="animate delay-1">
+                Connecting healthcare systems through <em>open standards</em>
+            </h1>
+            <p class="hero-desc animate delay-2">
+                We help hospitals, national health programs, and health IT vendors implement FHIR, openEHR, and IHE-based architectures that scale — from regional networks to national infrastructure.
+            </p>
+            <div class="hero-actions animate delay-3">
+                <a href="mailto:info@syntaric.com" class="btn-primary">
+                    Start a conversation
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+                </a>
+                <a href="#openfhir" class="btn-ghost">Explore openFHIR</a>
+            </div>
+            <div class="hero-trust">
+                <p class="hero-trust-label">Trusted by teams at</p>
+                <div class="trust-logos">
+                    <span class="trust-logo">Maastricht UMC+</span>
+                    <span class="trust-logo">Firely</span>
+                    <span class="trust-logo">NHS Trusts</span>
+                    <span class="trust-logo">UMC Utrecht</span>
+                    <span class="trust-logo">Open Line</span>
+                    <span class="trust-logo">Landspítali</span>
+                    <span class="trust-logo">NJII</span>
+                    <span class="trust-logo">NUTS</span>
+                </div>
             </div>
         </div>
     </section>
 
-    <!-- Services Section -->
+    <!-- ─── STATS ─── -->
+    <div class="stats-strip">
+        <div class="container">
+            <div class="stats-grid">
+                <div class="stat-item">
+                    <div class="stat-num">10<span>+</span></div>
+                    <div class="stat-desc">Years of experience</div>
+                </div>
+                <div class="stat-item">
+                    <div class="stat-num">20<span>+</span></div>
+                    <div class="stat-desc">Major projects delivered</div>
+                </div>
+                <div class="stat-item">
+                    <div class="stat-num">IHE</div>
+                    <div class="stat-desc">Certified Professional</div>
+                </div>
+                <div class="stat-item">
+                    <div class="stat-num">EU <span>&</span> US</div>
+                    <div class="stat-desc">International reach</div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- ─── SERVICES ─── -->
     <section id="services" class="services">
         <div class="container">
-            <h2 class="section-title">Our Services</h2>
+            <div class="services-header">
+                <p class="section-tag">What we do</p>
+                <h2 class="section-heading">End-to-end interoperability services</h2>
+                <p class="section-sub">From architecture design to implementation and training — we cover the full lifecycle of healthcare integration projects.</p>
+            </div>
             <div class="services-grid">
                 <div class="service-card">
-                    <img src="https://www.hl7.org/fhir/assets/images/fhir-logo-www.png" alt="FHIR" class="service-logo" onerror="this.style.display='none'">
+                    <div class="service-icon-wrap">
+                        <svg viewBox="0 0 24 24"><path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"/></svg>
+                    </div>
                     <h3>FHIR Consulting</h3>
-                    <p>Expert guidance on implementing FHIR-based architectures and integrations. We help you leverage the full potential of the FHIR standard for modern healthcare data exchange.</p>
+                    <p>Expert guidance on implementing FHIR R4/R5 architectures and APIs. We help you leverage the full power of the standard for modern health data exchange.</p>
                 </div>
                 <div class="service-card">
-                    <img src="https://openehr.org/wp-content/uploads/2024/11/openehr_logo_9DNsQEt-3.png" alt="openEHR" class="service-logo" onerror="this.style.display='none'">
+                    <div class="service-icon-wrap">
+                        <svg viewBox="0 0 24 24"><rect x="2" y="3" width="20" height="14" rx="2"/><path d="M8 21h8M12 17v4"/></svg>
+                    </div>
                     <h3>openEHR Integration</h3>
                     <p>Specialized consulting in openEHR implementations and the co-existence of openEHR and FHIR through our FHIR Connect specification.</p>
                 </div>
                 <div class="service-card">
-<!--                    <div class="service-logo" style="font-size: 1.5rem; font-weight: 700; color: var(&#45;&#45;primary-color); display: flex; align-items: center; justify-content: flex-start;">HL7</div>-->
+                    <div class="service-icon-wrap">
+                        <svg viewBox="0 0 24 24"><path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"/></svg>
+                    </div>
                     <h3>Enterprise Architecture</h3>
-                    <p>Design and implementation of scalable, interoperable healthcare IT architectures for hospitals, clinics, and national health programs.</p>
+                    <p>Design of scalable, interoperable healthcare IT architectures for hospitals, clinics, and national health programs — built for the long term.</p>
                 </div>
                 <div class="service-card">
+                    <div class="service-icon-wrap">
+                        <svg viewBox="0 0 24 24"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87M16 3.13a4 4 0 0 1 0 7.75"/></svg>
+                    </div>
                     <h3>System Integration</h3>
-                    <p>Complex integrations with major EMR systems including Epic, Cerner Millennium, ChipSoft HiX, and other healthcare platforms using IHE profiles.</p>
+                    <p>Complex integrations with Epic, Cerner Millennium, ChipSoft HiX, and other major EMR/EHR platforms using IHE profiles and messaging standards.</p>
                 </div>
                 <div class="service-card">
-                    <img src="https://www.ihe.net/wp-content/uploads/2018/02/ihe-logo.svg" alt="IHE" class="service-logo" onerror="this.style.display='none'">
+                    <div class="service-icon-wrap">
+                        <svg viewBox="0 0 24 24"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>
+                    </div>
                     <h3>IHE Compliance</h3>
-                    <p>Implementation of IHE profiles including XDS, MPI, XDW, ATNA, QEDm, and SMART on FHIR to ensure standards-based interoperability.</p>
+                    <p>Implementation of IHE profiles including XDS, MPI, XDW, ATNA, QEDm, and SMART on FHIR to ensure standards-based, auditable interoperability.</p>
                 </div>
                 <div class="service-card">
-                    <img src="https://www.hl7.org/fhir/assets/images/fhir-logo-www.png" alt="FHIR" class="service-logo" onerror="this.style.display='none'">
+                    <div class="service-icon-wrap">
+                        <svg viewBox="0 0 24 24"><path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"/><path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"/></svg>
+                    </div>
                     <h3>Training & Education</h3>
-                    <p>Comprehensive training sessions on healthcare interoperability standards, FHIR implementation, and best practices for health IT teams.</p>
+                    <p>Comprehensive training on healthcare interoperability standards, FHIR implementation, and best practices — tailored for health IT teams at all levels.</p>
                 </div>
             </div>
         </div>
     </section>
 
-    <!-- Expertise Section -->
-    <section id="expertise" class="expertise">
+    <!-- ─── WAYS TO WORK ─── -->
+    <section id="engagements" class="engagements">
         <div class="container">
-            <h2 class="section-title">Proven Track Record</h2>
-            <div class="expertise-content">
-                <div>
-                    <h3 style="font-size: 1.8rem; margin-bottom: 1.5rem; color: var(--primary-color);">Experience Across Leading Healthcare Organizations</h3>
-                    <ul class="expertise-list">
-                        <li>University Hospitals (Maastricht UMC+, UMC Utrecht, Landspítali)</li>
-                        <li>National Health Programs (VECOZO, Dutch Ministry of Health, NJII)</li>
-                        <li>NHS Trusts (EPUT, West Suffolk Hospital, LPRES)</li>
-                        <li>Regional Health Networks (RSO Zuid-Limburg)</li>
-                        <li>Specialized Clinics (Maastro Clinic, Oncology Institute)</li>
-                        <li>Integration with Epic, Enovation, InterSystems, Firely, Tiani, Philips, .. and other major vendors</li>
+            <div class="engagements-header">
+                <p class="section-tag">Engagements</p>
+                <h2 class="section-heading">Ways to work with us</h2>
+                <p class="section-sub">Choose the engagement model that fits your stage — from a focused review to a long-term partnership.</p>
+            </div>
+            <div class="engagements-grid">
+
+                <div class="engagement-card">
+                    <div class="engagement-num">01</div>
+                    <h3>Architecture Review</h3>
+                    <p>A deep-dive assessment of your existing or planned healthcare integration architecture. You get a written report with findings, gaps, and a prioritised set of recommendations.</p>
+                    <div class="engagement-meta">
+                        <span class="engagement-tag">Fixed scope</span>
+                        <span class="engagement-tag">1–2 weeks</span>
+                    </div>
+                    <ul class="engagement-list">
+                        <li>Review of current integration landscape</li>
+                        <li>Standards alignment check (FHIR, IHE, openEHR)</li>
+                        <li>Written findings &amp; recommendations report</li>
+                        <li>1 follow-up Q&amp;A session</li>
                     </ul>
                 </div>
-                <div class="stats">
-                    <div class="stat-card">
-                        <span class="stat-number">10+</span>
-                        <span class="stat-label">Years Experience</span>
+
+                <div class="engagement-card">
+                    <div class="engagement-num">02</div>
+                    <h3>Project Consulting</h3>
+                    <p>Embedded expert support for a specific integration or interoperability project — from design through delivery. We work alongside your team to keep things on track and standards-compliant.</p>
+                    <div class="engagement-meta">
+                        <span class="engagement-tag">Time &amp; materials</span>
+                        <span class="engagement-tag">Weeks to months</span>
                     </div>
-                    <div class="stat-card">
-                        <span class="stat-number">20+</span>
-                        <span class="stat-label">Major Projects</span>
-                    </div>
-                    <div class="stat-card">
-                        <span class="stat-number">IHE</span>
-                        <span class="stat-label">Certified Professional</span>
-                    </div>
-                    <div class="stat-card">
-                        <span class="stat-number">EU & US</span>
-                        <span class="stat-label">International Reach</span>
-                    </div>
+                    <ul class="engagement-list">
+                        <li>FHIR / openEHR / IHE design &amp; implementation support</li>
+                        <li>Integration guidance</li>
+                        <li>Architecture documentation</li>
+                        <li>Regular syncs with your team</li>
+                    </ul>
                 </div>
+
+                <div class="engagement-card engagement-card--featured">
+                    <div class="engagement-featured-badge">Most popular</div>
+                    <div class="engagement-num">03</div>
+                    <h3>Strategic Advisory</h3>
+                    <p>An ongoing retainer for organisations that need a trusted expert on-call. Think of us as your fractional Chief Interoperability Officer — available when you need strategic input, a second opinion, or a quick answer.</p>
+                    <div class="engagement-meta">
+                        <span class="engagement-tag engagement-tag--light">Retainer</span>
+                        <span class="engagement-tag engagement-tag--light">Ongoing</span>
+                    </div>
+                    <ul class="engagement-list">
+                        <li>Dedicated async support channel</li>
+                        <li>Monthly strategy &amp; roadmap sessions</li>
+                        <li>Priority access for urgent questions</li>
+                        <li>Quarterly architecture reviews</li>
+                    </ul>
+                </div>
+
+                <div class="engagement-card">
+                    <div class="engagement-num">04</div>
+                    <h3>Training &amp; Workshops</h3>
+                    <p>Hands-on training sessions for health IT teams — from introductory FHIR workshops to advanced openEHR and IHE deep-dives. Delivered remotely or on-site, tailored to your team's level.</p>
+                    <div class="engagement-meta">
+                        <span class="engagement-tag">Fixed scope</span>
+                        <span class="engagement-tag">Half-day to 2 days</span>
+                    </div>
+                    <ul class="engagement-list">
+                        <li>FHIR fundamentals &amp; advanced implementation</li>
+                        <li>openEHR archetypes &amp; templates</li>
+                        <li>IHE profiles in practice</li>
+                        <li>Custom curriculum on request</li>
+                    </ul>
+                </div>
+
             </div>
-            <div style="margin-top: 4rem; text-align: center;">
-                <h3 style="font-size: 1.5rem; margin-bottom: 2rem; color: var(--primary-color); text-align: center;">Standards-Based Healthcare Architecture</h3>
-                <img src="images/architecture.svg" alt="Healthcare Systems Architecture" style="max-width: 600px; width: 100%; height: auto;">
-            </div>
+            <p class="engagements-note"><a href="mailto:info@syntaric.com">Get in touch</a> to discuss what fits best.</p>
+        </div>
+    </section>
 
-            <!-- Collaborators Subsection -->
-            <div class="collaborators">
-                <h3 style="font-size: 1.8rem; margin-bottom: 1rem; color: var(--primary-color); text-align: center;">Vendor Collaborations</h3>
-                <p style="text-align: center; color: var(--text-light); margin-bottom: 2rem;">Companies and organizations we've worked with and for on healthcare interoperability projects</p>
-
-                <div class="collaborators-grid">
-                    <div class="collaborator-card">
-                        <img src="https://fire.ly/wp-content/uploads/2021/04/Firely-logo_white-background_yellow.jpg" alt="Firely" class="collaborator-logo" onerror="this.style.display='none'">
-                        <h4>Firely</h4>
-                        <p>FHIR software solutions and services provider. Core offering includes Firely Server, tools, consulting, and training to help organizations implement FHIR standards for interoperability.</p>
-                        <a href="https://fire.ly/" target="_blank" class="collaborator-link">Visit website →</a>
-                    </div>
-
-                    <div class="collaborator-card">
-                        <img src="http://openline.nl/img/svg/logo_openline.svg" alt="Open Line" class="collaborator-logo" onerror="this.style.display='none'">
-                        <h4>Open Line</h4>
-                        <p>Managed cloud services provider offering flexible, reliable, and secure ICT infrastructure management with expertise in healthcare, government, and logistics sectors.</p>
-                        <a href="http://openline.nl/" target="_blank" class="collaborator-link">Visit website →</a>
-                    </div>
-
-                    <div class="collaborator-card">
-                        <img src="https://openline-vitaly.com/wp-content/themes/parsek/images/svg-icons/raw/openline-vitaly-logo.svg" alt="Open Line Vitaly" class="collaborator-logo" onerror="this.style.display='none'">
-                        <h4>Open Line Vitaly (Previously Parsek)</h4>
-                        <p>Healthcare collaboration solutions developer specializing in platforms for multidisciplinary team meetings, referral management, and coordinated care across healthcare settings.</p>
-                        <a href="https://openline-vitaly.com/" target="_blank" class="collaborator-link">Visit website →</a>
-                    </div>
-
-                    <div class="collaborator-card">
-                        <img src="https://www.tactuum.com/Tactuum.THEME/dist/img/tactuum-logo--small.png" alt="Tactuum" class="collaborator-logo" onerror="this.style.display='none'">
-                        <h4>Tactuum</h4>
-                        <p>Technology and transformation partner developing digital healthcare solutions. Flagship product Tactuum Clinical Companion provides real-time clinical resources for healthcare professionals.</p>
-                        <a href="https://www.tactuum.com/" target="_blank" class="collaborator-link">Visit website →</a>
-                    </div>
-
-                    <div class="collaborator-card">
-                        <div class="collaborator-logo">
-                            <svg width="74" height="32" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M56.341 0h-21.88v6.627h7.942V32h6.61V6.627h2.479c.436-1.99 1.408-3.73 2.928-5.183C55.02.88 55.666.404 56.341 0Z" fill="#ff6b35"></path><path d="M71.102 16.42c-1.285-1.348-3.781-2.821-7.491-4.418-2.694-1.14-4.04-2.293-4.04-3.452 0-.664.23-1.208.682-1.633a2.333 2.333 0 0 1 1.648-.637c1.347 0 2.477.932 3.387 2.8l5.782-3.076C69.186 2.001 66.304 0 62.429 0h-.003c-1.972 0-3.72.483-5.251 1.448a9.8 9.8 0 0 0-1.46 1.13c-1.195 1.14-1.988 2.487-2.39 4.029a9.889 9.889 0 0 0-.317 2.503c0 1.988.528 3.617 1.583 4.884.829.994 2.257 1.991 4.29 2.986.725.353 1.44.696 2.143 1.026.706.334 1.408.674 2.114 1.027 1.823 1.078 2.736 2.24 2.736 3.484 0 2.157-1.182 3.233-3.542 3.233h-.003c-1.182 0-2.199-.395-3.047-1.183-.434-.395-1.068-1.318-1.894-2.768l-5.97 2.765C53.53 29.52 57.123 31.997 62.202 32h.007c2.962 0 5.487-.933 7.582-2.795 2.156-1.969 3.234-4.414 3.234-7.338.003-2.287-.638-4.1-1.923-5.448ZM34.376 8.223v11.24c0 4.566-1.804 6.848-5.41 6.848-3.499 0-5.294-2.156-5.4-6.45v-7.466c0-2.528-.266-4.434-.794-5.715-.548-1.434-1.48-2.725-2.803-3.877C17.82.935 15.087 0 11.783 0 8.459 0 5.72.935 3.57 2.803 2.268 3.95 1.351 5.246.823 6.68.275 8.282 0 10.188 0 12.395v19.592c.172-.184.337-.372.525-.55a10.887 10.887 0 0 1 5.847-2.845V12.537c0-4.566 1.805-6.848 5.41-6.848 3.5 0 5.294 2.156 5.401 6.45v7.466c0 2.528.266 4.434.794 5.715.547 1.434 1.484 2.725 2.806 3.877C22.933 31.065 25.665 32 28.969 32c3.324 0 6.062-.935 8.213-2.803 1.302-1.148 2.22-2.443 2.747-3.877.548-1.602.823-3.508.823-5.715V8.223h-6.376Z" fill="#ff6b35"></path></svg>
-                        </div>
-                        <h4>Stichting NUTS</h4>
-                        <p>Decentralized healthcare communication network enabling organizations to securely share medical data through collaborative infrastructure rather than proprietary systems.</p>
-                        <a href="https://nuts.nl/en/" target="_blank" class="collaborator-link">Visit website →</a>
-                    </div>
-
-                    <div class="collaborator-card">
-                        <img src="https://www.wvs.nl/wp-content/uploads/2022/03/logo-wvs.svg" alt="VWS" class="collaborator-logo" onerror="this.style.display='none'">
-                        <h4>VWS (Dutch Ministry of Health)</h4>
-                        <p>Dutch Ministry of Health, Welfare and Sport (Ministerie van Volksgezondheid, Welzijn en Sport) responsible for national healthcare policy and infrastructure.</p>
-                        <a href="https://www.wvs.nl/" target="_blank" class="collaborator-link">Visit website →</a>
-                    </div>
-
-                    <div class="collaborator-card">
-                        <img src="https://www.petrolpay.si/wp-content/uploads/2025/07/Petrol_pay_no_icon_logo_horizontal_red_gradient_RGB_1_2024.png" alt="Petrol Pay" class="collaborator-logo" onerror="this.style.display='none'">
-                        <h4>Petrol Pay</h4>
-                        <p>Payment solutions provider offering loyalty cards, digital wallet services, and payment acceptance solutions for businesses with worldwide purchase capabilities.</p>
-                        <a href="https://www.petrolpay.si/petrol-pay-loyalty/" target="_blank" class="collaborator-link">Visit website →</a>
-                    </div>
-
-                    <div class="collaborator-card">
-                        <img src="https://medblocks.com/logo.svg" alt="Medblocks" class="collaborator-logo" onerror="this.style.display='none'">
-                        <h4>Medblocks</h4>
-                        <p>Healthcare data platform leveraging blockchain technology for secure, patient-centric health information exchange and data ownership.</p>
-                        <a href="https://medblocks.com/" target="_blank" class="collaborator-link">Visit website →</a>
-                    </div>
-
-                    <div class="collaborator-card">
-                        <img src="https://htec.com/uploads/2024/07/logo.svg" alt="HTEC" class="collaborator-logo dark-bg" onerror="this.style.display='none'">
-                        <h4>HTEC</h4>
-                        <p>Digital engineering and AI services firm specializing in innovation strategy, experience design, technical architecture, and product engineering across healthcare and other industries.</p>
-                        <a href="https://htec.com/" target="_blank" class="collaborator-link">Visit website →</a>
+    <!-- ─── EXPERTISE ─── -->
+    <section id="expertise" class="expertise">
+        <div class="container">
+            <div class="expertise-layout">
+                <div>
+                    <p class="section-tag">Track record</p>
+                    <h2 class="section-heading">Experience across leading healthcare organizations</h2>
+                    <p class="section-sub" style="margin-bottom: 2rem;">Over a decade of delivering mission-critical interoperability projects across Europe and the US.</p>
+                    <ul class="expertise-list">
+                        <li>
+                            <span class="check-icon"><svg viewBox="0 0 12 12"><polyline points="2 6 5 9 10 3"/></svg></span>
+                            University Hospitals — Maastricht UMC+, UMC Utrecht, Landspítali
+                        </li>
+                        <li>
+                            <span class="check-icon"><svg viewBox="0 0 12 12"><polyline points="2 6 5 9 10 3"/></svg></span>
+                            National Health Programs — VECOZO, Dutch Ministry of Health, NJII
+                        </li>
+                        <li>
+                            <span class="check-icon"><svg viewBox="0 0 12 12"><polyline points="2 6 5 9 10 3"/></svg></span>
+                            NHS Trusts — EPUT, West Suffolk Hospital, LPRES
+                        </li>
+                        <li>
+                            <span class="check-icon"><svg viewBox="0 0 12 12"><polyline points="2 6 5 9 10 3"/></svg></span>
+                            Regional Health Networks — RSO Zuid-Limburg
+                        </li>
+                        <li>
+                            <span class="check-icon"><svg viewBox="0 0 12 12"><polyline points="2 6 5 9 10 3"/></svg></span>
+                            Specialized Clinics — Maastro Clinic, Oncology Institute
+                        </li>
+                        <li>
+                            <span class="check-icon"><svg viewBox="0 0 12 12"><polyline points="2 6 5 9 10 3"/></svg></span>
+                            Vendor integrations — Epic, Enovation, InterSystems, Firely, Tiani, Philips, and more
+                        </li>
+                    </ul>
+                </div>
+                <div class="expertise-right">
+                    <div class="arch-diagram">
+                        <p style="font-size: 0.75rem; font-weight: 600; letter-spacing: 0.06em; text-transform: uppercase; color: var(--ink-muted); margin-bottom: 1.5rem;">Standards-Based Architecture</p>
+                        <img src="images/architecture.svg" alt="Healthcare Systems Architecture Diagram">
                     </div>
                 </div>
             </div>
         </div>
     </section>
 
-    <!-- openFHIR Section -->
+    <!-- ─── OPENFHIR ─── -->
     <section id="openfhir" class="openfhir">
         <div class="container">
-            <div class="openfhir-content">
-                <div class="openfhir-text">
+            <div class="openfhir-layout">
+                <div>
+                    <p class="openfhir-tag">Our Product</p>
                     <h2>openFHIR: Bridging openEHR and FHIR</h2>
-                    <p>As co-creators of the FHIR Connect specification and founders of openFHIR, we provide a groundbreaking engine that enables seamless bidirectional interoperability between openEHR and HL7 FHIR standards.</p>
-                    <p>openFHIR creates a clinical data repository that ensures long-term reliability while leveraging FHIR's widespread adoption for accessibility and interoperability.</p>
+                    <p class="openfhir-desc">As co-creators of the FHIR Connect specification and founders of openFHIR, we built a groundbreaking engine for seamless bidirectional interoperability between openEHR and HL7 FHIR — giving you the clinical richness of openEHR with the connectivity of FHIR.</p>
                     <ul class="openfhir-features">
                         <li>Bidirectional mapping between FHIR Resources and openEHR Compositions</li>
                         <li>RESTful API and message queue support for flexible integration</li>
-                        <li>Docker-ready deployment for rapid implementation</li>
+                        <li>Docker-ready deployment for rapid rollout</li>
                         <li>Atlas interface for mapping management and data analysis</li>
-                        <li>Built on open-source FHIR Connect specification</li>
+                        <li>Built on the open-source FHIR Connect specification</li>
                     </ul>
-                    <a href="https://open-fhir.com" target="_blank" class="openfhir-cta">Explore openFHIR</a>
+                    <a href="https://open-fhir.com" target="_blank" class="btn-openfhir">
+                        Explore openFHIR
+                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+                    </a>
                 </div>
-                <div>
-                    <img src="https://open-fhir.com/images/openFIHR-hero-image.png" alt="openFHIR Platform" class="openfhir-image" onerror="this.style.display='none'">
+                <div class="openfhir-visual">
+                    <img src="etc/icon_only.png" alt="Syntaric Icon" style="filter: brightness(0) invert(1);">
                 </div>
             </div>
         </div>
     </section>
 
-    <!-- Contact Section -->
+    <!-- ─── COLLABORATORS ─── -->
+    <section id="collaborators" class="collaborators">
+        <div class="container">
+            <div class="collab-header">
+                <p class="section-tag">Collaborations</p>
+                <h2 class="section-heading">Companies we've worked with</h2>
+                <p class="section-sub">A selection of partners and clients on healthcare interoperability projects across Europe and beyond.</p>
+            </div>
+            <div class="collab-grid">
+
+                <div class="collab-card">
+                    <div class="collab-logo-wrap">
+                        <img src="https://fire.ly/wp-content/uploads/2021/04/Firely-logo_white-background_yellow.jpg" alt="Firely" onerror="this.style.display='none'">
+                    </div>
+                    <h4>Firely</h4>
+                    <p>FHIR software solutions provider — Firely Server, tooling, consulting, and training to help organizations implement FHIR for interoperability.</p>
+                    <a href="https://fire.ly/" target="_blank" class="collab-link">fire.ly ↗</a>
+                </div>
+
+                <div class="collab-card">
+                    <div class="collab-logo-wrap">
+                        <img src="http://openline.nl/img/svg/logo_openline.svg" alt="Open Line" onerror="this.style.display='none'">
+                    </div>
+                    <h4>Open Line</h4>
+                    <p>Managed cloud services with expertise in healthcare, government, and logistics — flexible, secure ICT infrastructure management.</p>
+                    <a href="http://openline.nl/" target="_blank" class="collab-link">openline.nl ↗</a>
+                </div>
+
+                <div class="collab-card">
+                    <div class="collab-logo-wrap">
+                        <img src="https://openline-vitaly.com/wp-content/themes/parsek/images/svg-icons/raw/openline-vitaly-logo.svg" alt="Open Line Vitaly" onerror="this.style.display='none'">
+                    </div>
+                    <h4>Open Line Vitaly</h4>
+                    <p>Platforms for multidisciplinary team meetings, referral management, and coordinated care across healthcare settings. Previously Parsek.</p>
+                    <a href="https://openline-vitaly.com/" target="_blank" class="collab-link">openline-vitaly.com ↗</a>
+                </div>
+
+                <div class="collab-card">
+                    <div class="collab-logo-wrap">
+                        <img src="https://www.tactuum.com/Tactuum.THEME/dist/img/tactuum-logo--small.png" alt="Tactuum" onerror="this.style.display='none'">
+                    </div>
+                    <h4>Tactuum</h4>
+                    <p>Digital healthcare solutions including Tactuum Clinical Companion — real-time clinical resources for healthcare professionals at the point of care.</p>
+                    <a href="https://www.tactuum.com/" target="_blank" class="collab-link">tactuum.com ↗</a>
+                </div>
+
+                <div class="collab-card">
+                    <div class="collab-logo-wrap" style="align-items: center;">
+                        <svg width="70" height="30" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M52.3 0H32.4v6.2h7.4V30h6.2V6.2h2.3c.4-1.9 1.3-3.5 2.7-4.8C51.3.82 51.9.38 52.3 0Z" fill="#ff6b35"/><path d="M66.2 15.3c-1.2-1.26-3.5-2.63-7-4.13-2.52-1.07-3.77-2.14-3.77-3.23 0-.62.22-1.13.64-1.52a2.18 2.18 0 0 1 1.54-.6c1.26 0 2.32.87 3.17 2.62l5.4-2.87C64.47 1.87 61.77 0 58.15 0c-1.84 0-3.47.45-4.9 1.35a9.16 9.16 0 0 0-1.37 1.06c-1.11 1.06-1.85 2.32-2.23 3.76a9.24 9.24 0 0 0-.3 2.34c0 1.86.5 3.38 1.48 4.56.77.93 2.11 1.86 4.01 2.79.68.33 1.34.65 2 .96.66.31 1.31.63 1.97.96 1.71 1.01 2.56 2.09 2.56 3.25 0 2.02-1.1 3.02-3.31 3.02-1.1 0-2.05-.37-2.85-1.1-.4-.37-1-.23-1.77-2.59L48.5 22.7C50.5 27.58 53.87 30 58.68 30c2.77 0 5.13-.87 7.09-2.61 2.01-1.84 3.02-4.12 3.02-6.86 0-2.14-.6-3.83-1.8-5.09ZM32.14 7.68V18.2c0 4.26-1.69 6.4-5.05 6.4-3.27 0-4.95-2.01-5.04-6.03V11.6c0-2.36-.25-4.14-.74-5.34-.51-1.34-1.38-2.55-2.62-3.62C16.64.87 14.1 0 11.02 0 7.9 0 5.35.87 3.33 2.62 2.12 3.69 1.26 4.9.77 6.24.26 7.73 0 9.51 0 11.58v18.3c.16-.17.31-.35.49-.51a10.18 10.18 0 0 1 5.46-2.66V11.71c0-4.27 1.69-6.4 5.05-6.4 3.27 0 4.95 2.01 5.05 6.03v6.97c0 2.36.25 4.14.74 5.34.51 1.34 1.39 2.55 2.62 3.62C20.98 29.07 23.52 30 26.6 30c3.11 0 5.66-.87 7.68-2.62 1.22-1.07 2.07-2.28 2.57-3.62.51-1.5.77-3.28.77-5.34V7.68h-5.48Z" fill="#ff6b35"/></svg>
+                    </div>
+                    <h4>Stichting NUTS</h4>
+                    <p>Decentralized healthcare communication network enabling organizations to securely share medical data through collaborative infrastructure.</p>
+                    <a href="https://nuts.nl/en/" target="_blank" class="collab-link">nuts.nl ↗</a>
+                </div>
+
+                <div class="collab-card">
+                    <div class="collab-logo-wrap">
+                        <img src="https://www.wvs.nl/wp-content/uploads/2022/03/logo-wvs.svg" alt="VWS" onerror="this.style.display='none'">
+                    </div>
+                    <h4>VWS — Dutch Ministry of Health</h4>
+                    <p>Ministerie van Volksgezondheid, Welzijn en Sport — responsible for national healthcare policy and infrastructure in the Netherlands.</p>
+                    <a href="https://www.wvs.nl/" target="_blank" class="collab-link">wvs.nl ↗</a>
+                </div>
+
+                <div class="collab-card">
+                    <div class="collab-logo-wrap">
+                        <img src="https://www.petrolpay.si/wp-content/uploads/2025/07/Petrol_pay_no_icon_logo_horizontal_red_gradient_RGB_1_2024.png" alt="Petrol Pay" onerror="this.style.display='none'">
+                    </div>
+                    <h4>Petrol Pay</h4>
+                    <p>Payment and loyalty solutions provider offering digital wallet services and payment acceptance with worldwide purchase capabilities.</p>
+                    <a href="https://www.petrolpay.si/petrol-pay-loyalty/" target="_blank" class="collab-link">petrolpay.si ↗</a>
+                </div>
+
+                <div class="collab-card">
+                    <div class="collab-logo-wrap">
+                        <img src="https://medblocks.com/logo.svg" alt="Medblocks" onerror="this.style.display='none'">
+                    </div>
+                    <h4>Medblocks</h4>
+                    <p>Healthcare data platform for secure, patient-centric health information exchange and interoperable clinical data ownership.</p>
+                    <a href="https://medblocks.com/" target="_blank" class="collab-link">medblocks.com ↗</a>
+                </div>
+
+                <div class="collab-card">
+                    <div class="collab-logo-wrap">
+                        <img src="https://htec.com/uploads/2024/07/logo.svg" alt="HTEC" class="on-dark" onerror="this.style.display='none'">
+                    </div>
+                    <h4>HTEC</h4>
+                    <p>Digital engineering and AI services firm specializing in technical architecture and product engineering across healthcare and other industries.</p>
+                    <a href="https://htec.com/" target="_blank" class="collab-link">htec.com ↗</a>
+                </div>
+
+            </div>
+        </div>
+    </section>
+
+    <!-- ─── CONTACT ─── -->
     <section id="contact" class="contact">
         <div class="container">
-            <div class="contact-content">
-                <h2>Let's Build Better Healthcare IT Together</h2>
-                <p style="font-size: 1.2rem; margin-bottom: 2rem;">Contact us to discuss your healthcare interoperability needs</p>
-                <div class="contact-info">
-                    <div class="contact-item">
-                        <span class="contact-label">Email</span>
-                        <a href="mailto:info@syntaric.com">info@syntaric.com</a>
-                    </div>
-                    <div class="contact-item">
-                        <span class="contact-label">Phone</span>
-                        <a href="tel:+38641551431">+386 41 551 431</a>
-                    </div>
-                    <div class="contact-item">
-                        <span class="contact-label">LinkedIn</span>
-                        <a href="https://www.linkedin.com/in/andrejcgasper/" target="_blank">Gasper Andrejc</a>
-                    </div>
-                    <div class="contact-item">
-                        <span class="contact-label">Location</span>
-                        <span style="margin-top: 0.5rem;">Parižlje 117, 3314 Braslovče, Slovenia</span>
+            <div class="contact-layout">
+                <div class="contact-cta-block">
+                    <p class="section-tag">Get in touch</p>
+                    <h2 class="section-heading">Let's build better healthcare IT together</h2>
+                    <p style="font-size: 1rem; color: var(--ink-light); line-height: 1.7;">Whether you're starting a new integration project, need a second opinion on your architecture, or want to explore openFHIR — we'd love to hear from you.</p>
+                    <a href="mailto:info@syntaric.com" class="btn-primary" style="align-self: flex-start;">
+                        Send us an email
+                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg>
+                    </a>
+                </div>
+                <div class="contact-card">
+                    <h3>Contact details</h3>
+                    <div class="contact-rows">
+                        <div class="contact-row">
+                            <div class="contact-icon">
+                                <svg viewBox="0 0 24 24"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg>
+                            </div>
+                            <div>
+                                <div class="contact-row-label">Email</div>
+                                <a href="mailto:info@syntaric.com">info@syntaric.com</a>
+                            </div>
+                        </div>
+                        <div class="contact-row">
+                            <div class="contact-icon">
+                                <svg viewBox="0 0 24 24"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07A19.5 19.5 0 0 1 4.69 12a19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 3.6 1.18h3a2 2 0 0 1 2 1.72c.127.96.361 1.903.7 2.81a2 2 0 0 1-.45 2.11L7.91 8.91a16 16 0 0 0 6.08 6.08l.98-.97a2 2 0 0 1 2.11-.45c.907.339 1.85.573 2.81.7a2 2 0 0 1 1.72 2.05z"/></svg>
+                            </div>
+                            <div>
+                                <div class="contact-row-label">Phone</div>
+                                <a href="tel:+38641551431">+386 41 551 431</a>
+                            </div>
+                        </div>
+                        <div class="contact-row">
+                            <div class="contact-icon">
+                                <svg viewBox="0 0 24 24"><path d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-2-2 2 2 0 0 0-2 2v7h-4v-7a6 6 0 0 1 6-6z"/><rect x="2" y="9" width="4" height="12"/><circle cx="4" cy="4" r="2"/></svg>
+                            </div>
+                            <div>
+                                <div class="contact-row-label">LinkedIn</div>
+                                <a href="https://www.linkedin.com/in/andrejcgasper/" target="_blank">Gasper Andrejc</a>
+                            </div>
+                        </div>
+                        <div class="contact-row">
+                            <div class="contact-icon">
+                                <svg viewBox="0 0 24 24"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>
+                            </div>
+                            <div>
+                                <div class="contact-row-label">Location</div>
+                                <span>Parižlje 117, 3314 Braslovče, Slovenia</span>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>
         </div>
     </section>
 
-    <!-- Footer -->
+    <!-- ─── FOOTER ─── -->
     <footer>
         <div class="container">
-            <p>&copy; 2025 Syntaric d.o.o. | Healthcare Interoperability Consulting</p>
-            <p style="margin-top: 0.5rem;">SI24333611 | 9746927000</p>
+            <div class="footer-inner">
+                <div class="footer-left">
+                    <span class="footer-logo-name">Syntaric</span>
+                </div>
+                <div class="footer-right">
+                    <p>&copy; 2025 Syntaric d.o.o. · Healthcare Interoperability Consulting</p>
+                    <p>VAT SI24333611 · Reg. 9746927000</p>
+                </div>
+            </div>
         </div>
     </footer>
+
 </body>
 </html>
