@@ -1,0 +1,392 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Analytics with Firely Server | Syntaric</title>
+    <meta name="description" content="How to separate analytics workloads from production FHIR infrastructure using Firely Server, RabbitMQ, and the ELK stack.">
+    <meta name="robots" content="index, follow">
+    <link rel="canonical" href="https://syntaric.com/blog/analytics-firely-server/">
+
+    <!-- Open Graph -->
+    <meta property="og:type" content="article">
+    <meta property="og:url" content="https://syntaric.com/blog/analytics-firely-server/">
+    <meta property="og:title" content="Analytics with Firely Server | Syntaric">
+    <meta property="og:description" content="How to separate analytics workloads from production FHIR infrastructure using Firely Server, RabbitMQ, and the ELK stack.">
+    <meta property="og:image" content="https://syntaric.com/blog/images/analytics-firely-server.jpg">
+    <meta property="og:site_name" content="Syntaric">
+    <meta property="article:published_time" content="2024-12-18">
+    <meta property="article:author" content="Gasper Andrejc">
+    <meta property="article:tag" content="FHIR">
+    <meta property="article:tag" content="Firely Server">
+    <meta property="article:tag" content="Analytics">
+    <meta property="article:tag" content="ELK">
+    <meta property="article:tag" content="Architecture">
+
+    <!-- Twitter Card -->
+    <meta name="twitter:card" content="summary">
+    <meta name="twitter:title" content="Analytics with Firely Server | Syntaric">
+    <meta name="twitter:description" content="How to separate analytics workloads from production FHIR infrastructure using Firely Server, RabbitMQ, and the ELK stack.">
+    <meta name="twitter:image" content="https://syntaric.com/blog/images/analytics-firely-server.jpg">
+
+    <!-- JSON-LD: Article -->
+    <script type="application/ld+json">{
+  "@context": "https://schema.org",
+  "@type": "Article",
+  "headline": "Analytics with Firely Server",
+  "description": "How to separate analytics workloads from production FHIR infrastructure using Firely Server, RabbitMQ, and the ELK stack.",
+  "datePublished": "2024-12-18",
+  "author": {
+    "@type": "Person",
+    "name": "Gasper Andrejc",
+    "url": "https://www.linkedin.com/in/andrejcgasper/"
+  },
+  "publisher": {
+    "@type": "Organization",
+    "name": "Syntaric",
+    "@id": "https://syntaric.com/#organization",
+    "logo": {
+      "@type": "ImageObject",
+      "url": "https://syntaric.com/blog/images/analytics-firely-server.jpg"
+    }
+  },
+  "mainEntityOfPage": {
+    "@type": "WebPage",
+    "@id": "https://syntaric.com/blog/analytics-firely-server/"
+  },
+  "keywords": "FHIR, Firely Server, Analytics, ELK, Architecture"
+}</script>
+
+    <link rel="icon" type="image/png" href="../../favicon-96x96.png" sizes="96x96" />
+    <link rel="icon" type="image/svg+xml" href="../../favicon.svg" />
+    <link rel="shortcut icon" href="../../favicon.ico" />
+    <link rel="apple-touch-icon" sizes="180x180" href="../../apple-touch-icon.png" />
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=DM+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+
+        :root {
+            --ink: #0d1117;
+            --ink-light: #4a5568;
+            --ink-muted: #718096;
+            --surface: #ffffff;
+            --surface-2: #f7f8fc;
+            --surface-3: #eef0f6;
+            --border: #e2e8f0;
+            --accent: #0052cc;
+            --accent-light: #e8f0fe;
+            --accent-glow: rgba(0, 82, 204, 0.12);
+            --green: #0f7b55;
+            --green-light: #e6f4f0;
+            --radius: 12px;
+            --radius-lg: 20px;
+            --shadow-sm: 0 1px 3px rgba(0,0,0,0.06), 0 1px 2px rgba(0,0,0,0.04);
+            --shadow: 0 4px 16px rgba(0,0,0,0.07), 0 1px 4px rgba(0,0,0,0.04);
+            --shadow-lg: 0 16px 48px rgba(0,0,0,0.1), 0 4px 12px rgba(0,0,0,0.06);
+            --nav-h: 68px;
+        }
+
+        html { scroll-behavior: smooth; }
+
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+            color: var(--ink);
+            background: var(--surface);
+            line-height: 1.6;
+            -webkit-font-smoothing: antialiased;
+        }
+
+        .container { max-width: 1160px; margin: 0 auto; padding: 0 24px; }
+
+        /* ─── NAV ─── */
+        header {
+            position: sticky; top: 0; z-index: 200;
+            background: rgba(255,255,255,0.88);
+            backdrop-filter: blur(16px); -webkit-backdrop-filter: blur(16px);
+            border-bottom: 1px solid var(--border);
+            height: var(--nav-h);
+        }
+        nav { height: 100%; display: flex; align-items: center; justify-content: space-between; }
+        .logo { display: flex; align-items: center; gap: 10px; text-decoration: none; }
+        .logo img { height: 36px; width: auto; }
+        .logo-name { font-size: 1.2rem; font-weight: 700; color: var(--ink); letter-spacing: -0.02em; }
+        .nav-links { display: flex; align-items: center; gap: 2rem; list-style: none; }
+        .nav-links a { font-size: 0.9rem; font-weight: 500; color: var(--ink-light); text-decoration: none; transition: color 0.2s; }
+        .nav-links a:hover { color: var(--ink); }
+        .nav-links a.active { color: var(--accent); }
+        .nav-cta { background: var(--ink) !important; color: var(--surface) !important; padding: 0.55rem 1.25rem !important; border-radius: 8px !important; font-size: 0.875rem !important; transition: background 0.2s, opacity 0.2s !important; }
+        .nav-cta:hover { opacity: 0.85; }
+        @media (max-width: 640px) { .nav-links { display: none; } }
+
+        /* ─── FOOTER ─── */
+        footer { background: var(--ink); color: rgba(255,255,255,0.5); padding: 36px 0; }
+        .footer-inner { display: flex; align-items: center; justify-content: space-between; gap: 24px; flex-wrap: wrap; }
+        .footer-logo-name { font-size: 1.1rem; font-weight: 700; color: white; letter-spacing: -0.02em; }
+        .footer-right { text-align: right; font-size: 0.825rem; line-height: 1.6; }
+        @media (max-width: 640px) { .footer-right { text-align: left; } }
+
+        /* ─── ANIMATIONS ─── */
+        @keyframes fade-up { from { opacity: 0; transform: translateY(18px); } to { opacity: 1; transform: translateY(0); } }
+        .animate { animation: fade-up 0.55s ease both; }
+        .delay-1 { animation-delay: 0.1s; }
+        .delay-2 { animation-delay: 0.2s; }
+        .delay-3 { animation-delay: 0.3s; }
+
+        /* ─── ARTICLE HERO ─── */
+        .article-hero {
+            background: linear-gradient(135deg, #0a1832 0%, #0d2160 40%, #0052cc 80%, #1a6fff 100%);
+            padding: 80px 0 72px; position: relative; overflow: hidden;
+        }
+        .article-hero::before { content: ''; position: absolute; top: -100px; right: -100px; width: 600px; height: 600px; background: radial-gradient(circle, rgba(255,255,255,0.06) 0%, transparent 70%); pointer-events: none; }
+        .article-hero::after  { content: ''; position: absolute; bottom: -80px; left: -80px; width: 400px; height: 400px; background: radial-gradient(circle, rgba(26,111,255,0.2) 0%, transparent 70%); pointer-events: none; }
+        .article-hero-inner { position: relative; z-index: 1; max-width: 800px; }
+        .breadcrumb { display: flex; align-items: center; gap: 8px; margin-bottom: 2rem; }
+        .breadcrumb a { font-size: 0.85rem; font-weight: 500; color: rgba(255,255,255,0.6); text-decoration: none; transition: color 0.2s; }
+        .breadcrumb a:hover { color: rgba(255,255,255,0.9); }
+        .breadcrumb-sep { color: rgba(255,255,255,0.3); font-size: 0.85rem; }
+        .breadcrumb-current { font-size: 0.85rem; color: rgba(255,255,255,0.5); overflow: hidden; text-overflow: ellipsis; white-space: nowrap; max-width: 300px; }
+        .article-tag { display: inline-flex; align-items: center; font-size: 0.75rem; font-weight: 600; letter-spacing: 0.08em; text-transform: uppercase; color: rgba(255,255,255,0.9); background: rgba(255,255,255,0.14); border: 1px solid rgba(255,255,255,0.2); padding: 5px 12px; border-radius: 100px; margin-bottom: 1.5rem; }
+        .article-hero h1 { font-size: clamp(1.8rem, 3.5vw, 2.8rem); font-weight: 700; line-height: 1.15; letter-spacing: -0.03em; color: white; margin-bottom: 1.5rem; }
+        .article-hero-meta { display: flex; align-items: center; gap: 16px; flex-wrap: wrap; }
+        .article-meta-author { display: flex; align-items: center; gap: 10px; }
+        .article-meta-avatar { width: 36px; height: 36px; border-radius: 50%; background: rgba(255,255,255,0.15); border: 2px solid rgba(255,255,255,0.3); display: flex; align-items: center; justify-content: center; font-size: 0.75rem; font-weight: 700; color: white; }
+        .article-meta-name { font-size: 0.9rem; font-weight: 600; color: rgba(255,255,255,0.9); }
+        .article-meta-role { font-size: 0.8rem; color: rgba(255,255,255,0.55); margin-top: 1px; }
+        .article-meta-sep { width: 3px; height: 3px; border-radius: 50%; background: rgba(255,255,255,0.25); }
+        .article-meta-date, .article-meta-read { font-size: 0.85rem; color: rgba(255,255,255,0.55); }
+
+        /* ─── ARTICLE LAYOUT ─── */
+        .article-layout { display: grid; grid-template-columns: 1fr 300px; gap: 48px; padding: 64px 0 96px; align-items: start; }
+        @media (max-width: 900px) { .article-layout { grid-template-columns: 1fr; gap: 40px; } .article-sidebar { order: -1; } }
+        @media (max-width: 640px) { .article-layout { padding: 40px 0 72px; } }
+
+        /* ─── ARTICLE BODY ─── */
+        .article-body { min-width: 0; }
+        .article-body h2 { font-size: 1.5rem; font-weight: 700; line-height: 1.25; letter-spacing: -0.02em; color: var(--ink); margin: 2.5rem 0 1rem; padding-top: 2rem; border-top: 1px solid var(--border); }
+        .article-body h2:first-child { margin-top: 0; padding-top: 0; border-top: none; }
+        .article-body h3 { font-size: 1.15rem; font-weight: 600; color: var(--ink); margin: 1.75rem 0 0.75rem; }
+        .article-body p { font-size: 1.05rem; line-height: 1.8; color: var(--ink-light); margin-bottom: 1.25rem; }
+        .article-body strong { color: var(--ink); font-weight: 600; }
+        .article-body a { color: var(--accent); text-decoration: underline; text-decoration-color: rgba(0,82,204,0.3); text-underline-offset: 3px; transition: text-decoration-color 0.2s; }
+        .article-body a:hover { text-decoration-color: var(--accent); }
+        .article-body ul, .article-body ol { margin: 1rem 0 1.25rem 1.5rem; display: flex; flex-direction: column; gap: 0.5rem; }
+        .article-body li { font-size: 1.05rem; line-height: 1.7; color: var(--ink-light); }
+        .article-body li strong { color: var(--ink); }
+        .article-body pre { background: var(--ink); color: #e2e8f0; border-radius: var(--radius); padding: 20px 24px; overflow-x: auto; margin: 1.5rem 0; font-size: 0.9rem; line-height: 1.6; }
+        .article-body code { font-family: 'JetBrains Mono', 'Fira Code', 'Cascadia Code', monospace; }
+        .article-body p code, .article-body li code { background: var(--surface-3); color: var(--accent); padding: 2px 6px; border-radius: 4px; font-size: 0.9em; }
+        .article-body img { max-width: 100%; border-radius: var(--radius); border: 1px solid var(--border); margin: 1.5rem 0; }
+        .article-body hr { border: none; border-top: 1px solid var(--border); margin: 2.5rem 0; }
+        .article-body table { width: 100%; border-collapse: collapse; margin: 1.5rem 0; font-size: 0.95rem; }
+        .article-body th { background: var(--surface-2); font-weight: 600; color: var(--ink); text-align: left; padding: 10px 14px; border: 1px solid var(--border); }
+        .article-body td { padding: 10px 14px; border: 1px solid var(--border); color: var(--ink-light); }
+        .article-body tr:hover td { background: var(--surface-2); }
+
+        /* ─── COVER IMAGE ─── */
+        .article-cover { width: 100%; max-height: 480px; object-fit: cover; border-radius: var(--radius-lg); margin-bottom: 48px; border: 1px solid var(--border); display: block; }
+
+        /* ─── CALLOUT ─── */
+        .callout { background: var(--accent-light); border-left: 3px solid var(--accent); border-radius: 0 var(--radius) var(--radius) 0; padding: 20px 24px; margin: 1.75rem 0; }
+        .callout p { margin: 0; color: var(--ink); font-size: 0.975rem; }
+
+        /* ─── SIDEBAR ─── */
+        .article-sidebar { position: sticky; top: calc(var(--nav-h) + 24px); }
+        .sidebar-card { background: var(--surface-2); border: 1px solid var(--border); border-radius: var(--radius-lg); padding: 24px; margin-bottom: 20px; }
+        .sidebar-card-title { font-size: 0.75rem; font-weight: 600; letter-spacing: 0.08em; text-transform: uppercase; color: var(--ink-muted); margin-bottom: 16px; }
+        .toc-list { list-style: none; display: flex; flex-direction: column; gap: 2px; }
+        .toc-list a { display: block; font-size: 0.875rem; color: var(--ink-light); text-decoration: none; padding: 6px 10px; border-radius: 6px; transition: background 0.15s, color 0.15s; line-height: 1.4; }
+        .toc-list a:hover { background: var(--surface-3); color: var(--ink); }
+        .sidebar-tags { display: flex; flex-wrap: wrap; gap: 8px; }
+        .sidebar-tag { font-size: 0.78rem; font-weight: 500; color: var(--accent); background: var(--accent-light); padding: 4px 10px; border-radius: 100px; }
+        .sidebar-author-name { font-size: 0.95rem; font-weight: 600; color: var(--ink); margin-bottom: 4px; }
+        .sidebar-author-role { font-size: 0.83rem; color: var(--ink-muted); margin-bottom: 16px; line-height: 1.5; }
+        .sidebar-author-link { display: inline-flex; align-items: center; gap: 6px; font-size: 0.83rem; font-weight: 500; color: var(--accent); text-decoration: none; transition: opacity 0.2s; }
+        .sidebar-author-link:hover { opacity: 0.75; }
+        .sidebar-author-link svg { width: 14px; height: 14px; stroke: currentColor; fill: none; stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; }
+    </style>
+</head>
+<body>
+
+    <header>
+        <nav class="container">
+            <a href="../../" class="logo">
+                <img src="../../etc/syntaric_logo_2.png" alt="Syntaric">
+                <span class="logo-name">Syntaric</span>
+            </a>
+            <ul class="nav-links">
+                <li><a href="../../#services">Services</a></li>
+                <li><a href="../../#engagements">Engagements</a></li>
+                <li><a href="../../#openfhir">openFHIR</a></li>
+                <li><a href="../../#expertise">Expertise</a></li>
+                <li><a href="../../#collaborators">Collaborators</a></li>
+                <li><a href="../../blog/" class="active">Blog</a></li>
+                <li><a href="../../#contact" class="nav-cta">Contact</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <!-- ─── ARTICLE HERO ─── -->
+    <section class="article-hero">
+        <div class="container">
+            <div class="article-hero-inner animate">
+                <div class="breadcrumb">
+                    <a href="../../">Home</a>
+                    <span class="breadcrumb-sep">/</span>
+                    <a href="../">Blog</a>
+                    <span class="breadcrumb-sep">/</span>
+                    <span class="breadcrumb-current">Analytics with Firely Server</span>
+                </div>
+                <span class="article-tag">Architecture</span>
+                <h1>Analytics with Firely Server</h1>
+                <div class="article-hero-meta">
+                    <div class="article-meta-author">
+                        <div class="article-meta-avatar">GA</div>
+                        <div>
+                            <div class="article-meta-name">Gasper Andrejc</div>
+                            <div class="article-meta-role">Healthcare Interoperability Architect</div>
+                            <div class="article-meta-role"><strong>Written as:</strong> Firely Server Technical Consultant</div>
+                        </div>
+                    </div>
+                    <span class="article-meta-sep"></span>
+                    <span class="article-meta-date">December 18, 2024</span>
+                    <span class="article-meta-sep"></span>
+                    <span class="article-meta-read">4 min read</span>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ─── ARTICLE CONTENT ─── -->
+    <div class="container">
+        <div class="article-layout">
+            <article class="article-body animate">
+<img src="../../blog/analytics-firely-server/cover.png" alt="Analytics with Firely Server" class="article-cover">
+<h2 id="introduction">Introduction</h2>
+<p>Running analytics and reporting directly on a production database, particularly one serving as a clinical data
+repository, can create significant challenges and risks that impact both system performance and data management.
+Clinical systems must maintain high availability, reliability, and speed to support critical real-time operations, such
+as patient care and clinical decision-making.</p>
+<p>When resource-intensive analytics processes are executed directly against the production database, they can interfere
+with the system&#39;s responsiveness, slow down vital queries, and even cause database locking, preventing essential
+clinical transactions from completing in a timely manner.</p>
+<p>Moreover, clinical data often includes sensitive patient information that must be carefully managed to meet privacy
+regulations and ensure data security. Performing analytics on this data without proper anonymization or governance
+introduces risks around unauthorized access and potential breaches of confidentiality.</p>
+<p>In this article, I will shed light on these challenges and present an alternative architecture built around the Firely
+Server. This setup incorporates services such as Elasticsearch, Logstash, Kibana and RabbitMQ.</p>
+<h2 id="performance">Performance</h2>
+<p>The performance of the Firely Server largely depends on the setup, scale, and administration of the underlying database.
+It supports SQL Server, SQLite, and MongoDB, and is designed to take full advantage of specific database
+functionalities (indexing, sharding, ..) to maximize performance. It is important to know though, that it adheres
+strictly to the FHIR specification, which also introduces certain boundaries. A clear example of this is the use of
+predefined query parameters specified by FHIR. These parameters are appropriately indexed (even custom Search
+Parameters), ensuring that queries executed against them are both fast and efficient.</p>
+<p>Trying to squeeze an analytics or reporting use case into this setup is like forcing a square peg into a round hole -
+you’re setting yourself up for a tough time. Any modifications you make to accommodate analytics would likely be for all
+the wrong reasons. The principle of separation of concerns is clear: the Firely Server is designed to support primary
+use cases, while a dedicated architecture built around it should handle the secondary analytics workload.</p>
+<p><img src="../analytics-firely-server/hammer.png" alt="hammer.png"></p>
+<h2 id="elk">ELK</h2>
+<p>ELK stands for Elasticsearch, Logstash, and Kibana. This stack is designed specifically for searching, analyzing, and
+visualizing large volumes of data in real time, making it an ideal solution for reporting and analytics use cases.
+Unlike a FHIR server, which is built to handle clinical data for primary use cases, the ELK Stack is purpose-built to
+process and present data efficiently for secondary tasks like analytics and reporting.</p>
+<p>So, how can we leverage this with Firely Server?</p>
+<h2 id="rabbitmq">RabbitMQ</h2>
+<p>The Firely Server, out of the box, supports integration with a messaging queue through its Firely PubSub feature. By
+leveraging this integration, you can seamlessly export events to an analytics warehouse with minimal to no performance
+impact on the production system.</p>
+<p>The PubSub feature supports two specific types of events:</p>
+<ul>
+<li><strong>ResourcesChangedEvent</strong>: This event includes the full FHIR Resource along with additional metadata, which is added
+to the
+messaging queue.</li>
+<li><strong>ResourcesChangedLightEvent</strong>: This lighter event includes only key information about the Resource (but not the
+Resource
+itself), making it more efficient for scenarios where full Resource details are not required.</li>
+</ul>
+<p>Using RabbitMQ in this setup allows for reliable and scalable message handling, enabling real-time or near-real-time
+processing of data for analytics without burdening the Firely Server or the underlying database.</p>
+<h2 id="architecture">Architecture</h2>
+<p><img src="../analytics-firely-server/pipeline.png" alt="pipeline.png"></p>
+<p>When a request comes through, the Firely Server processes it as usual but, in parallel, also adds it to the messaging
+queue (e.g., RabbitMQ) using its PubSub feature. On the other end, Logstash is subscribed to the queue and acts as a
+powerful data processor. With the wide range of functionalities Logstash offers, you can handle the data however you
+need - be it anonymization, extraction, transformation, or any other operation required to tailor the data for your
+analytical or reporting use case.</p>
+<p><img src="../analytics-firely-server/logstash.png" alt="logstash.png"></p>
+<p>Then comes Elasticsearch, which serves as both a data storage solution and a powerful search engine that drives Kibana&#39;s
+visualization capabilities. After Logstash finishes its logstashing (processing, transforming, and/or enriching the
+data), it sends the processed data to Elasticsearch for indexing and storage.</p>
+<h2 id="visualization">Visualization</h2>
+<p>Last but not least comes the most important part - making use of all this data. Enter Kibana, the visualization
+powerhouse of the stack. Kibana offers an almost overwhelming array of features to help you make sense of the data
+you&#39;ve just stored. With Elasticsearch underneath, the queries you perform are crazy fast, and most importantly, they
+have zero performance impact on the FHIR server itself, as this entire process is isolated from the core clinical data
+repository. Additionally, users accessing this data can see and analyze it safely, as any sensitive information has
+already been removed or anonymized during this whole process.</p>
+<p><img src="../analytics-firely-server/dashboard1.png" alt="dashboard1.png"></p>
+<p><img src="../analytics-firely-server/dashboard2.png" alt="dashboard2.png"></p>
+<h2 id="conclusion">Conclusion</h2>
+<p>This is just one of many ways of how you can complement Firely Server with peripherals and suit many use cases at once.
+It is important to know more tools so you don&#39;t end up making compromises that would impact sensitive information flow.
+When your only tool is a hammer, you tend to see every problem as a nail. For setting up the ideal architecture, you
+sometimes need to look outside the box and Firely Server, with a wide variety of plugins and integration capabilities,
+is able to play an active role in such a diverse setup.</p>
+
+            </article>
+
+            <aside class="article-sidebar">
+                <div class="sidebar-card">
+                    <div class="sidebar-card-title">Table of contents</div>
+                    <ul class="toc-list">
+                        <li><a href="#introduction">Introduction</a></li>
+                        <li><a href="#performance">Performance</a></li>
+                        <li><a href="#elk">ELK</a></li>
+                        <li><a href="#rabbitmq">RabbitMQ</a></li>
+                        <li><a href="#architecture">Architecture</a></li>
+                        <li><a href="#visualization">Visualization</a></li>
+                        <li><a href="#conclusion">Conclusion</a></li>
+                    </ul>
+                </div>
+
+                <div class="sidebar-card">
+                    <div class="sidebar-card-title">Author</div>
+                    <div class="sidebar-author-name">Gasper Andrejc</div>
+                    <div class="sidebar-author-role">Healthcare Interoperability Architect &amp; Consultant at Syntaric. 10+ years building FHIR, openEHR, and IHE solutions across Europe and the US.</div>
+                    <a href="https://www.linkedin.com/in/andrejcgasper/" target="_blank" class="sidebar-author-link">
+                        LinkedIn profile
+                        <svg viewBox="0 0 24 24"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>
+                    </a>
+                </div>
+
+                <div class="sidebar-card">
+                    <div class="sidebar-card-title">Topics</div>
+                    <div class="sidebar-tags">
+                        <span class="sidebar-tag">FHIR</span>
+                        <span class="sidebar-tag">Firely Server</span>
+                        <span class="sidebar-tag">Analytics</span>
+                        <span class="sidebar-tag">ELK</span>
+                        <span class="sidebar-tag">Architecture</span>
+                    </div>
+                </div>
+            </aside>
+        </div>
+    </div>
+
+    <footer>
+        <div class="container">
+            <div class="footer-inner">
+                <div><span class="footer-logo-name">Syntaric</span></div>
+                <div class="footer-right">
+                    <p>&copy; 2025 Syntaric d.o.o. · Healthcare Interoperability Consulting</p>
+                    <p>VAT SI24333611 · Reg. 9746927000</p>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+</body>
+</html>

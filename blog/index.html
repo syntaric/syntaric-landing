@@ -1,0 +1,585 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <!-- Google tag (gtag.js) -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-ZSP30ZJ4NV"></script>
+    <script>
+        window.dataLayer = window.dataLayer || [];
+        function gtag(){dataLayer.push(arguments);}
+        gtag('js', new Date());
+
+        gtag('config', 'G-ZSP30ZJ4NV');
+    </script>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Blog | Syntaric</title>
+    <meta name="description" content="Deep dives into FHIR, openEHR, IHE, and the architecture decisions shaping modern health information exchange — by Gasper Andrejc, Syntaric.">
+    <meta name="robots" content="index, follow">
+    <link rel="canonical" href="https://syntaric.com/blog/">
+
+    <!-- Open Graph -->
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://syntaric.com/blog/">
+    <meta property="og:title" content="Blog | Syntaric">
+    <meta property="og:description" content="Deep dives into FHIR, openEHR, IHE, and the architecture decisions shaping modern health information exchange — by Gasper Andrejc, Syntaric.">
+    <meta property="og:image" content="https://syntaric.com/etc/syntaric_logo_2.png">
+    <meta property="og:site_name" content="Syntaric">
+
+    <!-- Twitter Card -->
+    <meta name="twitter:card" content="summary">
+    <meta name="twitter:title" content="Blog | Syntaric">
+    <meta name="twitter:description" content="Deep dives into FHIR, openEHR, IHE, and the architecture decisions shaping modern health information exchange — by Gasper Andrejc, Syntaric.">
+    <meta name="twitter:image" content="https://syntaric.com/etc/syntaric_logo_2.png">
+
+    <!-- JSON-LD: Blog -->
+    <script type="application/ld+json">{
+  "@context": "https://schema.org",
+  "@type": "Blog",
+  "name": "Syntaric Blog",
+  "url": "https://syntaric.com/blog/",
+  "description": "Deep dives into FHIR, openEHR, IHE, and the architecture decisions shaping modern health information exchange — by Gasper Andrejc, Syntaric.",
+  "publisher": {
+    "@type": "Organization",
+    "name": "Syntaric",
+    "@id": "https://syntaric.com/#organization"
+  },
+  "blogPost": [
+    {
+      "@type": "BlogPosting",
+      "headline": "eOverdracht in a Hybrid Architecture of openEHR and FHIR",
+      "url": "https://syntaric.com/blog/eoverdracht-hybrid-architecture-openehr-fhir/",
+      "datePublished": "2026-01-13",
+      "author": {
+        "@type": "Person",
+        "name": "Gasper Andrejc"
+      }
+    },
+    {
+      "@type": "BlogPosting",
+      "headline": "FHIR Server and XDS",
+      "url": "https://syntaric.com/blog/fhir-server-xds/",
+      "datePublished": "2025-07-15",
+      "author": {
+        "@type": "Person",
+        "name": "Gasper Andrejc"
+      }
+    },
+    {
+      "@type": "BlogPosting",
+      "headline": "Analytics with Firely Server",
+      "url": "https://syntaric.com/blog/analytics-firely-server/",
+      "datePublished": "2024-12-18",
+      "author": {
+        "@type": "Person",
+        "name": "Gasper Andrejc"
+      }
+    },
+    {
+      "@type": "BlogPosting",
+      "headline": "Firely Server and openEHR",
+      "url": "https://syntaric.com/blog/firely-server-openehr/",
+      "datePublished": "2024-09-12",
+      "author": {
+        "@type": "Person",
+        "name": "Gasper Andrejc"
+      }
+    },
+    {
+      "@type": "BlogPosting",
+      "headline": "Extending Firely Server & FHIR DS4P",
+      "url": "https://syntaric.com/blog/extending-firely-server-fhir-ds4p/",
+      "datePublished": "2024-04-23",
+      "author": {
+        "@type": "Person",
+        "name": "Gasper Andrejc"
+      }
+    },
+    {
+      "@type": "BlogPosting",
+      "headline": "Renaissance of Vitaly's Interoperable Core",
+      "url": "https://syntaric.com/blog/renaissance-vitalys-interoperable-core/",
+      "datePublished": "2023-10-18",
+      "author": {
+        "@type": "Person",
+        "name": "Gasper Andrejc"
+      }
+    },
+    {
+      "@type": "BlogPosting",
+      "headline": "Vitaly Going NUTS",
+      "url": "https://syntaric.com/blog/vitaly-going-nuts/",
+      "datePublished": "2023-02-09",
+      "author": {
+        "@type": "Person",
+        "name": "Gasper Andrejc"
+      }
+    },
+    {
+      "@type": "BlogPosting",
+      "headline": "Virtual MDT Meetings Through the Lens of Interoperability",
+      "url": "https://syntaric.com/blog/virtual-mdt-meetings-interoperability/",
+      "datePublished": "2022-12-22",
+      "author": {
+        "@type": "Person",
+        "name": "Gasper Andrejc"
+      }
+    },
+    {
+      "@type": "BlogPosting",
+      "headline": "Data First: Use-Case Driven Interoperability",
+      "url": "https://syntaric.com/blog/data-first-use-case-driven-interoperability/",
+      "datePublished": "2022-11-24",
+      "author": {
+        "@type": "Person",
+        "name": "Gasper Andrejc"
+      }
+    },
+    {
+      "@type": "BlogPosting",
+      "headline": "Pragmatic Approach to Interoperability",
+      "url": "https://syntaric.com/blog/pragmatic-approach-interoperability/",
+      "datePublished": "2022-10-28",
+      "author": {
+        "@type": "Person",
+        "name": "Gasper Andrejc"
+      }
+    }
+  ]
+}</script>
+
+    <link rel="icon" type="image/png" href="../favicon-96x96.png" sizes="96x96" />
+    <link rel="icon" type="image/svg+xml" href="../favicon.svg" />
+    <link rel="shortcut icon" href="../favicon.ico" />
+    <link rel="apple-touch-icon" sizes="180x180" href="../apple-touch-icon.png" />
+    <link rel="manifest" href="../site.webmanifest" />
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=DM+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+
+        :root {
+            --ink: #0d1117;
+            --ink-light: #4a5568;
+            --ink-muted: #718096;
+            --surface: #ffffff;
+            --surface-2: #f7f8fc;
+            --surface-3: #eef0f6;
+            --border: #e2e8f0;
+            --accent: #0052cc;
+            --accent-light: #e8f0fe;
+            --accent-glow: rgba(0, 82, 204, 0.12);
+            --green: #0f7b55;
+            --green-light: #e6f4f0;
+            --radius: 12px;
+            --radius-lg: 20px;
+            --shadow-sm: 0 1px 3px rgba(0,0,0,0.06), 0 1px 2px rgba(0,0,0,0.04);
+            --shadow: 0 4px 16px rgba(0,0,0,0.07), 0 1px 4px rgba(0,0,0,0.04);
+            --shadow-lg: 0 16px 48px rgba(0,0,0,0.1), 0 4px 12px rgba(0,0,0,0.06);
+            --nav-h: 68px;
+        }
+
+        html { scroll-behavior: smooth; }
+
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+            color: var(--ink);
+            background: var(--surface);
+            line-height: 1.6;
+            -webkit-font-smoothing: antialiased;
+        }
+
+        .container { max-width: 1160px; margin: 0 auto; padding: 0 24px; }
+
+        /* ─── NAV ─── */
+        header {
+            position: sticky; top: 0; z-index: 200;
+            background: rgba(255,255,255,0.88);
+            backdrop-filter: blur(16px); -webkit-backdrop-filter: blur(16px);
+            border-bottom: 1px solid var(--border);
+            height: var(--nav-h);
+        }
+        nav { height: 100%; display: flex; align-items: center; justify-content: space-between; }
+        .logo { display: flex; align-items: center; gap: 10px; text-decoration: none; }
+        .logo img { height: 36px; width: auto; }
+        .logo-name { font-size: 1.2rem; font-weight: 700; color: var(--ink); letter-spacing: -0.02em; }
+        .nav-links { display: flex; align-items: center; gap: 2rem; list-style: none; }
+        .nav-links a { font-size: 0.9rem; font-weight: 500; color: var(--ink-light); text-decoration: none; transition: color 0.2s; }
+        .nav-links a:hover { color: var(--ink); }
+        .nav-links a.active { color: var(--accent); }
+        .nav-cta { background: var(--ink) !important; color: var(--surface) !important; padding: 0.55rem 1.25rem !important; border-radius: 8px !important; font-size: 0.875rem !important; transition: background 0.2s, opacity 0.2s !important; }
+        .nav-cta:hover { opacity: 0.85; }
+        @media (max-width: 640px) { .nav-links { display: none; } }
+
+        /* ─── FOOTER ─── */
+        footer { background: var(--ink); color: rgba(255,255,255,0.5); padding: 36px 0; }
+        .footer-inner { display: flex; align-items: center; justify-content: space-between; gap: 24px; flex-wrap: wrap; }
+        .footer-logo-name { font-size: 1.1rem; font-weight: 700; color: white; letter-spacing: -0.02em; }
+        .footer-right { text-align: right; font-size: 0.825rem; line-height: 1.6; }
+        @media (max-width: 640px) { .footer-right { text-align: left; } }
+
+        /* ─── ANIMATIONS ─── */
+        @keyframes fade-up { from { opacity: 0; transform: translateY(18px); } to { opacity: 1; transform: translateY(0); } }
+        .animate { animation: fade-up 0.55s ease both; }
+        .delay-1 { animation-delay: 0.1s; }
+        .delay-2 { animation-delay: 0.2s; }
+        .delay-3 { animation-delay: 0.3s; }
+
+        /* ─── HERO ─── */
+        .blog-hero {
+            padding: 80px 0 64px;
+            background:
+                linear-gradient(to bottom, rgba(255,255,255,0.94) 0%, rgba(255,255,255,0.88) 50%, rgba(255,255,255,0.98) 100%),
+                url('https://open-fhir.com/images/openFHIR-hero-background-image.jpg') center/cover no-repeat;
+            position: relative; overflow: hidden;
+        }
+        .blog-hero::before { content: ''; position: absolute; top: -120px; right: -160px; width: 600px; height: 600px; background: radial-gradient(circle, rgba(0,82,204,0.07) 0%, transparent 70%); pointer-events: none; }
+        .blog-hero-label { display: inline-flex; align-items: center; gap: 8px; font-size: 0.8rem; font-weight: 600; letter-spacing: 0.08em; text-transform: uppercase; color: var(--accent); background: var(--accent-light); padding: 6px 14px; border-radius: 100px; margin-bottom: 1.5rem; }
+        .blog-hero-dot { width: 6px; height: 6px; border-radius: 50%; background: var(--accent); }
+        .blog-hero h1 { font-size: clamp(2rem, 4vw, 3rem); font-weight: 700; line-height: 1.1; letter-spacing: -0.03em; color: var(--ink); max-width: 600px; margin-bottom: 1rem; }
+        .blog-hero-desc { font-size: 1.1rem; color: var(--ink-light); max-width: 520px; line-height: 1.7; }
+
+        /* ─── POSTS GRID ─── */
+        .blog-posts { padding: 72px 0 96px; }
+        .posts-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 28px; }
+        @media (max-width: 900px) { .posts-grid { grid-template-columns: repeat(2, 1fr); } }
+        @media (max-width: 640px) { .posts-grid { grid-template-columns: 1fr; } }
+
+        /* Featured */
+        .post-card--featured { grid-column: 1 / -1; display: grid; grid-template-columns: 1fr 1fr; background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius-lg); overflow: hidden; box-shadow: var(--shadow); transition: box-shadow 0.2s, transform 0.2s; text-decoration: none; color: inherit; }
+        .post-card--featured:hover { box-shadow: var(--shadow-lg); transform: translateY(-2px); }
+        @media (max-width: 900px) { .post-card--featured { grid-template-columns: 1fr; } }
+        .post-card--featured .post-visual { background: linear-gradient(135deg, #0d1f4d 0%, #0052cc 50%, #1a6fff 100%); min-height: 280px; display: flex; align-items: center; justify-content: center; padding: 48px; position: relative; overflow: hidden; }
+        .post-card--featured .post-visual::before { content: ''; position: absolute; top: -60px; right: -60px; width: 300px; height: 300px; background: radial-gradient(circle, rgba(255,255,255,0.08) 0%, transparent 70%); }
+        .post-visual-icon { width: 80px; height: 80px; background: rgba(255,255,255,0.12); border-radius: 20px; display: flex; align-items: center; justify-content: center; border: 1px solid rgba(255,255,255,0.2); }
+        .post-visual-icon svg { width: 40px; height: 40px; stroke: rgba(255,255,255,0.9); fill: none; stroke-width: 1.5; stroke-linecap: round; stroke-linejoin: round; }
+        .post-card--featured .post-body { padding: 48px; display: flex; flex-direction: column; justify-content: center; }
+
+        /* Regular */
+        .post-card { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius-lg); overflow: hidden; box-shadow: var(--shadow-sm); transition: box-shadow 0.2s, transform 0.2s; text-decoration: none; color: inherit; display: flex; flex-direction: column; }
+        .post-card:hover { box-shadow: var(--shadow); transform: translateY(-2px); }
+        .post-visual-sm { background: linear-gradient(135deg, #0d1f4d 0%, #0052cc 60%, #1a6fff 100%); height: 160px; display: flex; align-items: center; justify-content: center; position: relative; overflow: hidden; }
+        .post-visual-sm::before { content: ''; position: absolute; top: -40px; right: -40px; width: 200px; height: 200px; background: radial-gradient(circle, rgba(255,255,255,0.07) 0%, transparent 70%); }
+        .post-visual-sm-icon { width: 48px; height: 48px; background: rgba(255,255,255,0.12); border-radius: 12px; display: flex; align-items: center; justify-content: center; border: 1px solid rgba(255,255,255,0.2); }
+        .post-visual-sm-icon svg { width: 24px; height: 24px; stroke: rgba(255,255,255,0.9); fill: none; stroke-width: 1.5; stroke-linecap: round; stroke-linejoin: round; }
+        .post-card .post-body { padding: 28px; flex: 1; display: flex; flex-direction: column; }
+
+        /* Shared card */
+        .post-tag { display: inline-flex; font-size: 0.75rem; font-weight: 600; letter-spacing: 0.06em; text-transform: uppercase; color: var(--accent); background: var(--accent-light); padding: 4px 10px; border-radius: 100px; margin-bottom: 1rem; width: fit-content; }
+        .post-title { font-size: 1.25rem; font-weight: 700; line-height: 1.3; letter-spacing: -0.02em; color: var(--ink); margin-bottom: 0.75rem; }
+        .post-card--featured .post-title { font-size: 1.6rem; margin-bottom: 1rem; }
+        .post-excerpt { font-size: 0.95rem; color: var(--ink-light); line-height: 1.65; flex: 1; margin-bottom: 1.5rem; }
+        .post-meta { display: flex; align-items: center; gap: 16px; font-size: 0.825rem; color: var(--ink-muted); }
+        .post-meta-author { display: flex; align-items: center; gap: 8px; font-weight: 500; color: var(--ink-light); }
+        .post-meta-avatar { width: 28px; height: 28px; border-radius: 50%; background: linear-gradient(135deg, var(--accent) 0%, #1a6fff 100%); display: flex; align-items: center; justify-content: center; font-size: 0.7rem; font-weight: 700; color: white; flex-shrink: 0; }
+        .post-meta-sep { width: 3px; height: 3px; border-radius: 50%; background: var(--border); }
+        .post-read-more { display: inline-flex; align-items: center; gap: 6px; font-size: 0.875rem; font-weight: 600; color: var(--accent); margin-top: 1.5rem; }
+        .post-read-more svg { width: 16px; height: 16px; stroke: currentColor; fill: none; stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; transition: transform 0.2s; }
+        .post-card:hover .post-read-more svg, .post-card--featured:hover .post-read-more svg { transform: translateX(3px); }
+    </style>
+</head>
+<body>
+
+    <header>
+        <nav class="container">
+            <a href="../" class="logo">
+                <img src="../etc/syntaric_logo_2.png" alt="Syntaric">
+                <span class="logo-name">Syntaric</span>
+            </a>
+            <ul class="nav-links">
+                <li><a href="../#services">Services</a></li>
+                <li><a href="../#engagements">Engagements</a></li>
+                <li><a href="../#openfhir">openFHIR</a></li>
+                <li><a href="../#expertise">Expertise</a></li>
+                <li><a href="../#collaborators">Collaborators</a></li>
+                <li><a href="../blog/" class="active">Blog</a></li>
+                <li><a href="../#contact" class="nav-cta">Contact</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <!-- ─── HERO ─── -->
+    <section class="blog-hero">
+        <div class="container">
+            <div class="blog-hero-label animate">
+                <span class="blog-hero-dot"></span>
+                Insights &amp; Research
+            </div>
+            <h1 class="animate delay-1">Thoughts on healthcare interoperability</h1>
+            <p class="blog-hero-desc animate delay-2">Deep dives into FHIR, openEHR, IHE, and the architecture decisions shaping modern health information exchange.</p>
+        </div>
+    </section>
+
+    <!-- ─── POSTS ─── -->
+    <section class="blog-posts">
+        <div class="container">
+            <div class="posts-grid">
+
+                <!-- Featured post -->
+                <a href="eoverdracht-hybrid-architecture-openehr-fhir/" class="post-card--featured animate">
+                    <div class="post-visual" style="background-image:url('../../blog/eoverdracht-hybrid-architecture-openehr-fhir/eoverdracht-hybrid-architecture-openehr-fhir.jpg');background-size:cover;background-position:center;">
+                        
+                    </div>
+                    <div class="post-body">
+                        <span class="post-tag">Architecture</span>
+                        <h2 class="post-title">eOverdracht in a Hybrid Architecture of openEHR and FHIR</h2>
+                        <p class="post-excerpt">A working proof-of-concept showing how the Dutch national care transfer standard can be implemented in a hybrid openEHR + FHIR environment — covering mCSD routing, ACP data models, and vendor-neutral design.</p>
+                        <div class="post-meta">
+                            <div class="post-meta-author">
+                                <div class="post-meta-avatar">GA</div>
+                                Gasper Andrejc
+                            </div>
+                            <span class="post-meta-sep"></span>
+                            <span>January 13, 2026</span>
+                            <span class="post-meta-sep"></span>
+                            <span>5 min read</span>
+                        </div>
+                        <span class="post-read-more">
+                            Read article
+                            <svg viewBox="0 0 24 24"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
+                        </span>
+                    </div>
+                </a>
+
+                <a href="fhir-server-xds/" class="post-card animate">
+                    <div class="post-visual-sm" style="background-image:url('../../blog/fhir-server-xds/cover.png');background-size:cover;background-position:center;">
+                        
+                    </div>
+                    <div class="post-body">
+                        <span class="post-tag">Integration</span>
+                        <h2 class="post-title">FHIR Server and XDS</h2>
+                        <p class="post-excerpt">Despite momentum toward FHIR adoption, XDS remains extensively used across Europe. This article explores how Firely Server acts as a FHIR interface over XDS systems through MHD, mXDE, and QEDm profiles.</p>
+                        <div class="post-meta">
+                            <div class="post-meta-author">
+                                <div class="post-meta-avatar">GA</div>
+                                Gasper Andrejc
+                            </div>
+                            <span class="post-meta-sep"></span>
+                            <span>July 15, 2025</span>
+                            <span class="post-meta-sep"></span>
+                            <span>5 min read</span>
+                        </div>
+                        <span class="post-read-more">
+                            Read article
+                            <svg viewBox="0 0 24 24"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
+                        </span>
+                    </div>
+                </a>
+
+                <a href="analytics-firely-server/" class="post-card animate">
+                    <div class="post-visual-sm" style="background-image:url('../../blog/analytics-firely-server/cover.png');background-size:cover;background-position:center;">
+                        
+                    </div>
+                    <div class="post-body">
+                        <span class="post-tag">Architecture</span>
+                        <h2 class="post-title">Analytics with Firely Server</h2>
+                        <p class="post-excerpt">Running analytics directly on production clinical databases creates serious risks. This article presents an architecture using Firely Server integrated with Elasticsearch, Logstash, Kibana, and RabbitMQ to keep analytics isolated and safe.</p>
+                        <div class="post-meta">
+                            <div class="post-meta-author">
+                                <div class="post-meta-avatar">GA</div>
+                                Gasper Andrejc
+                            </div>
+                            <span class="post-meta-sep"></span>
+                            <span>December 18, 2024</span>
+                            <span class="post-meta-sep"></span>
+                            <span>4 min read</span>
+                        </div>
+                        <span class="post-read-more">
+                            Read article
+                            <svg viewBox="0 0 24 24"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
+                        </span>
+                    </div>
+                </a>
+
+                <a href="firely-server-openehr/" class="post-card animate">
+                    <div class="post-visual-sm" style="background-image:url('../../blog/firely-server-openehr/cover.png');background-size:cover;background-position:center;">
+                        
+                    </div>
+                    <div class="post-body">
+                        <span class="post-tag">Integration</span>
+                        <h2 class="post-title">Firely Server and openEHR</h2>
+                        <p class="post-excerpt">FHIR and openEHR will coexist rather than compete. This article explores how Firely Server can be configured as a gateway, routing FHIR requests to an openEHR backend via custom plugins and the openFHIR mapping engine.</p>
+                        <div class="post-meta">
+                            <div class="post-meta-author">
+                                <div class="post-meta-avatar">GA</div>
+                                Gasper Andrejc
+                            </div>
+                            <span class="post-meta-sep"></span>
+                            <span>September 12, 2024</span>
+                            <span class="post-meta-sep"></span>
+                            <span>4 min read</span>
+                        </div>
+                        <span class="post-read-more">
+                            Read article
+                            <svg viewBox="0 0 24 24"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
+                        </span>
+                    </div>
+                </a>
+
+                <a href="extending-firely-server-fhir-ds4p/" class="post-card animate">
+                    <div class="post-visual-sm" style="background-image:url('../../blog/extending-firely-server-fhir-ds4p/cover.png');background-size:cover;background-position:center;">
+                        
+                    </div>
+                    <div class="post-body">
+                        <span class="post-tag">Security</span>
+                        <h2 class="post-title">Extending Firely Server &amp; FHIR DS4P</h2>
+                        <p class="post-excerpt">A practical walkthrough of implementing the FHIR DS4P Implementation Guide as a Firely Server plugin, covering custom search parameters, IReadAuthorizer services, and inline security label enforcement.</p>
+                        <div class="post-meta">
+                            <div class="post-meta-author">
+                                <div class="post-meta-avatar">GA</div>
+                                Gasper Andrejc
+                            </div>
+                            <span class="post-meta-sep"></span>
+                            <span>April 23, 2024</span>
+                            <span class="post-meta-sep"></span>
+                            <span>5 min read</span>
+                        </div>
+                        <span class="post-read-more">
+                            Read article
+                            <svg viewBox="0 0 24 24"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
+                        </span>
+                    </div>
+                </a>
+
+                <a href="renaissance-vitalys-interoperable-core/" class="post-card animate">
+                    <div class="post-visual-sm" style="background-image:url('../../blog/renaissance-vitalys-interoperable-core/cover.png');background-size:cover;background-position:center;">
+                        
+                    </div>
+                    <div class="post-body">
+                        <span class="post-tag">IHE</span>
+                        <h2 class="post-title">Renaissance of Vitaly's Interoperable Core</h2>
+                        <p class="post-excerpt">After the IHE Connectathon in Rennes, the Vitaly platform achieved full compliance across MHD, International Patient Summary, mXDE, QEDm, and legacy XDS profiles — plus a FHIR federation component for multi-server querying.</p>
+                        <div class="post-meta">
+                            <div class="post-meta-author">
+                                <div class="post-meta-avatar">GA</div>
+                                Gasper Andrejc
+                            </div>
+                            <span class="post-meta-sep"></span>
+                            <span>October 18, 2023</span>
+                            <span class="post-meta-sep"></span>
+                            <span>7 min read</span>
+                        </div>
+                        <span class="post-read-more">
+                            Read article
+                            <svg viewBox="0 0 24 24"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
+                        </span>
+                    </div>
+                </a>
+
+                <a href="vitaly-going-nuts/" class="post-card animate">
+                    <div class="post-visual-sm" style="background-image:url('../../blog/vitaly-going-nuts/cover.jpeg');background-size:cover;background-position:center;">
+                        
+                    </div>
+                    <div class="post-body">
+                        <span class="post-tag">Security</span>
+                        <h2 class="post-title">Vitaly Going NUTS</h2>
+                        <p class="post-excerpt">NUTS is a joint initiative by healthcare software suppliers to develop an open-source protocol regulating access to healthcare data. This article covers how it works, how it integrates with Vitaly, and a proof-of-concept implementation.</p>
+                        <div class="post-meta">
+                            <div class="post-meta-author">
+                                <div class="post-meta-avatar">GA</div>
+                                Gasper Andrejc
+                            </div>
+                            <span class="post-meta-sep"></span>
+                            <span>February 9, 2023</span>
+                            <span class="post-meta-sep"></span>
+                            <span>6 min read</span>
+                        </div>
+                        <span class="post-read-more">
+                            Read article
+                            <svg viewBox="0 0 24 24"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
+                        </span>
+                    </div>
+                </a>
+
+                <a href="virtual-mdt-meetings-interoperability/" class="post-card animate">
+                    <div class="post-visual-sm" style="background-image:url('../../blog/virtual-mdt-meetings-interoperability/cover.jpeg');background-size:cover;background-position:center;">
+                        
+                    </div>
+                    <div class="post-body">
+                        <span class="post-tag">Interoperability</span>
+                        <h2 class="post-title">Virtual MDT Meetings Through the Lens of Interoperability</h2>
+                        <p class="post-excerpt">Behind every virtual MDT meeting lies a stack of interoperability standards. This article examines how SMART on FHIR, XDS, IHE Cross Enterprise Workflow, Master Patient Index, and QEDm combine to make collaborative clinical decision-making work at scale.</p>
+                        <div class="post-meta">
+                            <div class="post-meta-author">
+                                <div class="post-meta-avatar">GA</div>
+                                Gasper Andrejc
+                            </div>
+                            <span class="post-meta-sep"></span>
+                            <span>December 22, 2022</span>
+                            <span class="post-meta-sep"></span>
+                            <span>9 min read</span>
+                        </div>
+                        <span class="post-read-more">
+                            Read article
+                            <svg viewBox="0 0 24 24"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
+                        </span>
+                    </div>
+                </a>
+
+                <a href="data-first-use-case-driven-interoperability/" class="post-card animate">
+                    <div class="post-visual-sm" style="background-image:url('../../blog/data-first-use-case-driven-interoperability/cover.jpeg');background-size:cover;background-position:center;">
+                        
+                    </div>
+                    <div class="post-body">
+                        <span class="post-tag">Interoperability</span>
+                        <h2 class="post-title">Data First: Use-Case Driven Interoperability</h2>
+                        <p class="post-excerpt">Technical integration is only the first phase. The real opportunity emerges when organisations leverage integrated data to create meaningful solutions. This article introduces two use-case-driven applications built on an interoperable platform foundation.</p>
+                        <div class="post-meta">
+                            <div class="post-meta-author">
+                                <div class="post-meta-avatar">GA</div>
+                                Gasper Andrejc
+                            </div>
+                            <span class="post-meta-sep"></span>
+                            <span>November 24, 2022</span>
+                            <span class="post-meta-sep"></span>
+                            <span>5 min read</span>
+                        </div>
+                        <span class="post-read-more">
+                            Read article
+                            <svg viewBox="0 0 24 24"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
+                        </span>
+                    </div>
+                </a>
+
+                <a href="pragmatic-approach-interoperability/" class="post-card animate">
+                    <div class="post-visual-sm" style="background-image:url('../../blog/pragmatic-approach-interoperability/cover.jpeg');background-size:cover;background-position:center;">
+                        
+                    </div>
+                    <div class="post-body">
+                        <span class="post-tag">Interoperability</span>
+                        <h2 class="post-title">Pragmatic Approach to Interoperability</h2>
+                        <p class="post-excerpt">Real-world healthcare interoperability requires pragmatism. This article traces an evolution through five stages of understanding standards in health IT, and the value of remaining flexible across XDS, FHIR, and HL7v2 rather than over-committing to any one approach.</p>
+                        <div class="post-meta">
+                            <div class="post-meta-author">
+                                <div class="post-meta-avatar">GA</div>
+                                Gasper Andrejc
+                            </div>
+                            <span class="post-meta-sep"></span>
+                            <span>October 28, 2022</span>
+                            <span class="post-meta-sep"></span>
+                            <span>5 min read</span>
+                        </div>
+                        <span class="post-read-more">
+                            Read article
+                            <svg viewBox="0 0 24 24"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
+                        </span>
+                    </div>
+                </a>
+            </div>
+        </div>
+    </section>
+
+    <footer>
+        <div class="container">
+            <div class="footer-inner">
+                <div><span class="footer-logo-name">Syntaric</span></div>
+                <div class="footer-right">
+                    <p>&copy; 2025 Syntaric d.o.o. · Healthcare Interoperability Consulting</p>
+                    <p>VAT SI24333611 · Reg. 9746927000</p>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+</body>
+</html>

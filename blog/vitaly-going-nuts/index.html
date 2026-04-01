@@ -1,0 +1,427 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Vitaly Going NUTS | Syntaric</title>
+    <meta name="description" content="Integrating the Vitaly platform with NUTS — the Dutch decentralised, open-source protocol for secure healthcare data access based on W3C Verifiable Credentials.">
+    <meta name="robots" content="index, follow">
+    <link rel="canonical" href="https://syntaric.com/blog/vitaly-going-nuts/">
+
+    <!-- Open Graph -->
+    <meta property="og:type" content="article">
+    <meta property="og:url" content="https://syntaric.com/blog/vitaly-going-nuts/">
+    <meta property="og:title" content="Vitaly Going NUTS | Syntaric">
+    <meta property="og:description" content="Integrating the Vitaly platform with NUTS — the Dutch decentralised, open-source protocol for secure healthcare data access based on W3C Verifiable Credentials.">
+    <meta property="og:image" content="https://syntaric.com/blog/images/vitaly-going-nuts.jpg">
+    <meta property="og:site_name" content="Syntaric">
+    <meta property="article:published_time" content="2023-02-09">
+    <meta property="article:author" content="Gasper Andrejc">
+    <meta property="article:tag" content="FHIR">
+    <meta property="article:tag" content="NUTS">
+    <meta property="article:tag" content="Security">
+    <meta property="article:tag" content="Netherlands">
+    <meta property="article:tag" content="Decentralised">
+    <meta property="article:tag" content="Verifiable Credentials">
+
+    <!-- Twitter Card -->
+    <meta name="twitter:card" content="summary">
+    <meta name="twitter:title" content="Vitaly Going NUTS | Syntaric">
+    <meta name="twitter:description" content="Integrating the Vitaly platform with NUTS — the Dutch decentralised, open-source protocol for secure healthcare data access based on W3C Verifiable Credentials.">
+    <meta name="twitter:image" content="https://syntaric.com/blog/images/vitaly-going-nuts.jpg">
+
+    <!-- JSON-LD: Article -->
+    <script type="application/ld+json">{
+  "@context": "https://schema.org",
+  "@type": "Article",
+  "headline": "Vitaly Going NUTS",
+  "description": "Integrating the Vitaly platform with NUTS — the Dutch decentralised, open-source protocol for secure healthcare data access based on W3C Verifiable Credentials.",
+  "datePublished": "2023-02-09",
+  "author": {
+    "@type": "Person",
+    "name": "Gasper Andrejc",
+    "url": "https://www.linkedin.com/in/andrejcgasper/"
+  },
+  "publisher": {
+    "@type": "Organization",
+    "name": "Syntaric",
+    "@id": "https://syntaric.com/#organization",
+    "logo": {
+      "@type": "ImageObject",
+      "url": "https://syntaric.com/blog/images/vitaly-going-nuts.jpg"
+    }
+  },
+  "mainEntityOfPage": {
+    "@type": "WebPage",
+    "@id": "https://syntaric.com/blog/vitaly-going-nuts/"
+  },
+  "keywords": "FHIR, NUTS, Security, Netherlands, Decentralised, Verifiable Credentials"
+}</script>
+
+    <link rel="icon" type="image/png" href="../../favicon-96x96.png" sizes="96x96" />
+    <link rel="icon" type="image/svg+xml" href="../../favicon.svg" />
+    <link rel="shortcut icon" href="../../favicon.ico" />
+    <link rel="apple-touch-icon" sizes="180x180" href="../../apple-touch-icon.png" />
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=DM+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+
+        :root {
+            --ink: #0d1117;
+            --ink-light: #4a5568;
+            --ink-muted: #718096;
+            --surface: #ffffff;
+            --surface-2: #f7f8fc;
+            --surface-3: #eef0f6;
+            --border: #e2e8f0;
+            --accent: #0052cc;
+            --accent-light: #e8f0fe;
+            --accent-glow: rgba(0, 82, 204, 0.12);
+            --green: #0f7b55;
+            --green-light: #e6f4f0;
+            --radius: 12px;
+            --radius-lg: 20px;
+            --shadow-sm: 0 1px 3px rgba(0,0,0,0.06), 0 1px 2px rgba(0,0,0,0.04);
+            --shadow: 0 4px 16px rgba(0,0,0,0.07), 0 1px 4px rgba(0,0,0,0.04);
+            --shadow-lg: 0 16px 48px rgba(0,0,0,0.1), 0 4px 12px rgba(0,0,0,0.06);
+            --nav-h: 68px;
+        }
+
+        html { scroll-behavior: smooth; }
+
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+            color: var(--ink);
+            background: var(--surface);
+            line-height: 1.6;
+            -webkit-font-smoothing: antialiased;
+        }
+
+        .container { max-width: 1160px; margin: 0 auto; padding: 0 24px; }
+
+        /* ─── NAV ─── */
+        header {
+            position: sticky; top: 0; z-index: 200;
+            background: rgba(255,255,255,0.88);
+            backdrop-filter: blur(16px); -webkit-backdrop-filter: blur(16px);
+            border-bottom: 1px solid var(--border);
+            height: var(--nav-h);
+        }
+        nav { height: 100%; display: flex; align-items: center; justify-content: space-between; }
+        .logo { display: flex; align-items: center; gap: 10px; text-decoration: none; }
+        .logo img { height: 36px; width: auto; }
+        .logo-name { font-size: 1.2rem; font-weight: 700; color: var(--ink); letter-spacing: -0.02em; }
+        .nav-links { display: flex; align-items: center; gap: 2rem; list-style: none; }
+        .nav-links a { font-size: 0.9rem; font-weight: 500; color: var(--ink-light); text-decoration: none; transition: color 0.2s; }
+        .nav-links a:hover { color: var(--ink); }
+        .nav-links a.active { color: var(--accent); }
+        .nav-cta { background: var(--ink) !important; color: var(--surface) !important; padding: 0.55rem 1.25rem !important; border-radius: 8px !important; font-size: 0.875rem !important; transition: background 0.2s, opacity 0.2s !important; }
+        .nav-cta:hover { opacity: 0.85; }
+        @media (max-width: 640px) { .nav-links { display: none; } }
+
+        /* ─── FOOTER ─── */
+        footer { background: var(--ink); color: rgba(255,255,255,0.5); padding: 36px 0; }
+        .footer-inner { display: flex; align-items: center; justify-content: space-between; gap: 24px; flex-wrap: wrap; }
+        .footer-logo-name { font-size: 1.1rem; font-weight: 700; color: white; letter-spacing: -0.02em; }
+        .footer-right { text-align: right; font-size: 0.825rem; line-height: 1.6; }
+        @media (max-width: 640px) { .footer-right { text-align: left; } }
+
+        /* ─── ANIMATIONS ─── */
+        @keyframes fade-up { from { opacity: 0; transform: translateY(18px); } to { opacity: 1; transform: translateY(0); } }
+        .animate { animation: fade-up 0.55s ease both; }
+        .delay-1 { animation-delay: 0.1s; }
+        .delay-2 { animation-delay: 0.2s; }
+        .delay-3 { animation-delay: 0.3s; }
+
+        /* ─── ARTICLE HERO ─── */
+        .article-hero {
+            background: linear-gradient(135deg, #0a1832 0%, #0d2160 40%, #0052cc 80%, #1a6fff 100%);
+            padding: 80px 0 72px; position: relative; overflow: hidden;
+        }
+        .article-hero::before { content: ''; position: absolute; top: -100px; right: -100px; width: 600px; height: 600px; background: radial-gradient(circle, rgba(255,255,255,0.06) 0%, transparent 70%); pointer-events: none; }
+        .article-hero::after  { content: ''; position: absolute; bottom: -80px; left: -80px; width: 400px; height: 400px; background: radial-gradient(circle, rgba(26,111,255,0.2) 0%, transparent 70%); pointer-events: none; }
+        .article-hero-inner { position: relative; z-index: 1; max-width: 800px; }
+        .breadcrumb { display: flex; align-items: center; gap: 8px; margin-bottom: 2rem; }
+        .breadcrumb a { font-size: 0.85rem; font-weight: 500; color: rgba(255,255,255,0.6); text-decoration: none; transition: color 0.2s; }
+        .breadcrumb a:hover { color: rgba(255,255,255,0.9); }
+        .breadcrumb-sep { color: rgba(255,255,255,0.3); font-size: 0.85rem; }
+        .breadcrumb-current { font-size: 0.85rem; color: rgba(255,255,255,0.5); overflow: hidden; text-overflow: ellipsis; white-space: nowrap; max-width: 300px; }
+        .article-tag { display: inline-flex; align-items: center; font-size: 0.75rem; font-weight: 600; letter-spacing: 0.08em; text-transform: uppercase; color: rgba(255,255,255,0.9); background: rgba(255,255,255,0.14); border: 1px solid rgba(255,255,255,0.2); padding: 5px 12px; border-radius: 100px; margin-bottom: 1.5rem; }
+        .article-hero h1 { font-size: clamp(1.8rem, 3.5vw, 2.8rem); font-weight: 700; line-height: 1.15; letter-spacing: -0.03em; color: white; margin-bottom: 1.5rem; }
+        .article-hero-meta { display: flex; align-items: center; gap: 16px; flex-wrap: wrap; }
+        .article-meta-author { display: flex; align-items: center; gap: 10px; }
+        .article-meta-avatar { width: 36px; height: 36px; border-radius: 50%; background: rgba(255,255,255,0.15); border: 2px solid rgba(255,255,255,0.3); display: flex; align-items: center; justify-content: center; font-size: 0.75rem; font-weight: 700; color: white; }
+        .article-meta-name { font-size: 0.9rem; font-weight: 600; color: rgba(255,255,255,0.9); }
+        .article-meta-role { font-size: 0.8rem; color: rgba(255,255,255,0.55); margin-top: 1px; }
+        .article-meta-sep { width: 3px; height: 3px; border-radius: 50%; background: rgba(255,255,255,0.25); }
+        .article-meta-date, .article-meta-read { font-size: 0.85rem; color: rgba(255,255,255,0.55); }
+
+        /* ─── ARTICLE LAYOUT ─── */
+        .article-layout { display: grid; grid-template-columns: 1fr 300px; gap: 48px; padding: 64px 0 96px; align-items: start; }
+        @media (max-width: 900px) { .article-layout { grid-template-columns: 1fr; gap: 40px; } .article-sidebar { order: -1; } }
+        @media (max-width: 640px) { .article-layout { padding: 40px 0 72px; } }
+
+        /* ─── ARTICLE BODY ─── */
+        .article-body { min-width: 0; }
+        .article-body h2 { font-size: 1.5rem; font-weight: 700; line-height: 1.25; letter-spacing: -0.02em; color: var(--ink); margin: 2.5rem 0 1rem; padding-top: 2rem; border-top: 1px solid var(--border); }
+        .article-body h2:first-child { margin-top: 0; padding-top: 0; border-top: none; }
+        .article-body h3 { font-size: 1.15rem; font-weight: 600; color: var(--ink); margin: 1.75rem 0 0.75rem; }
+        .article-body p { font-size: 1.05rem; line-height: 1.8; color: var(--ink-light); margin-bottom: 1.25rem; }
+        .article-body strong { color: var(--ink); font-weight: 600; }
+        .article-body a { color: var(--accent); text-decoration: underline; text-decoration-color: rgba(0,82,204,0.3); text-underline-offset: 3px; transition: text-decoration-color 0.2s; }
+        .article-body a:hover { text-decoration-color: var(--accent); }
+        .article-body ul, .article-body ol { margin: 1rem 0 1.25rem 1.5rem; display: flex; flex-direction: column; gap: 0.5rem; }
+        .article-body li { font-size: 1.05rem; line-height: 1.7; color: var(--ink-light); }
+        .article-body li strong { color: var(--ink); }
+        .article-body pre { background: var(--ink); color: #e2e8f0; border-radius: var(--radius); padding: 20px 24px; overflow-x: auto; margin: 1.5rem 0; font-size: 0.9rem; line-height: 1.6; }
+        .article-body code { font-family: 'JetBrains Mono', 'Fira Code', 'Cascadia Code', monospace; }
+        .article-body p code, .article-body li code { background: var(--surface-3); color: var(--accent); padding: 2px 6px; border-radius: 4px; font-size: 0.9em; }
+        .article-body img { max-width: 100%; border-radius: var(--radius); border: 1px solid var(--border); margin: 1.5rem 0; }
+        .article-body hr { border: none; border-top: 1px solid var(--border); margin: 2.5rem 0; }
+        .article-body table { width: 100%; border-collapse: collapse; margin: 1.5rem 0; font-size: 0.95rem; }
+        .article-body th { background: var(--surface-2); font-weight: 600; color: var(--ink); text-align: left; padding: 10px 14px; border: 1px solid var(--border); }
+        .article-body td { padding: 10px 14px; border: 1px solid var(--border); color: var(--ink-light); }
+        .article-body tr:hover td { background: var(--surface-2); }
+
+        /* ─── COVER IMAGE ─── */
+        .article-cover { width: 100%; max-height: 480px; object-fit: cover; border-radius: var(--radius-lg); margin-bottom: 48px; border: 1px solid var(--border); display: block; }
+
+        /* ─── CALLOUT ─── */
+        .callout { background: var(--accent-light); border-left: 3px solid var(--accent); border-radius: 0 var(--radius) var(--radius) 0; padding: 20px 24px; margin: 1.75rem 0; }
+        .callout p { margin: 0; color: var(--ink); font-size: 0.975rem; }
+
+        /* ─── SIDEBAR ─── */
+        .article-sidebar { position: sticky; top: calc(var(--nav-h) + 24px); }
+        .sidebar-card { background: var(--surface-2); border: 1px solid var(--border); border-radius: var(--radius-lg); padding: 24px; margin-bottom: 20px; }
+        .sidebar-card-title { font-size: 0.75rem; font-weight: 600; letter-spacing: 0.08em; text-transform: uppercase; color: var(--ink-muted); margin-bottom: 16px; }
+        .toc-list { list-style: none; display: flex; flex-direction: column; gap: 2px; }
+        .toc-list a { display: block; font-size: 0.875rem; color: var(--ink-light); text-decoration: none; padding: 6px 10px; border-radius: 6px; transition: background 0.15s, color 0.15s; line-height: 1.4; }
+        .toc-list a:hover { background: var(--surface-3); color: var(--ink); }
+        .sidebar-tags { display: flex; flex-wrap: wrap; gap: 8px; }
+        .sidebar-tag { font-size: 0.78rem; font-weight: 500; color: var(--accent); background: var(--accent-light); padding: 4px 10px; border-radius: 100px; }
+        .sidebar-author-name { font-size: 0.95rem; font-weight: 600; color: var(--ink); margin-bottom: 4px; }
+        .sidebar-author-role { font-size: 0.83rem; color: var(--ink-muted); margin-bottom: 16px; line-height: 1.5; }
+        .sidebar-author-link { display: inline-flex; align-items: center; gap: 6px; font-size: 0.83rem; font-weight: 500; color: var(--accent); text-decoration: none; transition: opacity 0.2s; }
+        .sidebar-author-link:hover { opacity: 0.75; }
+        .sidebar-author-link svg { width: 14px; height: 14px; stroke: currentColor; fill: none; stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; }
+    </style>
+</head>
+<body>
+
+    <header>
+        <nav class="container">
+            <a href="../../" class="logo">
+                <img src="../../etc/syntaric_logo_2.png" alt="Syntaric">
+                <span class="logo-name">Syntaric</span>
+            </a>
+            <ul class="nav-links">
+                <li><a href="../../#services">Services</a></li>
+                <li><a href="../../#engagements">Engagements</a></li>
+                <li><a href="../../#openfhir">openFHIR</a></li>
+                <li><a href="../../#expertise">Expertise</a></li>
+                <li><a href="../../#collaborators">Collaborators</a></li>
+                <li><a href="../../blog/" class="active">Blog</a></li>
+                <li><a href="../../#contact" class="nav-cta">Contact</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <!-- ─── ARTICLE HERO ─── -->
+    <section class="article-hero">
+        <div class="container">
+            <div class="article-hero-inner animate">
+                <div class="breadcrumb">
+                    <a href="../../">Home</a>
+                    <span class="breadcrumb-sep">/</span>
+                    <a href="../">Blog</a>
+                    <span class="breadcrumb-sep">/</span>
+                    <span class="breadcrumb-current">Vitaly Going NUTS</span>
+                </div>
+                <span class="article-tag">Security</span>
+                <h1>Vitaly Going NUTS</h1>
+                <div class="article-hero-meta">
+                    <div class="article-meta-author">
+                        <div class="article-meta-avatar">GA</div>
+                        <div>
+                            <div class="article-meta-name">Gasper Andrejc</div>
+                            <div class="article-meta-role">Healthcare Interoperability Architect</div>
+                            <div class="article-meta-role"><strong>Written as:</strong> Open Line Vitaly Interoperability Specialist</div>
+                        </div>
+                    </div>
+                    <span class="article-meta-sep"></span>
+                    <span class="article-meta-date">February 9, 2023</span>
+                    <span class="article-meta-sep"></span>
+                    <span class="article-meta-read">6 min read</span>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ─── ARTICLE CONTENT ─── -->
+    <div class="container">
+        <div class="article-layout">
+            <article class="article-body animate">
+<img src="../../blog/vitaly-going-nuts/cover.jpeg" alt="Vitaly Going NUTS" class="article-cover">
+<h2 id="introduction">Introduction</h2>
+<p>Our strong presence in the Netherlands market forces us to stay up to date with new development that is happening in the
+ecosystem and lately, there’s been a big shift happening towards a decentralized infrastructure called hashtag#NUTS.
+It’s not really new per-se, as the initial position paper was written in 2018, but that in the hashtag#digitalhealth
+years means is still quite new.</p>
+<p>In short – and I’m sure some of you reading this have better ways of describing it, which I’d kindly ask you to actually
+do so in the comments below – NUTS is a joint initiative by healthcare software suppliers to develop an open-source
+protocol that regulates access to healthcare data.</p>
+<p>How does it work? Well it’s based on W3C Verifiable Credentials Data Model. Whenever clinical data is exchanged, the one
+sharing it creates a unique key that tells you:</p>
+<p>who is allowed to view the data,
+what can be viewed and
+where the actual data can be found.</p>
+<p>That key is then transferred to the intended recipient of that clinical data (i.e. specialist) – or rather to his NUTS
+node (NUTS nodes are decentralized.. each system has one*).</p>
+<p>When the person (i.e. specialist) is trying to access that data, all restrictions are verified and data can successfully
+be viewed exactly by the person and in a way intended. Furthermore, patient can know exactly when the unique key was
+used and can even retract the permission and thus manage authorizations (authorization credentials, i.e. consents ) for
+his clinical data.</p>
+<p>It’s a way how nuts enables secure and safe exchange of clinical data entirely in the control of the patient or the
+referrer.</p>
+<p>Emphasis on the secure and less on the ‘exchange’. The ‘exchange’ part has been solved by many already and can already
+be taken for granted, whereas making it be secure in the very foundation of the standard and the patient having total
+control of his or her data – well that’s new and very much needed.</p>
+<p>Not trying to say other initiatives and standards don’t have this built in, but I think the difference here is that this
+open standard is all about that, whereas other have security and privacy as an add-on and perhaps up to the implementer
+to implement properly. But with NUTS.. well you can’t spell NUTS without security, can you! (I know, I know..)</p>
+<h2 id="how-it-works-with-vitaly">How it works with Vitaly</h2>
+<p>Our solutions are all about the data and how to leverage data to support the use cases we are covering. So naturally,
+without the data exchange – without data going from our platform as well as obtaining data from other systems – our
+solutions can’t function properly and can’t achieve their true potential.</p>
+<p>And NUTS being all about secure data exchange, we naturally have to place it at the very core of all transactions that
+are happening.</p>
+<p>Whenever our system would want to obtain data from other sources (other EMRs, other HIEs, FHIR servers, OpenEHR
+repos, ..), the following happens:</p>
+<p>First, 3rd party FHIR server/system (data holder) needs to issue credentials (VerifiableCredentials = authorization
+credentials, i.e. consent) for data to our solution (our local NUTS node); pieces information in there are: (1) who can
+view data, (2) what data can be viewed and (3) where that data is available.</p>
+<p>All these three pieces of information are then signed and represent a &quot;key&quot; created by their (data holder&#39;s) keystore.
+That key is stored within our keystore (via NUTS gRPC syncing).</p>
+<p>Once our solution tries to fetch the data we were given permission for (given VerifiableCredentials), the key is checked
+as well as the identity of our solution. If all checks out (nothing has been tempered with and we are actually allowed
+to see the data, as per VerifiableCredentials), we can fetch that data from the 3rd party FHIR server.</p>
+<p>Consent is ensured. If anything is tempered with, it automatically prevents data sharing. It’s secure. It’s seamless.
+It’s audited. It’s built in. It’s magic.</p>
+<p><img src="../vitaly-going-nuts/seq.png" alt="seq.png"></p>
+<h2 id="nuts-network">NUTS network</h2>
+<p>As mentioned, NUTS is decentralized. Each system or each organisation have their own NUTS node that together with others
+in the ecosystem form a network of these little, powerful secure blocks that build a foundation for secure data sharing.
+Those nodes communicate with one another following gRPC, which is a modern open source high performance Remote Procedure
+Call (RPC) framework that can run in any environment.</p>
+<p>You set up a local NUTS node and connect it to all other nodes in the environment. NUTS nodes talk to one another
+following the gRPC so you only care about integrating/talking to your own NUTS node, whereas the synchronization between
+NUTS node is happening automagically by NUTS nodes themselves.</p>
+<p>Integration with your NUTS node is RESTful based and uses the w3c vc-data-model. For example you use REST interactions
+with NUTS for the following things:</p>
+<ul>
+<li>issuing authorizations (authorization credentials) to someone else to view the data within your system,</li>
+<li>fetching access-token for accessing the data in a 3rd party system,</li>
+<li>validating an access-token,</li>
+<li>searching for endpoints where some specific data is available,</li>
+<li>finding authorizations (authorization credentials) issued to you,</li>
+<li>.…</li>
+</ul>
+<h2 id="how-it-positions-in-our-architecture">How it positions in our architecture</h2>
+<p>So us being one of the pieces in the architecture, which both consumes and produces clinical data, we need to have our
+own local NUTS node. As mentioned above, our internal services communicate with the local NUTS node via a RESTful
+interface, while NUTS node itself communicates with other in the architecture the way it knows best.</p>
+<p><img src="../vitaly-going-nuts/arch.png" alt="arch.png"></p>
+<p>Integration points to the local NUTS node are basically two; one is our Clinical Data Repository with it&#39;s integrators
+talking to NUTS and the other is our IdP talking to NUTS.</p>
+<p>When our CDR talks to NUTS, it&#39;s for the following reasons:</p>
+<ul>
+<li>finding endpoints of integrated systems,</li>
+<li>requesting access tokens before going to 3rd party systems,</li>
+<li>depending on the final design, also may be to validate incoming requests,</li>
+<li>our endpoint registration,</li>
+<li>issuing authorizations (authorization credentials) to other systems,</li>
+<li>finding authorizations (authorization credentials) issued to us</li>
+</ul>
+<p>and when our IdP talks to NUTS:</p>
+<ul>
+<li>issuing access tokens when other systems are accessing our clinical data repositories and</li>
+<li>depending on the final design, may also be to validate incoming requests.</li>
+</ul>
+<h2 id="proof-of-concept-setup">Proof of Concept Setup</h2>
+<p>For the proof-of-concept setup, I&#39;ve setup two NUTS nodes and combined them in a cluster - one representing our local
+NUTS node and another representing a 3rd party NUTS node. They have a nice and easy to follow tutorial written out for
+that, so that wasn&#39;t the hard part.</p>
+<p>It was a bit harder to understand how everything works, though. Party because I wasn&#39;t familiar with the W3C Verifiable
+Credentials Data Model and party because some relevant NUTS documentation is still in dutch.</p>
+<p>At the end, though, I managed to setup a demo environment, covering all functionalities relevant to us, so:</p>
+<ul>
+<li>registering and configuring a NUTS node</li>
+<li>registering and configuring an organization within a NUTS node</li>
+<li>registering FHIR and oauth endpoints within an organization and enabling them (broadcasting orgs and endpoints</li>
+<li>throughout the network)</li>
+<li>issuing, revoking and viewing all authorizations (auth credentials // verifiable credentials, i.e. consents)</li>
+<li>requesting access tokens and validating access tokens</li>
+<li>...</li>
+</ul>
+<h2 id="what-39-s-next">What&#39;s next</h2>
+<p>I think it&#39;s only a matter of time before projects and the market forces us to polish this proof-of-concept integration
+and embed it deeply within our platform, thus further extending interoperable capabilities of our core - something with
+which we are able to integrate into existing health information backbones and actively participate in a secure data
+exchange, while doing our best to empower our end-users who are able to leverage obtained clinical data. </p>
+
+            </article>
+
+            <aside class="article-sidebar">
+                <div class="sidebar-card">
+                    <div class="sidebar-card-title">Table of contents</div>
+                    <ul class="toc-list">
+                        <li><a href="#introduction">Introduction</a></li>
+                        <li><a href="#how-it-works-with-vitaly">How it works with Vitaly</a></li>
+                        <li><a href="#nuts-network">NUTS network</a></li>
+                        <li><a href="#how-it-positions-in-our-architecture">How it positions in our architecture</a></li>
+                        <li><a href="#proof-of-concept-setup">Proof of Concept Setup</a></li>
+                        <li><a href="#what-39-s-next">What&amp;#39;s next</a></li>
+                    </ul>
+                </div>
+
+                <div class="sidebar-card">
+                    <div class="sidebar-card-title">Author</div>
+                    <div class="sidebar-author-name">Gasper Andrejc</div>
+                    <div class="sidebar-author-role">Healthcare Interoperability Architect &amp; Consultant at Syntaric. 10+ years building FHIR, openEHR, and IHE solutions across Europe and the US.</div>
+                    <a href="https://www.linkedin.com/in/andrejcgasper/" target="_blank" class="sidebar-author-link">
+                        LinkedIn profile
+                        <svg viewBox="0 0 24 24"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>
+                    </a>
+                </div>
+
+                <div class="sidebar-card">
+                    <div class="sidebar-card-title">Topics</div>
+                    <div class="sidebar-tags">
+                        <span class="sidebar-tag">FHIR</span>
+                        <span class="sidebar-tag">NUTS</span>
+                        <span class="sidebar-tag">Security</span>
+                        <span class="sidebar-tag">Netherlands</span>
+                        <span class="sidebar-tag">Decentralised</span>
+                        <span class="sidebar-tag">Verifiable Credentials</span>
+                    </div>
+                </div>
+            </aside>
+        </div>
+    </div>
+
+    <footer>
+        <div class="container">
+            <div class="footer-inner">
+                <div><span class="footer-logo-name">Syntaric</span></div>
+                <div class="footer-right">
+                    <p>&copy; 2025 Syntaric d.o.o. · Healthcare Interoperability Consulting</p>
+                    <p>VAT SI24333611 · Reg. 9746927000</p>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+</body>
+</html>

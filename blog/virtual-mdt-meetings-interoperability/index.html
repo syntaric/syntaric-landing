@@ -1,0 +1,473 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Virtual MDT Meetings Through the Lens of Interoperability | Syntaric</title>
+    <meta name="description" content="A deep dive into the interoperability infrastructure underpinning virtual multidisciplinary team meetings — from SMART on FHIR context launching to XDS, XDW, MPI, and QEDm.">
+    <meta name="robots" content="index, follow">
+    <link rel="canonical" href="https://syntaric.com/blog/virtual-mdt-meetings-interoperability/">
+
+    <!-- Open Graph -->
+    <meta property="og:type" content="article">
+    <meta property="og:url" content="https://syntaric.com/blog/virtual-mdt-meetings-interoperability/">
+    <meta property="og:title" content="Virtual MDT Meetings Through the Lens of Interoperability | Syntaric">
+    <meta property="og:description" content="A deep dive into the interoperability infrastructure underpinning virtual multidisciplinary team meetings — from SMART on FHIR context launching to XDS, XDW, MPI, and QEDm.">
+    <meta property="og:image" content="https://syntaric.com/blog/images/virtual-mdt-meetings-interoperability.jpg">
+    <meta property="og:site_name" content="Syntaric">
+    <meta property="article:published_time" content="2022-12-22">
+    <meta property="article:author" content="Gasper Andrejc">
+    <meta property="article:tag" content="FHIR">
+    <meta property="article:tag" content="IHE">
+    <meta property="article:tag" content="XDS">
+    <meta property="article:tag" content="SMART on FHIR">
+    <meta property="article:tag" content="MDT">
+    <meta property="article:tag" content="Interoperability">
+
+    <!-- Twitter Card -->
+    <meta name="twitter:card" content="summary">
+    <meta name="twitter:title" content="Virtual MDT Meetings Through the Lens of Interoperability | Syntaric">
+    <meta name="twitter:description" content="A deep dive into the interoperability infrastructure underpinning virtual multidisciplinary team meetings — from SMART on FHIR context launching to XDS, XDW, MPI, and QEDm.">
+    <meta name="twitter:image" content="https://syntaric.com/blog/images/virtual-mdt-meetings-interoperability.jpg">
+
+    <!-- JSON-LD: Article -->
+    <script type="application/ld+json">{
+  "@context": "https://schema.org",
+  "@type": "Article",
+  "headline": "Virtual MDT Meetings Through the Lens of Interoperability",
+  "description": "A deep dive into the interoperability infrastructure underpinning virtual multidisciplinary team meetings — from SMART on FHIR context launching to XDS, XDW, MPI, and QEDm.",
+  "datePublished": "2022-12-22",
+  "author": {
+    "@type": "Person",
+    "name": "Gasper Andrejc",
+    "url": "https://www.linkedin.com/in/andrejcgasper/"
+  },
+  "publisher": {
+    "@type": "Organization",
+    "name": "Syntaric",
+    "@id": "https://syntaric.com/#organization",
+    "logo": {
+      "@type": "ImageObject",
+      "url": "https://syntaric.com/blog/images/virtual-mdt-meetings-interoperability.jpg"
+    }
+  },
+  "mainEntityOfPage": {
+    "@type": "WebPage",
+    "@id": "https://syntaric.com/blog/virtual-mdt-meetings-interoperability/"
+  },
+  "keywords": "FHIR, IHE, XDS, SMART on FHIR, MDT, Interoperability"
+}</script>
+
+    <link rel="icon" type="image/png" href="../../favicon-96x96.png" sizes="96x96" />
+    <link rel="icon" type="image/svg+xml" href="../../favicon.svg" />
+    <link rel="shortcut icon" href="../../favicon.ico" />
+    <link rel="apple-touch-icon" sizes="180x180" href="../../apple-touch-icon.png" />
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=DM+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+
+        :root {
+            --ink: #0d1117;
+            --ink-light: #4a5568;
+            --ink-muted: #718096;
+            --surface: #ffffff;
+            --surface-2: #f7f8fc;
+            --surface-3: #eef0f6;
+            --border: #e2e8f0;
+            --accent: #0052cc;
+            --accent-light: #e8f0fe;
+            --accent-glow: rgba(0, 82, 204, 0.12);
+            --green: #0f7b55;
+            --green-light: #e6f4f0;
+            --radius: 12px;
+            --radius-lg: 20px;
+            --shadow-sm: 0 1px 3px rgba(0,0,0,0.06), 0 1px 2px rgba(0,0,0,0.04);
+            --shadow: 0 4px 16px rgba(0,0,0,0.07), 0 1px 4px rgba(0,0,0,0.04);
+            --shadow-lg: 0 16px 48px rgba(0,0,0,0.1), 0 4px 12px rgba(0,0,0,0.06);
+            --nav-h: 68px;
+        }
+
+        html { scroll-behavior: smooth; }
+
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+            color: var(--ink);
+            background: var(--surface);
+            line-height: 1.6;
+            -webkit-font-smoothing: antialiased;
+        }
+
+        .container { max-width: 1160px; margin: 0 auto; padding: 0 24px; }
+
+        /* ─── NAV ─── */
+        header {
+            position: sticky; top: 0; z-index: 200;
+            background: rgba(255,255,255,0.88);
+            backdrop-filter: blur(16px); -webkit-backdrop-filter: blur(16px);
+            border-bottom: 1px solid var(--border);
+            height: var(--nav-h);
+        }
+        nav { height: 100%; display: flex; align-items: center; justify-content: space-between; }
+        .logo { display: flex; align-items: center; gap: 10px; text-decoration: none; }
+        .logo img { height: 36px; width: auto; }
+        .logo-name { font-size: 1.2rem; font-weight: 700; color: var(--ink); letter-spacing: -0.02em; }
+        .nav-links { display: flex; align-items: center; gap: 2rem; list-style: none; }
+        .nav-links a { font-size: 0.9rem; font-weight: 500; color: var(--ink-light); text-decoration: none; transition: color 0.2s; }
+        .nav-links a:hover { color: var(--ink); }
+        .nav-links a.active { color: var(--accent); }
+        .nav-cta { background: var(--ink) !important; color: var(--surface) !important; padding: 0.55rem 1.25rem !important; border-radius: 8px !important; font-size: 0.875rem !important; transition: background 0.2s, opacity 0.2s !important; }
+        .nav-cta:hover { opacity: 0.85; }
+        @media (max-width: 640px) { .nav-links { display: none; } }
+
+        /* ─── FOOTER ─── */
+        footer { background: var(--ink); color: rgba(255,255,255,0.5); padding: 36px 0; }
+        .footer-inner { display: flex; align-items: center; justify-content: space-between; gap: 24px; flex-wrap: wrap; }
+        .footer-logo-name { font-size: 1.1rem; font-weight: 700; color: white; letter-spacing: -0.02em; }
+        .footer-right { text-align: right; font-size: 0.825rem; line-height: 1.6; }
+        @media (max-width: 640px) { .footer-right { text-align: left; } }
+
+        /* ─── ANIMATIONS ─── */
+        @keyframes fade-up { from { opacity: 0; transform: translateY(18px); } to { opacity: 1; transform: translateY(0); } }
+        .animate { animation: fade-up 0.55s ease both; }
+        .delay-1 { animation-delay: 0.1s; }
+        .delay-2 { animation-delay: 0.2s; }
+        .delay-3 { animation-delay: 0.3s; }
+
+        /* ─── ARTICLE HERO ─── */
+        .article-hero {
+            background: linear-gradient(135deg, #0a1832 0%, #0d2160 40%, #0052cc 80%, #1a6fff 100%);
+            padding: 80px 0 72px; position: relative; overflow: hidden;
+        }
+        .article-hero::before { content: ''; position: absolute; top: -100px; right: -100px; width: 600px; height: 600px; background: radial-gradient(circle, rgba(255,255,255,0.06) 0%, transparent 70%); pointer-events: none; }
+        .article-hero::after  { content: ''; position: absolute; bottom: -80px; left: -80px; width: 400px; height: 400px; background: radial-gradient(circle, rgba(26,111,255,0.2) 0%, transparent 70%); pointer-events: none; }
+        .article-hero-inner { position: relative; z-index: 1; max-width: 800px; }
+        .breadcrumb { display: flex; align-items: center; gap: 8px; margin-bottom: 2rem; }
+        .breadcrumb a { font-size: 0.85rem; font-weight: 500; color: rgba(255,255,255,0.6); text-decoration: none; transition: color 0.2s; }
+        .breadcrumb a:hover { color: rgba(255,255,255,0.9); }
+        .breadcrumb-sep { color: rgba(255,255,255,0.3); font-size: 0.85rem; }
+        .breadcrumb-current { font-size: 0.85rem; color: rgba(255,255,255,0.5); overflow: hidden; text-overflow: ellipsis; white-space: nowrap; max-width: 300px; }
+        .article-tag { display: inline-flex; align-items: center; font-size: 0.75rem; font-weight: 600; letter-spacing: 0.08em; text-transform: uppercase; color: rgba(255,255,255,0.9); background: rgba(255,255,255,0.14); border: 1px solid rgba(255,255,255,0.2); padding: 5px 12px; border-radius: 100px; margin-bottom: 1.5rem; }
+        .article-hero h1 { font-size: clamp(1.8rem, 3.5vw, 2.8rem); font-weight: 700; line-height: 1.15; letter-spacing: -0.03em; color: white; margin-bottom: 1.5rem; }
+        .article-hero-meta { display: flex; align-items: center; gap: 16px; flex-wrap: wrap; }
+        .article-meta-author { display: flex; align-items: center; gap: 10px; }
+        .article-meta-avatar { width: 36px; height: 36px; border-radius: 50%; background: rgba(255,255,255,0.15); border: 2px solid rgba(255,255,255,0.3); display: flex; align-items: center; justify-content: center; font-size: 0.75rem; font-weight: 700; color: white; }
+        .article-meta-name { font-size: 0.9rem; font-weight: 600; color: rgba(255,255,255,0.9); }
+        .article-meta-role { font-size: 0.8rem; color: rgba(255,255,255,0.55); margin-top: 1px; }
+        .article-meta-sep { width: 3px; height: 3px; border-radius: 50%; background: rgba(255,255,255,0.25); }
+        .article-meta-date, .article-meta-read { font-size: 0.85rem; color: rgba(255,255,255,0.55); }
+
+        /* ─── ARTICLE LAYOUT ─── */
+        .article-layout { display: grid; grid-template-columns: 1fr 300px; gap: 48px; padding: 64px 0 96px; align-items: start; }
+        @media (max-width: 900px) { .article-layout { grid-template-columns: 1fr; gap: 40px; } .article-sidebar { order: -1; } }
+        @media (max-width: 640px) { .article-layout { padding: 40px 0 72px; } }
+
+        /* ─── ARTICLE BODY ─── */
+        .article-body { min-width: 0; }
+        .article-body h2 { font-size: 1.5rem; font-weight: 700; line-height: 1.25; letter-spacing: -0.02em; color: var(--ink); margin: 2.5rem 0 1rem; padding-top: 2rem; border-top: 1px solid var(--border); }
+        .article-body h2:first-child { margin-top: 0; padding-top: 0; border-top: none; }
+        .article-body h3 { font-size: 1.15rem; font-weight: 600; color: var(--ink); margin: 1.75rem 0 0.75rem; }
+        .article-body p { font-size: 1.05rem; line-height: 1.8; color: var(--ink-light); margin-bottom: 1.25rem; }
+        .article-body strong { color: var(--ink); font-weight: 600; }
+        .article-body a { color: var(--accent); text-decoration: underline; text-decoration-color: rgba(0,82,204,0.3); text-underline-offset: 3px; transition: text-decoration-color 0.2s; }
+        .article-body a:hover { text-decoration-color: var(--accent); }
+        .article-body ul, .article-body ol { margin: 1rem 0 1.25rem 1.5rem; display: flex; flex-direction: column; gap: 0.5rem; }
+        .article-body li { font-size: 1.05rem; line-height: 1.7; color: var(--ink-light); }
+        .article-body li strong { color: var(--ink); }
+        .article-body pre { background: var(--ink); color: #e2e8f0; border-radius: var(--radius); padding: 20px 24px; overflow-x: auto; margin: 1.5rem 0; font-size: 0.9rem; line-height: 1.6; }
+        .article-body code { font-family: 'JetBrains Mono', 'Fira Code', 'Cascadia Code', monospace; }
+        .article-body p code, .article-body li code { background: var(--surface-3); color: var(--accent); padding: 2px 6px; border-radius: 4px; font-size: 0.9em; }
+        .article-body img { max-width: 100%; border-radius: var(--radius); border: 1px solid var(--border); margin: 1.5rem 0; }
+        .article-body hr { border: none; border-top: 1px solid var(--border); margin: 2.5rem 0; }
+        .article-body table { width: 100%; border-collapse: collapse; margin: 1.5rem 0; font-size: 0.95rem; }
+        .article-body th { background: var(--surface-2); font-weight: 600; color: var(--ink); text-align: left; padding: 10px 14px; border: 1px solid var(--border); }
+        .article-body td { padding: 10px 14px; border: 1px solid var(--border); color: var(--ink-light); }
+        .article-body tr:hover td { background: var(--surface-2); }
+
+        /* ─── COVER IMAGE ─── */
+        .article-cover { width: 100%; max-height: 480px; object-fit: cover; border-radius: var(--radius-lg); margin-bottom: 48px; border: 1px solid var(--border); display: block; }
+
+        /* ─── CALLOUT ─── */
+        .callout { background: var(--accent-light); border-left: 3px solid var(--accent); border-radius: 0 var(--radius) var(--radius) 0; padding: 20px 24px; margin: 1.75rem 0; }
+        .callout p { margin: 0; color: var(--ink); font-size: 0.975rem; }
+
+        /* ─── SIDEBAR ─── */
+        .article-sidebar { position: sticky; top: calc(var(--nav-h) + 24px); }
+        .sidebar-card { background: var(--surface-2); border: 1px solid var(--border); border-radius: var(--radius-lg); padding: 24px; margin-bottom: 20px; }
+        .sidebar-card-title { font-size: 0.75rem; font-weight: 600; letter-spacing: 0.08em; text-transform: uppercase; color: var(--ink-muted); margin-bottom: 16px; }
+        .toc-list { list-style: none; display: flex; flex-direction: column; gap: 2px; }
+        .toc-list a { display: block; font-size: 0.875rem; color: var(--ink-light); text-decoration: none; padding: 6px 10px; border-radius: 6px; transition: background 0.15s, color 0.15s; line-height: 1.4; }
+        .toc-list a:hover { background: var(--surface-3); color: var(--ink); }
+        .sidebar-tags { display: flex; flex-wrap: wrap; gap: 8px; }
+        .sidebar-tag { font-size: 0.78rem; font-weight: 500; color: var(--accent); background: var(--accent-light); padding: 4px 10px; border-radius: 100px; }
+        .sidebar-author-name { font-size: 0.95rem; font-weight: 600; color: var(--ink); margin-bottom: 4px; }
+        .sidebar-author-role { font-size: 0.83rem; color: var(--ink-muted); margin-bottom: 16px; line-height: 1.5; }
+        .sidebar-author-link { display: inline-flex; align-items: center; gap: 6px; font-size: 0.83rem; font-weight: 500; color: var(--accent); text-decoration: none; transition: opacity 0.2s; }
+        .sidebar-author-link:hover { opacity: 0.75; }
+        .sidebar-author-link svg { width: 14px; height: 14px; stroke: currentColor; fill: none; stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; }
+    </style>
+</head>
+<body>
+
+    <header>
+        <nav class="container">
+            <a href="../../" class="logo">
+                <img src="../../etc/syntaric_logo_2.png" alt="Syntaric">
+                <span class="logo-name">Syntaric</span>
+            </a>
+            <ul class="nav-links">
+                <li><a href="../../#services">Services</a></li>
+                <li><a href="../../#engagements">Engagements</a></li>
+                <li><a href="../../#openfhir">openFHIR</a></li>
+                <li><a href="../../#expertise">Expertise</a></li>
+                <li><a href="../../#collaborators">Collaborators</a></li>
+                <li><a href="../../blog/" class="active">Blog</a></li>
+                <li><a href="../../#contact" class="nav-cta">Contact</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <!-- ─── ARTICLE HERO ─── -->
+    <section class="article-hero">
+        <div class="container">
+            <div class="article-hero-inner animate">
+                <div class="breadcrumb">
+                    <a href="../../">Home</a>
+                    <span class="breadcrumb-sep">/</span>
+                    <a href="../">Blog</a>
+                    <span class="breadcrumb-sep">/</span>
+                    <span class="breadcrumb-current">Virtual MDT Meetings</span>
+                </div>
+                <span class="article-tag">Interoperability</span>
+                <h1>Virtual MDT Meetings Through the Lens of Interoperability</h1>
+                <div class="article-hero-meta">
+                    <div class="article-meta-author">
+                        <div class="article-meta-avatar">GA</div>
+                        <div>
+                            <div class="article-meta-name">Gasper Andrejc</div>
+                            <div class="article-meta-role">Healthcare Interoperability Architect</div>
+                            <div class="article-meta-role"><strong>Written as:</strong> Open Line Vitaly Interoperability Specialist</div>
+                        </div>
+                    </div>
+                    <span class="article-meta-sep"></span>
+                    <span class="article-meta-date">December 22, 2022</span>
+                    <span class="article-meta-sep"></span>
+                    <span class="article-meta-read">9 min read</span>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ─── ARTICLE CONTENT ─── -->
+    <div class="container">
+        <div class="article-layout">
+            <article class="article-body animate">
+<img src="../../blog/virtual-mdt-meetings-interoperability/cover.jpeg" alt="Virtual MDT Meetings Through the Lens of Interoperability" class="article-cover">
+<h2 id="introduction">Introduction</h2>
+<p>In my <a href="../data-first-use-case-driven-interoperability/">previous post</a>, I briefly introduced two main Vitaly solutions offered by <a href="https://www.linkedin.com/company/openlinevitaly/?lipi=urn%3Ali%3Apage%3Ad_flagship3_pulse_read%3B3g32dQJ0QsOeSgsQPisA%2Bw%3D%3D">Open Line Vitaly</a>. From the use-case
+perspective, that is. I tried to minimize the technology and interoperability part to the minimum just to stress the
+fact that when data is made available and “taken for granted”, magical things can happen.</p>
+<p>Now let’s look at all of this from the other side. What are the wheels that power all of this? How does interoperability
+look like in the background and how are profiles, standards and frameworks followed to ensure privacy, security,
+scalability and empower the end user to the maximum?</p>
+<h2 id="meet-the-vitaly-platform">Meet the Vitaly Platform</h2>
+<p>Below you can see the Vitaly Platform. Something that each of our frontend solutions relies on and something that powers
+the whole thing. Marked red are modules that play a part in the MDT solution – be it based on our users’ actions or
+other systems participating in the whole infrastructure.</p>
+<p><img src="../virtual-mdt-meetings-interoperability/arch.png" alt="arch.png"></p>
+<p>Perhaps a quick summary of what our MDT solution is and what it does. Using it, clinicians can prepare MDT requests and
+perform the whole MDT process with it:</p>
+<ol>
+<li>Request phase, where a certain hospital is preparing clinical documentation to support the MDT (including attaching
+relevant clinical documents and structured data),</li>
+<li>Scheduling phase, where the information in the case requested can be reviewed, confirmed for the MDT conference or
+rejected based on more information required.</li>
+<li>Preparation phase, where all participants have the relevant clinical documentation made available to review it and
+prepare for the board,</li>
+<li>Meeting itself (virtual ‘call’) and</li>
+<li>Finalization phase is where the documentation of the MDT itself is created and shared among all involved in the MDT
+meeting.</li>
+</ol>
+<p>Now let’s jump into how it behaves, what interoperable components it has and how they interact with other systems.</p>
+<h2 id="context-launching-what-is-it">Context launching – What is it?</h2>
+<p>Quite a magical thing can happen at the request phase in terms of interoperability. For we have supported a context
+launch (opening an app within an app)!</p>
+<p>Something that in the eyes of software developers and architects in other industries may find an extremely dull and
+outdated way of integration, but in the health-it, it’s the next big thing (some may find this sad).</p>
+<p><strong>It represents two things:</strong></p>
+<ul>
+<li>a way of how users used to a certain software can continue using it and don’t need to switch between different
+applications (SSO implied, context transferred, ..)</li>
+<li>and it also presents a compromise that these big vendors took between the vendor lock-in phenomenon and a fully
+interoperable and open platform – and I’m willing to be OK with that compromise (for a year or so).</li>
+</ul>
+<p><strong>So, what’s the context launch?</strong></p>
+<p>As said, users can continue using whatever EMRs they’re fond of – Epic, Easycare, Cerner, Hix, .. you name it. If you’ve
+been using it for decades, I understand it would be hard to switch. And you don’t need to.</p>
+<p>You can find and view the patient within your EMR, gather all clinical documentation relevant for the MDT and do
+everything to prepare yourself and the request for the tumor board.</p>
+<p>When you’re ready to continue with the flow and submit the request, you can launch our Vitaly right from that soft and
+cosy place of yours.</p>
+<p><strong>Magic that happens now:</strong></p>
+<ul>
+<li>The user is automatically logged-in because of the identity brokering and SSO setup – no need to type any credentials
+in.</li>
+<li>The patient is read from the EMR’s registry and presented within Vitaly – no need to find the exact patient again and
+open it.</li>
+<li>All clinical documentation and the whole request form (tens of question-answers) is obtained from the EMR’s clinical
+data repository and automagically filled in – no need to manually type in anything (again). You’re presented with a
+fully filled request and with already attached clinical documentation. As I said, magic.</li>
+</ul>
+<p><img src="../virtual-mdt-meetings-interoperability/arch1.png" alt="arch1.png"></p>
+<p>All of this is done by following the <strong>SMART on FHIR</strong> framework which in a detailed way describes how context should be
+passed, how security and access control are enforced and in what way the IdP and FHIR CDR can be tightly coupled.</p>
+<p>Our platform is fully compliant in that aspect which is great for scalability throughout different regions and among
+many different EMR vendors (and even different EMR versions).</p>
+<p>Luckily, as it turns out, it’s a framework widely adopted by them, and we’ve been able to integrate it with Epic,
+Easycare &amp; Cerner. Chipsoft (HIX) uses a bit different way of authentication, but the resolve of the context is very
+similar to the SMART on FHIR.</p>
+<h2 id="xds-to-the-rescue">XDS to the rescue</h2>
+<p>Non-structured clinical documentation, there is still a lot of those. We can act like there isn’t and we can be sad
+about that – but we can’t ignore it. Not when you’re integrating your software into an existing decades-old architecture
+where even HL7v2 is still very much alive, let alone XDS.</p>
+<p>So having XDS source and consumer available to jump in where there is no (available) alternative is a hard requirement.
+In the case of this setup, XDS integration is mostly happening in three ways:</p>
+<ol>
+<li>Much of the relevant clinical documentation is non-structured and available only in XDS. Even if it’s part of the
+request phase resolved through the SMART on FHIR, it references an XDS document (and not a FHIR document).</li>
+</ol>
+<p><img src="../virtual-mdt-meetings-interoperability/json.png" alt="json.png"></p>
+<ol>
+<li>As per the XTB-WD specification, all phases of the MDT have defined outputs – whether these are structured or not is not
+part of the profile, but due to other systems in the architecture, it’s often a requirement that these documents are
+available to everyone (perhaps most importantly to the hospital that is the author of the request/MDT) and the easiest
+way for everyone to do that is to put it in the XDS. We have our own XDS Registry and Repository as part of our Platform
+so that’s covered there.</li>
+<li>Similarly to the above – but important enough for it to get its own point – is the final report of the MDT. This is
+pretty much the whole summary of the tumour board and includes all relevant information that was discussed together with
+conclusions. This too needs to be made available to everyone…this too ends up in XDS.</li>
+</ol>
+<h2 id="how-does-the-importance-of-mpi-differ">How does the importance of MPI differ?</h2>
+<p><strong>Even though the user interface and experience of clinicians using our solutions is really amazing, shockingly, in the
+end, it’s all about the patient.</strong></p>
+<p>The master patient index is always there, but depending on other systems, the region the systems are in, the country the
+region is in, the planet the country is in, … the importance of the MPI can differ significantly.</p>
+<ul>
+<li>It could be there to hold only patient identifiers.</li>
+<li>It could also be there to hold patient demography.</li>
+<li>It can happen that it holds multiple patient records of the same patient.</li>
+<li>Or multiple patient records of multiple patients within multiple hospitals.</li>
+<li>Perhaps it happens that it holds less than one record of a patient (just kidding, this is where we draw the line, this
+can’t happen – I hope).</li>
+</ul>
+<p>In any case – we have an MPI that supports all v2, v3, FHIR and XCPD facades. It can be used only by us or by others as
+well. It can act as an EMPI and it can also be set up to perform a complex matching algorithm or a really simple one.</p>
+<p>There is no simple story when it comes to MPI and patient matching. And it does require a completely separate blog post.
+Or multiple of them.</p>
+<h2 id="advantages-of-the-cross-enterprise-workflow">Advantages of the Cross Enterprise Workflow</h2>
+<p>The process that’s happening behind the curtains follows the XTB-WD IHE profile and produces an XDW Workflow Document
+every step of the way. Arguably, this affects everything and quite often makes everything (unnecessarily?) complex.</p>
+<p>But at the same time, it has at least two advantages:</p>
+<p><strong>Access control</strong> – if security considerations allow this, it’s very elegant to do access control based on the XDW
+document.</p>
+<p>I’ll try to explain how: multiple hospitals participate in an MDT. Hospitals, where some patients aren’t even
+registered, can participate in patients’ MDTs and therefore don’t necessarily have consent to view patient documentation
+that resides within other hospitals’ backbone.</p>
+<p>Using the XDW Workflow Document, you can implement implicit consent for the time of the MDT. Meaning that if a clinician
+from the hospital wants to see a patient’s documentation, the following criteria need to pass:</p>
+<ul>
+<li>clinician needs to come from an organization that is participating in the MDT</li>
+<li>clinical documentation that the user is “trying to access” needs to be directly attached to the MDT</li>
+</ul>
+<p><strong>Both these pieces of information are available within the mentioned XDW Workflow Document.</strong></p>
+<p><img src="../virtual-mdt-meetings-interoperability/xdw.png" alt="xdw.png"></p>
+<p>Scalability, integration options &amp; history of the process – just like with any other standard you’re following, this too
+makes it possible to scale through other regions and with different vendors in setting up a common MDT process.</p>
+<p>Additionally, the profile “instructs” you to keep an XDW Workflow Document for every change that happens so you have a
+really nice and detailed “audit log” of who, what, how and when.</p>
+<h2 id="final-report-as-the-most-important-output-of-the-mdt-meeting">Final report as the most important output of the MDT meeting</h2>
+<p>It’s another interesting capability that we have, so it deserves special mention.</p>
+<p>As mentioned above, the final report is the most important output of the MDT process and as such, just letting it stay
+in the XDS can be considered a bit careless.</p>
+<p>After all, the hospital that “requested” the MDT and placed their patient on it deserves to have conclusions and
+summaries directly at hand, do they not?</p>
+<p>For this purpose, the final report (structured or non-structured) is, in an FHIR way, “pushed” directly to their EMR as
+well. Those that know SMART on FHIR know that this requires another way of integration.</p>
+<p>If before – for the context launch – it was following the “EHR launch”, it’s now following the “backend services”
+authentication.</p>
+<h2 id="exchange-of-structured-clinical-data">Exchange of structured clinical data</h2>
+<p>Apart from all this data that’s either pushed directly to other systems or made available in our XDS, there is also an
+astonishing amount of structured data that is generated in our Clinical Data Repository.</p>
+<p>All that data passively aggressively resides within our system and is made available to anyone* else following the QEDm
+IHE profile.</p>
+<p>As you could read throughout the post, the data is now there and available. Something we didn’t have a couple of years
+ago or if we did, it was proprietary, and behind the vendor-lock-in phenomena (effectively we didn’t have it).</p>
+<p>Now we’re reaching a new phase where hashtag#interoperability of data is slowly being taken for granted and we can now
+count on data being there.</p>
+<p><strong>The next – the semantic – questions that are being raised:</strong></p>
+<ul>
+<li>Is data (properly) structured or not?</li>
+<li>Are security and privacy ensured?</li>
+<li>Is semantic interoperability ensured (do we know what structured data means)?</li>
+<li>And the most important one – how can/is data being effectively used to ensure holistic and proper patient care?</li>
+</ul>
+<p><strong>It’s the next phase we’re entering</strong>. The interesting one, especially for data modelling (hashtag#openEHR) and
+use-case-driven solutions with proper meaning and intention to give this data purpose and the light it deserves.</p>
+
+            </article>
+
+            <aside class="article-sidebar">
+                <div class="sidebar-card">
+                    <div class="sidebar-card-title">Table of contents</div>
+                    <ul class="toc-list">
+                        <li><a href="#introduction">Introduction</a></li>
+                        <li><a href="#meet-the-vitaly-platform">Meet the Vitaly Platform</a></li>
+                        <li><a href="#context-launching-what-is-it">Context launching – What is it?</a></li>
+                        <li><a href="#xds-to-the-rescue">XDS to the rescue</a></li>
+                        <li><a href="#how-does-the-importance-of-mpi-differ">How does the importance of MPI differ?</a></li>
+                        <li><a href="#advantages-of-the-cross-enterprise-workflow">Advantages of the Cross Enterprise Workflow</a></li>
+                        <li><a href="#final-report-as-the-most-important-output-of-the-mdt-meeting">Final report as the most important output of the MDT meeting</a></li>
+                        <li><a href="#exchange-of-structured-clinical-data">Exchange of structured clinical data</a></li>
+                    </ul>
+                </div>
+
+                <div class="sidebar-card">
+                    <div class="sidebar-card-title">Author</div>
+                    <div class="sidebar-author-name">Gasper Andrejc</div>
+                    <div class="sidebar-author-role">Healthcare Interoperability Architect &amp; Consultant at Syntaric. 10+ years building FHIR, openEHR, and IHE solutions across Europe and the US.</div>
+                    <a href="https://www.linkedin.com/in/andrejcgasper/" target="_blank" class="sidebar-author-link">
+                        LinkedIn profile
+                        <svg viewBox="0 0 24 24"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>
+                    </a>
+                </div>
+
+                <div class="sidebar-card">
+                    <div class="sidebar-card-title">Topics</div>
+                    <div class="sidebar-tags">
+                        <span class="sidebar-tag">FHIR</span>
+                        <span class="sidebar-tag">IHE</span>
+                        <span class="sidebar-tag">XDS</span>
+                        <span class="sidebar-tag">SMART on FHIR</span>
+                        <span class="sidebar-tag">MDT</span>
+                        <span class="sidebar-tag">Interoperability</span>
+                    </div>
+                </div>
+            </aside>
+        </div>
+    </div>
+
+    <footer>
+        <div class="container">
+            <div class="footer-inner">
+                <div><span class="footer-logo-name">Syntaric</span></div>
+                <div class="footer-right">
+                    <p>&copy; 2025 Syntaric d.o.o. · Healthcare Interoperability Consulting</p>
+                    <p>VAT SI24333611 · Reg. 9746927000</p>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+</body>
+</html>

@@ -1,0 +1,381 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pragmatic Approach to Interoperability | Syntaric</title>
+    <meta name="description" content="A use-case and value-first philosophy for healthcare interoperability — staying flexible across XDS, FHIR, and HL7v2 rather than committing ideologically to any single standard.">
+    <meta name="robots" content="index, follow">
+    <link rel="canonical" href="https://syntaric.com/blog/pragmatic-approach-interoperability/">
+
+    <!-- Open Graph -->
+    <meta property="og:type" content="article">
+    <meta property="og:url" content="https://syntaric.com/blog/pragmatic-approach-interoperability/">
+    <meta property="og:title" content="Pragmatic Approach to Interoperability | Syntaric">
+    <meta property="og:description" content="A use-case and value-first philosophy for healthcare interoperability — staying flexible across XDS, FHIR, and HL7v2 rather than committing ideologically to any single standard.">
+    <meta property="og:image" content="https://syntaric.com/blog/images/pragmatic-approach-interoperability.jpg">
+    <meta property="og:site_name" content="Syntaric">
+    <meta property="article:published_time" content="2022-10-28">
+    <meta property="article:author" content="Gasper Andrejc">
+    <meta property="article:tag" content="FHIR">
+    <meta property="article:tag" content="Interoperability">
+    <meta property="article:tag" content="XDS">
+    <meta property="article:tag" content="HL7">
+    <meta property="article:tag" content="Architecture">
+    <meta property="article:tag" content="Strategy">
+
+    <!-- Twitter Card -->
+    <meta name="twitter:card" content="summary">
+    <meta name="twitter:title" content="Pragmatic Approach to Interoperability | Syntaric">
+    <meta name="twitter:description" content="A use-case and value-first philosophy for healthcare interoperability — staying flexible across XDS, FHIR, and HL7v2 rather than committing ideologically to any single standard.">
+    <meta name="twitter:image" content="https://syntaric.com/blog/images/pragmatic-approach-interoperability.jpg">
+
+    <!-- JSON-LD: Article -->
+    <script type="application/ld+json">{
+  "@context": "https://schema.org",
+  "@type": "Article",
+  "headline": "Pragmatic Approach to Interoperability",
+  "description": "A use-case and value-first philosophy for healthcare interoperability — staying flexible across XDS, FHIR, and HL7v2 rather than committing ideologically to any single standard.",
+  "datePublished": "2022-10-28",
+  "author": {
+    "@type": "Person",
+    "name": "Gasper Andrejc",
+    "url": "https://www.linkedin.com/in/andrejcgasper/"
+  },
+  "publisher": {
+    "@type": "Organization",
+    "name": "Syntaric",
+    "@id": "https://syntaric.com/#organization",
+    "logo": {
+      "@type": "ImageObject",
+      "url": "https://syntaric.com/blog/images/pragmatic-approach-interoperability.jpg"
+    }
+  },
+  "mainEntityOfPage": {
+    "@type": "WebPage",
+    "@id": "https://syntaric.com/blog/pragmatic-approach-interoperability/"
+  },
+  "keywords": "FHIR, Interoperability, XDS, HL7, Architecture, Strategy"
+}</script>
+
+    <link rel="icon" type="image/png" href="../../favicon-96x96.png" sizes="96x96" />
+    <link rel="icon" type="image/svg+xml" href="../../favicon.svg" />
+    <link rel="shortcut icon" href="../../favicon.ico" />
+    <link rel="apple-touch-icon" sizes="180x180" href="../../apple-touch-icon.png" />
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=DM+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+
+        :root {
+            --ink: #0d1117;
+            --ink-light: #4a5568;
+            --ink-muted: #718096;
+            --surface: #ffffff;
+            --surface-2: #f7f8fc;
+            --surface-3: #eef0f6;
+            --border: #e2e8f0;
+            --accent: #0052cc;
+            --accent-light: #e8f0fe;
+            --accent-glow: rgba(0, 82, 204, 0.12);
+            --green: #0f7b55;
+            --green-light: #e6f4f0;
+            --radius: 12px;
+            --radius-lg: 20px;
+            --shadow-sm: 0 1px 3px rgba(0,0,0,0.06), 0 1px 2px rgba(0,0,0,0.04);
+            --shadow: 0 4px 16px rgba(0,0,0,0.07), 0 1px 4px rgba(0,0,0,0.04);
+            --shadow-lg: 0 16px 48px rgba(0,0,0,0.1), 0 4px 12px rgba(0,0,0,0.06);
+            --nav-h: 68px;
+        }
+
+        html { scroll-behavior: smooth; }
+
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+            color: var(--ink);
+            background: var(--surface);
+            line-height: 1.6;
+            -webkit-font-smoothing: antialiased;
+        }
+
+        .container { max-width: 1160px; margin: 0 auto; padding: 0 24px; }
+
+        /* ─── NAV ─── */
+        header {
+            position: sticky; top: 0; z-index: 200;
+            background: rgba(255,255,255,0.88);
+            backdrop-filter: blur(16px); -webkit-backdrop-filter: blur(16px);
+            border-bottom: 1px solid var(--border);
+            height: var(--nav-h);
+        }
+        nav { height: 100%; display: flex; align-items: center; justify-content: space-between; }
+        .logo { display: flex; align-items: center; gap: 10px; text-decoration: none; }
+        .logo img { height: 36px; width: auto; }
+        .logo-name { font-size: 1.2rem; font-weight: 700; color: var(--ink); letter-spacing: -0.02em; }
+        .nav-links { display: flex; align-items: center; gap: 2rem; list-style: none; }
+        .nav-links a { font-size: 0.9rem; font-weight: 500; color: var(--ink-light); text-decoration: none; transition: color 0.2s; }
+        .nav-links a:hover { color: var(--ink); }
+        .nav-links a.active { color: var(--accent); }
+        .nav-cta { background: var(--ink) !important; color: var(--surface) !important; padding: 0.55rem 1.25rem !important; border-radius: 8px !important; font-size: 0.875rem !important; transition: background 0.2s, opacity 0.2s !important; }
+        .nav-cta:hover { opacity: 0.85; }
+        @media (max-width: 640px) { .nav-links { display: none; } }
+
+        /* ─── FOOTER ─── */
+        footer { background: var(--ink); color: rgba(255,255,255,0.5); padding: 36px 0; }
+        .footer-inner { display: flex; align-items: center; justify-content: space-between; gap: 24px; flex-wrap: wrap; }
+        .footer-logo-name { font-size: 1.1rem; font-weight: 700; color: white; letter-spacing: -0.02em; }
+        .footer-right { text-align: right; font-size: 0.825rem; line-height: 1.6; }
+        @media (max-width: 640px) { .footer-right { text-align: left; } }
+
+        /* ─── ANIMATIONS ─── */
+        @keyframes fade-up { from { opacity: 0; transform: translateY(18px); } to { opacity: 1; transform: translateY(0); } }
+        .animate { animation: fade-up 0.55s ease both; }
+        .delay-1 { animation-delay: 0.1s; }
+        .delay-2 { animation-delay: 0.2s; }
+        .delay-3 { animation-delay: 0.3s; }
+
+        /* ─── ARTICLE HERO ─── */
+        .article-hero {
+            background: linear-gradient(135deg, #0a1832 0%, #0d2160 40%, #0052cc 80%, #1a6fff 100%);
+            padding: 80px 0 72px; position: relative; overflow: hidden;
+        }
+        .article-hero::before { content: ''; position: absolute; top: -100px; right: -100px; width: 600px; height: 600px; background: radial-gradient(circle, rgba(255,255,255,0.06) 0%, transparent 70%); pointer-events: none; }
+        .article-hero::after  { content: ''; position: absolute; bottom: -80px; left: -80px; width: 400px; height: 400px; background: radial-gradient(circle, rgba(26,111,255,0.2) 0%, transparent 70%); pointer-events: none; }
+        .article-hero-inner { position: relative; z-index: 1; max-width: 800px; }
+        .breadcrumb { display: flex; align-items: center; gap: 8px; margin-bottom: 2rem; }
+        .breadcrumb a { font-size: 0.85rem; font-weight: 500; color: rgba(255,255,255,0.6); text-decoration: none; transition: color 0.2s; }
+        .breadcrumb a:hover { color: rgba(255,255,255,0.9); }
+        .breadcrumb-sep { color: rgba(255,255,255,0.3); font-size: 0.85rem; }
+        .breadcrumb-current { font-size: 0.85rem; color: rgba(255,255,255,0.5); overflow: hidden; text-overflow: ellipsis; white-space: nowrap; max-width: 300px; }
+        .article-tag { display: inline-flex; align-items: center; font-size: 0.75rem; font-weight: 600; letter-spacing: 0.08em; text-transform: uppercase; color: rgba(255,255,255,0.9); background: rgba(255,255,255,0.14); border: 1px solid rgba(255,255,255,0.2); padding: 5px 12px; border-radius: 100px; margin-bottom: 1.5rem; }
+        .article-hero h1 { font-size: clamp(1.8rem, 3.5vw, 2.8rem); font-weight: 700; line-height: 1.15; letter-spacing: -0.03em; color: white; margin-bottom: 1.5rem; }
+        .article-hero-meta { display: flex; align-items: center; gap: 16px; flex-wrap: wrap; }
+        .article-meta-author { display: flex; align-items: center; gap: 10px; }
+        .article-meta-avatar { width: 36px; height: 36px; border-radius: 50%; background: rgba(255,255,255,0.15); border: 2px solid rgba(255,255,255,0.3); display: flex; align-items: center; justify-content: center; font-size: 0.75rem; font-weight: 700; color: white; }
+        .article-meta-name { font-size: 0.9rem; font-weight: 600; color: rgba(255,255,255,0.9); }
+        .article-meta-role { font-size: 0.8rem; color: rgba(255,255,255,0.55); margin-top: 1px; }
+        .article-meta-sep { width: 3px; height: 3px; border-radius: 50%; background: rgba(255,255,255,0.25); }
+        .article-meta-date, .article-meta-read { font-size: 0.85rem; color: rgba(255,255,255,0.55); }
+
+        /* ─── ARTICLE LAYOUT ─── */
+        .article-layout { display: grid; grid-template-columns: 1fr 300px; gap: 48px; padding: 64px 0 96px; align-items: start; }
+        @media (max-width: 900px) { .article-layout { grid-template-columns: 1fr; gap: 40px; } .article-sidebar { order: -1; } }
+        @media (max-width: 640px) { .article-layout { padding: 40px 0 72px; } }
+
+        /* ─── ARTICLE BODY ─── */
+        .article-body { min-width: 0; }
+        .article-body h2 { font-size: 1.5rem; font-weight: 700; line-height: 1.25; letter-spacing: -0.02em; color: var(--ink); margin: 2.5rem 0 1rem; padding-top: 2rem; border-top: 1px solid var(--border); }
+        .article-body h2:first-child { margin-top: 0; padding-top: 0; border-top: none; }
+        .article-body h3 { font-size: 1.15rem; font-weight: 600; color: var(--ink); margin: 1.75rem 0 0.75rem; }
+        .article-body p { font-size: 1.05rem; line-height: 1.8; color: var(--ink-light); margin-bottom: 1.25rem; }
+        .article-body strong { color: var(--ink); font-weight: 600; }
+        .article-body a { color: var(--accent); text-decoration: underline; text-decoration-color: rgba(0,82,204,0.3); text-underline-offset: 3px; transition: text-decoration-color 0.2s; }
+        .article-body a:hover { text-decoration-color: var(--accent); }
+        .article-body ul, .article-body ol { margin: 1rem 0 1.25rem 1.5rem; display: flex; flex-direction: column; gap: 0.5rem; }
+        .article-body li { font-size: 1.05rem; line-height: 1.7; color: var(--ink-light); }
+        .article-body li strong { color: var(--ink); }
+        .article-body pre { background: var(--ink); color: #e2e8f0; border-radius: var(--radius); padding: 20px 24px; overflow-x: auto; margin: 1.5rem 0; font-size: 0.9rem; line-height: 1.6; }
+        .article-body code { font-family: 'JetBrains Mono', 'Fira Code', 'Cascadia Code', monospace; }
+        .article-body p code, .article-body li code { background: var(--surface-3); color: var(--accent); padding: 2px 6px; border-radius: 4px; font-size: 0.9em; }
+        .article-body img { max-width: 100%; border-radius: var(--radius); border: 1px solid var(--border); margin: 1.5rem 0; }
+        .article-body hr { border: none; border-top: 1px solid var(--border); margin: 2.5rem 0; }
+        .article-body table { width: 100%; border-collapse: collapse; margin: 1.5rem 0; font-size: 0.95rem; }
+        .article-body th { background: var(--surface-2); font-weight: 600; color: var(--ink); text-align: left; padding: 10px 14px; border: 1px solid var(--border); }
+        .article-body td { padding: 10px 14px; border: 1px solid var(--border); color: var(--ink-light); }
+        .article-body tr:hover td { background: var(--surface-2); }
+
+        /* ─── COVER IMAGE ─── */
+        .article-cover { width: 100%; max-height: 480px; object-fit: cover; border-radius: var(--radius-lg); margin-bottom: 48px; border: 1px solid var(--border); display: block; }
+
+        /* ─── CALLOUT ─── */
+        .callout { background: var(--accent-light); border-left: 3px solid var(--accent); border-radius: 0 var(--radius) var(--radius) 0; padding: 20px 24px; margin: 1.75rem 0; }
+        .callout p { margin: 0; color: var(--ink); font-size: 0.975rem; }
+
+        /* ─── SIDEBAR ─── */
+        .article-sidebar { position: sticky; top: calc(var(--nav-h) + 24px); }
+        .sidebar-card { background: var(--surface-2); border: 1px solid var(--border); border-radius: var(--radius-lg); padding: 24px; margin-bottom: 20px; }
+        .sidebar-card-title { font-size: 0.75rem; font-weight: 600; letter-spacing: 0.08em; text-transform: uppercase; color: var(--ink-muted); margin-bottom: 16px; }
+        .toc-list { list-style: none; display: flex; flex-direction: column; gap: 2px; }
+        .toc-list a { display: block; font-size: 0.875rem; color: var(--ink-light); text-decoration: none; padding: 6px 10px; border-radius: 6px; transition: background 0.15s, color 0.15s; line-height: 1.4; }
+        .toc-list a:hover { background: var(--surface-3); color: var(--ink); }
+        .sidebar-tags { display: flex; flex-wrap: wrap; gap: 8px; }
+        .sidebar-tag { font-size: 0.78rem; font-weight: 500; color: var(--accent); background: var(--accent-light); padding: 4px 10px; border-radius: 100px; }
+        .sidebar-author-name { font-size: 0.95rem; font-weight: 600; color: var(--ink); margin-bottom: 4px; }
+        .sidebar-author-role { font-size: 0.83rem; color: var(--ink-muted); margin-bottom: 16px; line-height: 1.5; }
+        .sidebar-author-link { display: inline-flex; align-items: center; gap: 6px; font-size: 0.83rem; font-weight: 500; color: var(--accent); text-decoration: none; transition: opacity 0.2s; }
+        .sidebar-author-link:hover { opacity: 0.75; }
+        .sidebar-author-link svg { width: 14px; height: 14px; stroke: currentColor; fill: none; stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; }
+    </style>
+</head>
+<body>
+
+    <header>
+        <nav class="container">
+            <a href="../../" class="logo">
+                <img src="../../etc/syntaric_logo_2.png" alt="Syntaric">
+                <span class="logo-name">Syntaric</span>
+            </a>
+            <ul class="nav-links">
+                <li><a href="../../#services">Services</a></li>
+                <li><a href="../../#engagements">Engagements</a></li>
+                <li><a href="../../#openfhir">openFHIR</a></li>
+                <li><a href="../../#expertise">Expertise</a></li>
+                <li><a href="../../#collaborators">Collaborators</a></li>
+                <li><a href="../../blog/" class="active">Blog</a></li>
+                <li><a href="../../#contact" class="nav-cta">Contact</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <!-- ─── ARTICLE HERO ─── -->
+    <section class="article-hero">
+        <div class="container">
+            <div class="article-hero-inner animate">
+                <div class="breadcrumb">
+                    <a href="../../">Home</a>
+                    <span class="breadcrumb-sep">/</span>
+                    <a href="../">Blog</a>
+                    <span class="breadcrumb-sep">/</span>
+                    <span class="breadcrumb-current">Pragmatic Approach to Interoperability</span>
+                </div>
+                <span class="article-tag">Interoperability</span>
+                <h1>Pragmatic Approach to Interoperability</h1>
+                <div class="article-hero-meta">
+                    <div class="article-meta-author">
+                        <div class="article-meta-avatar">GA</div>
+                        <div>
+                            <div class="article-meta-name">Gasper Andrejc</div>
+                            <div class="article-meta-role">Healthcare Interoperability Architect</div>
+                            <div class="article-meta-role"><strong>Written as:</strong> Parsek Interoperability Specialist</div>
+                        </div>
+                    </div>
+                    <span class="article-meta-sep"></span>
+                    <span class="article-meta-date">October 28, 2022</span>
+                    <span class="article-meta-sep"></span>
+                    <span class="article-meta-read">5 min read</span>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ─── ARTICLE CONTENT ─── -->
+    <div class="container">
+        <div class="article-layout">
+            <article class="article-body animate">
+<img src="../../blog/pragmatic-approach-interoperability/cover.jpeg" alt="Pragmatic Approach to Interoperability" class="article-cover">
+<h2 id="introduction">Introduction</h2>
+<p>In the last couple of years, we - as a relatively young IT company starting in the health IT field - have gone through
+several stages of interoperability. These stages were roughly:</p>
+<p>(1) we don&#39;t need interoperability (we were set straight);</p>
+<p>(2) we know everything (we were set straight);</p>
+<p>(3) we can have others do interoperability for us (boy, were we set straight);</p>
+<p>(4) we need to be interoperable;</p>
+<p>(finally, 5) we need to be interoperable but pragmatic with it at the same time.</p>
+<p>So how did we maintain great user experience and user engagement while trying to plug and play other systems?</p>
+<h2 id="the-value-behind-the-pragmatic-approach">The value behind the pragmatic approach</h2>
+<p>We stuck with the use-case and value-first approach and leveraged interoperability only when it would benefit our users.
+Based on the problems we were solving, we started thinking about how data coming from other systems or data going to
+other systems would help the user, the client and other applications or systems living in the ecosystem. We didn&#39;t have
+strong points or strong beliefs about any standard, and while we offered our expertise, we mostly complied with whatever
+was required wherever we were trying to &quot;plug in&quot; our solutions. XDS? Sure. FHIR? Okay. HL7v2? Let&#39;s do it (opening one
+big old can of wo...-).</p>
+<p>This mantra we have - unknowingly - adopted resulted in two things:</p>
+<p>(1) having a user-first and value-based approach, our applications are really intuitive and user-friendly, don&#39;t have
+pitfalls and aren&#39;t hindered due to interoperable requirements;</p>
+<p><img src="../pragmatic-approach-interoperability/vitaly.png" alt="vitaly.png"></p>
+<p>(2) pragmatism and leniency when it comes to which health IT standard we support resulted in the fact that we have built
+a really strong interoperable platform. Strong both in terms of the variety of standards we support as well as (or
+perhaps even more important) the option to stretch, configure and adapt to just the right flavour of standards that
+others have supported.</p>
+<h2 id="standard-ish-standards">Standard-ish standards</h2>
+<p>No implementation of a standard is the same, however weird that sounds. While it can be argued to be the same on a
+technical level - and that&#39;s mostly covered with written documentation, trial implementations and profiles. The one
+phase of interoperability we can almost guarantee won&#39;t be the same is the semantic part. The content part. The &quot;oh my
+god, I&#39;m going to write my age in a body height data point&quot; case. I know - people are forced to act this way when
+limited by software vendors and are looking for workarounds. This most often results in standard-ISH implementations -
+but it makes integrating with such solutions no less painful (and sometimes I think they are just doing it on purpose to
+mess with me).</p>
+<p>Accepting that unwritten rule of the health IT world, we started doing just that - being pragmatic when it comes to
+being compliant with a standard to the last letter and, at the same time extracting the pieces into configurable
+low-code components that can be configurable by &quot;anyone&quot; at &quot;any point of time&quot; - no more long development hours trying
+to cover every single version of the devil&#39;s implementation of the standard, no more long DevOps cycles to release and
+deploy a new version of the software, no more QC cycles of our (very.. oh my god how very) thorough QC team.</p>
+<h2 id="low-code-adaptability-of-our-platform-in-practice">Low-code adaptability of our platform – in practice</h2>
+<p>While this indirectly benefits anyone using any of our frontend solutions or our IHE components (XDS, MPI, ..), the most
+noticeable implementation of this is our SMART on FHIR context launching mechanism. Due to the nature of the DDMN
+project and the variety of vendors, it includes, we made the context launching of our MDT solution fully configurable.
+The beauty behind all of this is that although restricted by FHIR, the flavour of FHIR, the version of FHIR, the &quot;yeah
+but we put Patient&#39;s heart rate in the PaymentNotice field&quot; content-specific part of FHIR - we can adapt to all of that
+purely with configuration. With that, we have made the solution 100% scalable throughout the Netherlands and made our
+solution context-launchable by any vendor and any version of the vendor&#39;s EMR (because, yes - even two same EMRs don&#39;t
+speak the same language). For the more technical-minded of you, stay tuned. A more detailed post on how we&#39;ve achieved
+this will follow.</p>
+<h2 id="parsek-39-s-mantra-that-allowed-all-this">Parsek&#39;s mantra that allowed all this</h2>
+<p>While we are now directly involved in standardising national profiles (albeit the content part), we never positioned
+ourselves on the one side of any health IT standard. As developers, we never joined a cult. We did implement some with
+more enthusiasm than others, but we took a pragmatic approach and adapted to whatever the ecosystem required. We never
+took these decisions personally. And I think that&#39;s key and that gives our Vitaly platform a significant advantage and
+made it possible for us to switch when a switch made sense. Why? Because every standard has its place in the world.</p>
+<h2 id="the-trap-of-interoperability">The trap of interoperability</h2>
+<p>FHIR isn&#39;t the best for persistency and openEHR isn&#39;t the best for transfer... And XDS isn&#39;t the best for structured
+data..., and HL7v2 isn&#39;t good for...well..your health. When your only tool is a hammer, you tend to see every problem as
+a nail. And that clouds your judgment when designing scalable solutions, and you may very quickly find yourself in a
+downward spiral trying to find your way out. But it&#39;s hard to climb out because... Well... You only have a hammer.
+Luckily, we successfully avoided this trap of interoperability and are now reaping the benefits of good decisions we&#39;ve
+made along the way.</p>
+
+            </article>
+
+            <aside class="article-sidebar">
+                <div class="sidebar-card">
+                    <div class="sidebar-card-title">Table of contents</div>
+                    <ul class="toc-list">
+                        <li><a href="#introduction">Introduction</a></li>
+                        <li><a href="#the-value-behind-the-pragmatic-approach">The value behind the pragmatic approach</a></li>
+                        <li><a href="#standard-ish-standards">Standard-ish standards</a></li>
+                        <li><a href="#low-code-adaptability-of-our-platform-in-practice">Low-code adaptability of our platform – in practice</a></li>
+                        <li><a href="#parsek-39-s-mantra-that-allowed-all-this">Parsek&amp;#39;s mantra that allowed all this</a></li>
+                        <li><a href="#the-trap-of-interoperability">The trap of interoperability</a></li>
+                    </ul>
+                </div>
+
+                <div class="sidebar-card">
+                    <div class="sidebar-card-title">Author</div>
+                    <div class="sidebar-author-name">Gasper Andrejc</div>
+                    <div class="sidebar-author-role">Healthcare Interoperability Architect &amp; Consultant at Syntaric. 10+ years building FHIR, openEHR, and IHE solutions across Europe and the US.</div>
+                    <a href="https://www.linkedin.com/in/andrejcgasper/" target="_blank" class="sidebar-author-link">
+                        LinkedIn profile
+                        <svg viewBox="0 0 24 24"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>
+                    </a>
+                </div>
+
+                <div class="sidebar-card">
+                    <div class="sidebar-card-title">Topics</div>
+                    <div class="sidebar-tags">
+                        <span class="sidebar-tag">FHIR</span>
+                        <span class="sidebar-tag">Interoperability</span>
+                        <span class="sidebar-tag">XDS</span>
+                        <span class="sidebar-tag">HL7</span>
+                        <span class="sidebar-tag">Architecture</span>
+                        <span class="sidebar-tag">Strategy</span>
+                    </div>
+                </div>
+            </aside>
+        </div>
+    </div>
+
+    <footer>
+        <div class="container">
+            <div class="footer-inner">
+                <div><span class="footer-logo-name">Syntaric</span></div>
+                <div class="footer-right">
+                    <p>&copy; 2025 Syntaric d.o.o. · Healthcare Interoperability Consulting</p>
+                    <p>VAT SI24333611 · Reg. 9746927000</p>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+</body>
+</html>

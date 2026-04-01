@@ -1,0 +1,423 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Renaissance of Vitaly's Interoperable Core | Syntaric</title>
+    <meta name="description" content="Following IHE Connectathon in Rennes, a review of the Vitaly platform's full compliance with MHD, IPS, mXDE, QEDm, PIXm, PDQm, and XDS profiles.">
+    <meta name="robots" content="index, follow">
+    <link rel="canonical" href="https://syntaric.com/blog/renaissance-vitalys-interoperable-core/">
+
+    <!-- Open Graph -->
+    <meta property="og:type" content="article">
+    <meta property="og:url" content="https://syntaric.com/blog/renaissance-vitalys-interoperable-core/">
+    <meta property="og:title" content="Renaissance of Vitaly's Interoperable Core | Syntaric">
+    <meta property="og:description" content="Following IHE Connectathon in Rennes, a review of the Vitaly platform's full compliance with MHD, IPS, mXDE, QEDm, PIXm, PDQm, and XDS profiles.">
+    <meta property="og:image" content="https://syntaric.com/blog/images/renaissance-vitalys-interoperable-core.jpg">
+    <meta property="og:site_name" content="Syntaric">
+    <meta property="article:published_time" content="2023-10-18">
+    <meta property="article:author" content="Gasper Andrejc">
+    <meta property="article:tag" content="FHIR">
+    <meta property="article:tag" content="IHE">
+    <meta property="article:tag" content="XDS">
+    <meta property="article:tag" content="MHD">
+    <meta property="article:tag" content="IPS">
+    <meta property="article:tag" content="QEDm">
+    <meta property="article:tag" content="Connectathon">
+
+    <!-- Twitter Card -->
+    <meta name="twitter:card" content="summary">
+    <meta name="twitter:title" content="Renaissance of Vitaly's Interoperable Core | Syntaric">
+    <meta name="twitter:description" content="Following IHE Connectathon in Rennes, a review of the Vitaly platform's full compliance with MHD, IPS, mXDE, QEDm, PIXm, PDQm, and XDS profiles.">
+    <meta name="twitter:image" content="https://syntaric.com/blog/images/renaissance-vitalys-interoperable-core.jpg">
+
+    <!-- JSON-LD: Article -->
+    <script type="application/ld+json">{
+  "@context": "https://schema.org",
+  "@type": "Article",
+  "headline": "Renaissance of Vitaly's Interoperable Core",
+  "description": "Following IHE Connectathon in Rennes, a review of the Vitaly platform's full compliance with MHD, IPS, mXDE, QEDm, PIXm, PDQm, and XDS profiles.",
+  "datePublished": "2023-10-18",
+  "author": {
+    "@type": "Person",
+    "name": "Gasper Andrejc",
+    "url": "https://www.linkedin.com/in/andrejcgasper/"
+  },
+  "publisher": {
+    "@type": "Organization",
+    "name": "Syntaric",
+    "@id": "https://syntaric.com/#organization",
+    "logo": {
+      "@type": "ImageObject",
+      "url": "https://syntaric.com/blog/images/renaissance-vitalys-interoperable-core.jpg"
+    }
+  },
+  "mainEntityOfPage": {
+    "@type": "WebPage",
+    "@id": "https://syntaric.com/blog/renaissance-vitalys-interoperable-core/"
+  },
+  "keywords": "FHIR, IHE, XDS, MHD, IPS, QEDm, Connectathon"
+}</script>
+
+    <link rel="icon" type="image/png" href="../../favicon-96x96.png" sizes="96x96" />
+    <link rel="icon" type="image/svg+xml" href="../../favicon.svg" />
+    <link rel="shortcut icon" href="../../favicon.ico" />
+    <link rel="apple-touch-icon" sizes="180x180" href="../../apple-touch-icon.png" />
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=DM+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+
+        :root {
+            --ink: #0d1117;
+            --ink-light: #4a5568;
+            --ink-muted: #718096;
+            --surface: #ffffff;
+            --surface-2: #f7f8fc;
+            --surface-3: #eef0f6;
+            --border: #e2e8f0;
+            --accent: #0052cc;
+            --accent-light: #e8f0fe;
+            --accent-glow: rgba(0, 82, 204, 0.12);
+            --green: #0f7b55;
+            --green-light: #e6f4f0;
+            --radius: 12px;
+            --radius-lg: 20px;
+            --shadow-sm: 0 1px 3px rgba(0,0,0,0.06), 0 1px 2px rgba(0,0,0,0.04);
+            --shadow: 0 4px 16px rgba(0,0,0,0.07), 0 1px 4px rgba(0,0,0,0.04);
+            --shadow-lg: 0 16px 48px rgba(0,0,0,0.1), 0 4px 12px rgba(0,0,0,0.06);
+            --nav-h: 68px;
+        }
+
+        html { scroll-behavior: smooth; }
+
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+            color: var(--ink);
+            background: var(--surface);
+            line-height: 1.6;
+            -webkit-font-smoothing: antialiased;
+        }
+
+        .container { max-width: 1160px; margin: 0 auto; padding: 0 24px; }
+
+        /* ─── NAV ─── */
+        header {
+            position: sticky; top: 0; z-index: 200;
+            background: rgba(255,255,255,0.88);
+            backdrop-filter: blur(16px); -webkit-backdrop-filter: blur(16px);
+            border-bottom: 1px solid var(--border);
+            height: var(--nav-h);
+        }
+        nav { height: 100%; display: flex; align-items: center; justify-content: space-between; }
+        .logo { display: flex; align-items: center; gap: 10px; text-decoration: none; }
+        .logo img { height: 36px; width: auto; }
+        .logo-name { font-size: 1.2rem; font-weight: 700; color: var(--ink); letter-spacing: -0.02em; }
+        .nav-links { display: flex; align-items: center; gap: 2rem; list-style: none; }
+        .nav-links a { font-size: 0.9rem; font-weight: 500; color: var(--ink-light); text-decoration: none; transition: color 0.2s; }
+        .nav-links a:hover { color: var(--ink); }
+        .nav-links a.active { color: var(--accent); }
+        .nav-cta { background: var(--ink) !important; color: var(--surface) !important; padding: 0.55rem 1.25rem !important; border-radius: 8px !important; font-size: 0.875rem !important; transition: background 0.2s, opacity 0.2s !important; }
+        .nav-cta:hover { opacity: 0.85; }
+        @media (max-width: 640px) { .nav-links { display: none; } }
+
+        /* ─── FOOTER ─── */
+        footer { background: var(--ink); color: rgba(255,255,255,0.5); padding: 36px 0; }
+        .footer-inner { display: flex; align-items: center; justify-content: space-between; gap: 24px; flex-wrap: wrap; }
+        .footer-logo-name { font-size: 1.1rem; font-weight: 700; color: white; letter-spacing: -0.02em; }
+        .footer-right { text-align: right; font-size: 0.825rem; line-height: 1.6; }
+        @media (max-width: 640px) { .footer-right { text-align: left; } }
+
+        /* ─── ANIMATIONS ─── */
+        @keyframes fade-up { from { opacity: 0; transform: translateY(18px); } to { opacity: 1; transform: translateY(0); } }
+        .animate { animation: fade-up 0.55s ease both; }
+        .delay-1 { animation-delay: 0.1s; }
+        .delay-2 { animation-delay: 0.2s; }
+        .delay-3 { animation-delay: 0.3s; }
+
+        /* ─── ARTICLE HERO ─── */
+        .article-hero {
+            background: linear-gradient(135deg, #0a1832 0%, #0d2160 40%, #0052cc 80%, #1a6fff 100%);
+            padding: 80px 0 72px; position: relative; overflow: hidden;
+        }
+        .article-hero::before { content: ''; position: absolute; top: -100px; right: -100px; width: 600px; height: 600px; background: radial-gradient(circle, rgba(255,255,255,0.06) 0%, transparent 70%); pointer-events: none; }
+        .article-hero::after  { content: ''; position: absolute; bottom: -80px; left: -80px; width: 400px; height: 400px; background: radial-gradient(circle, rgba(26,111,255,0.2) 0%, transparent 70%); pointer-events: none; }
+        .article-hero-inner { position: relative; z-index: 1; max-width: 800px; }
+        .breadcrumb { display: flex; align-items: center; gap: 8px; margin-bottom: 2rem; }
+        .breadcrumb a { font-size: 0.85rem; font-weight: 500; color: rgba(255,255,255,0.6); text-decoration: none; transition: color 0.2s; }
+        .breadcrumb a:hover { color: rgba(255,255,255,0.9); }
+        .breadcrumb-sep { color: rgba(255,255,255,0.3); font-size: 0.85rem; }
+        .breadcrumb-current { font-size: 0.85rem; color: rgba(255,255,255,0.5); overflow: hidden; text-overflow: ellipsis; white-space: nowrap; max-width: 300px; }
+        .article-tag { display: inline-flex; align-items: center; font-size: 0.75rem; font-weight: 600; letter-spacing: 0.08em; text-transform: uppercase; color: rgba(255,255,255,0.9); background: rgba(255,255,255,0.14); border: 1px solid rgba(255,255,255,0.2); padding: 5px 12px; border-radius: 100px; margin-bottom: 1.5rem; }
+        .article-hero h1 { font-size: clamp(1.8rem, 3.5vw, 2.8rem); font-weight: 700; line-height: 1.15; letter-spacing: -0.03em; color: white; margin-bottom: 1.5rem; }
+        .article-hero-meta { display: flex; align-items: center; gap: 16px; flex-wrap: wrap; }
+        .article-meta-author { display: flex; align-items: center; gap: 10px; }
+        .article-meta-avatar { width: 36px; height: 36px; border-radius: 50%; background: rgba(255,255,255,0.15); border: 2px solid rgba(255,255,255,0.3); display: flex; align-items: center; justify-content: center; font-size: 0.75rem; font-weight: 700; color: white; }
+        .article-meta-name { font-size: 0.9rem; font-weight: 600; color: rgba(255,255,255,0.9); }
+        .article-meta-role { font-size: 0.8rem; color: rgba(255,255,255,0.55); margin-top: 1px; }
+        .article-meta-sep { width: 3px; height: 3px; border-radius: 50%; background: rgba(255,255,255,0.25); }
+        .article-meta-date, .article-meta-read { font-size: 0.85rem; color: rgba(255,255,255,0.55); }
+
+        /* ─── ARTICLE LAYOUT ─── */
+        .article-layout { display: grid; grid-template-columns: 1fr 300px; gap: 48px; padding: 64px 0 96px; align-items: start; }
+        @media (max-width: 900px) { .article-layout { grid-template-columns: 1fr; gap: 40px; } .article-sidebar { order: -1; } }
+        @media (max-width: 640px) { .article-layout { padding: 40px 0 72px; } }
+
+        /* ─── ARTICLE BODY ─── */
+        .article-body { min-width: 0; }
+        .article-body h2 { font-size: 1.5rem; font-weight: 700; line-height: 1.25; letter-spacing: -0.02em; color: var(--ink); margin: 2.5rem 0 1rem; padding-top: 2rem; border-top: 1px solid var(--border); }
+        .article-body h2:first-child { margin-top: 0; padding-top: 0; border-top: none; }
+        .article-body h3 { font-size: 1.15rem; font-weight: 600; color: var(--ink); margin: 1.75rem 0 0.75rem; }
+        .article-body p { font-size: 1.05rem; line-height: 1.8; color: var(--ink-light); margin-bottom: 1.25rem; }
+        .article-body strong { color: var(--ink); font-weight: 600; }
+        .article-body a { color: var(--accent); text-decoration: underline; text-decoration-color: rgba(0,82,204,0.3); text-underline-offset: 3px; transition: text-decoration-color 0.2s; }
+        .article-body a:hover { text-decoration-color: var(--accent); }
+        .article-body ul, .article-body ol { margin: 1rem 0 1.25rem 1.5rem; display: flex; flex-direction: column; gap: 0.5rem; }
+        .article-body li { font-size: 1.05rem; line-height: 1.7; color: var(--ink-light); }
+        .article-body li strong { color: var(--ink); }
+        .article-body pre { background: var(--ink); color: #e2e8f0; border-radius: var(--radius); padding: 20px 24px; overflow-x: auto; margin: 1.5rem 0; font-size: 0.9rem; line-height: 1.6; }
+        .article-body code { font-family: 'JetBrains Mono', 'Fira Code', 'Cascadia Code', monospace; }
+        .article-body p code, .article-body li code { background: var(--surface-3); color: var(--accent); padding: 2px 6px; border-radius: 4px; font-size: 0.9em; }
+        .article-body img { max-width: 100%; border-radius: var(--radius); border: 1px solid var(--border); margin: 1.5rem 0; }
+        .article-body hr { border: none; border-top: 1px solid var(--border); margin: 2.5rem 0; }
+        .article-body table { width: 100%; border-collapse: collapse; margin: 1.5rem 0; font-size: 0.95rem; }
+        .article-body th { background: var(--surface-2); font-weight: 600; color: var(--ink); text-align: left; padding: 10px 14px; border: 1px solid var(--border); }
+        .article-body td { padding: 10px 14px; border: 1px solid var(--border); color: var(--ink-light); }
+        .article-body tr:hover td { background: var(--surface-2); }
+
+        /* ─── COVER IMAGE ─── */
+        .article-cover { width: 100%; max-height: 480px; object-fit: cover; border-radius: var(--radius-lg); margin-bottom: 48px; border: 1px solid var(--border); display: block; }
+
+        /* ─── CALLOUT ─── */
+        .callout { background: var(--accent-light); border-left: 3px solid var(--accent); border-radius: 0 var(--radius) var(--radius) 0; padding: 20px 24px; margin: 1.75rem 0; }
+        .callout p { margin: 0; color: var(--ink); font-size: 0.975rem; }
+
+        /* ─── SIDEBAR ─── */
+        .article-sidebar { position: sticky; top: calc(var(--nav-h) + 24px); }
+        .sidebar-card { background: var(--surface-2); border: 1px solid var(--border); border-radius: var(--radius-lg); padding: 24px; margin-bottom: 20px; }
+        .sidebar-card-title { font-size: 0.75rem; font-weight: 600; letter-spacing: 0.08em; text-transform: uppercase; color: var(--ink-muted); margin-bottom: 16px; }
+        .toc-list { list-style: none; display: flex; flex-direction: column; gap: 2px; }
+        .toc-list a { display: block; font-size: 0.875rem; color: var(--ink-light); text-decoration: none; padding: 6px 10px; border-radius: 6px; transition: background 0.15s, color 0.15s; line-height: 1.4; }
+        .toc-list a:hover { background: var(--surface-3); color: var(--ink); }
+        .sidebar-tags { display: flex; flex-wrap: wrap; gap: 8px; }
+        .sidebar-tag { font-size: 0.78rem; font-weight: 500; color: var(--accent); background: var(--accent-light); padding: 4px 10px; border-radius: 100px; }
+        .sidebar-author-name { font-size: 0.95rem; font-weight: 600; color: var(--ink); margin-bottom: 4px; }
+        .sidebar-author-role { font-size: 0.83rem; color: var(--ink-muted); margin-bottom: 16px; line-height: 1.5; }
+        .sidebar-author-link { display: inline-flex; align-items: center; gap: 6px; font-size: 0.83rem; font-weight: 500; color: var(--accent); text-decoration: none; transition: opacity 0.2s; }
+        .sidebar-author-link:hover { opacity: 0.75; }
+        .sidebar-author-link svg { width: 14px; height: 14px; stroke: currentColor; fill: none; stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; }
+    </style>
+</head>
+<body>
+
+    <header>
+        <nav class="container">
+            <a href="../../" class="logo">
+                <img src="../../etc/syntaric_logo_2.png" alt="Syntaric">
+                <span class="logo-name">Syntaric</span>
+            </a>
+            <ul class="nav-links">
+                <li><a href="../../#services">Services</a></li>
+                <li><a href="../../#engagements">Engagements</a></li>
+                <li><a href="../../#openfhir">openFHIR</a></li>
+                <li><a href="../../#expertise">Expertise</a></li>
+                <li><a href="../../#collaborators">Collaborators</a></li>
+                <li><a href="../../blog/" class="active">Blog</a></li>
+                <li><a href="../../#contact" class="nav-cta">Contact</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <!-- ─── ARTICLE HERO ─── -->
+    <section class="article-hero">
+        <div class="container">
+            <div class="article-hero-inner animate">
+                <div class="breadcrumb">
+                    <a href="../../">Home</a>
+                    <span class="breadcrumb-sep">/</span>
+                    <a href="../">Blog</a>
+                    <span class="breadcrumb-sep">/</span>
+                    <span class="breadcrumb-current">Renaissance of Vitaly's Interoperable Core</span>
+                </div>
+                <span class="article-tag">IHE</span>
+                <h1>Renaissance of Vitaly's Interoperable Core</h1>
+                <div class="article-hero-meta">
+                    <div class="article-meta-author">
+                        <div class="article-meta-avatar">GA</div>
+                        <div>
+                            <div class="article-meta-name">Gasper Andrejc</div>
+                            <div class="article-meta-role">Healthcare Interoperability Architect</div>
+                            <div class="article-meta-role"><strong>Written as:</strong> Open Line Vitaly Interoperability Specialist</div>
+                        </div>
+                    </div>
+                    <span class="article-meta-sep"></span>
+                    <span class="article-meta-date">October 18, 2023</span>
+                    <span class="article-meta-sep"></span>
+                    <span class="article-meta-read">7 min read</span>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ─── ARTICLE CONTENT ─── -->
+    <div class="container">
+        <div class="article-layout">
+            <article class="article-body animate">
+<img src="../../blog/renaissance-vitalys-interoperable-core/cover.png" alt="Renaissance of Vitaly's Interoperable Core" class="article-cover">
+<h2 id="introduction">Introduction</h2>
+<p>A couple of weeks ago, we attended an adrenaline sporting event - the IHE Connectathon in Rennes.</p>
+<p>An amazing experience for our team, both in terms of what we&#39;ve learned and what we&#39;ve achieved, as well as the number
+of people and other vendors we&#39;ve gotten to know. Norepinephrine, adrenaline, and dopamine ensured.</p>
+<p>But underneath it all, the purpose of our attendance was not only because we, as a team, lacked adrenaline and stress.
+It was, in fact, to validate our platform and its interoperable core.</p>
+<p>So, a couple of weeks after the event, I&#39;m proud to say that full compliance to profiles and options we&#39;ve been able to
+implement and validate has been successfully productivized and is now part of our standard platform.</p>
+<p>A description of some of these - those that I think are going to play an important role in the upcoming months and years
+in the world of digital health - follows below.</p>
+<p>It is not a full description of what our interoperable core offers - that list is a lot longer - but summarizes
+capabilities we&#39;ve added to our platform as a result of the work in the last couple of months preparing for the
+Connectathon.</p>
+<p><img src="../renaissance-vitalys-interoperable-core/arch.png" alt="arch.png"></p>
+<h2 id="mhd-amp-xds-on-fhir">MHD &amp; XDS on FHIR</h2>
+<p>The ability of our platform to exchange documents has been one of the most important ones since the beginning of time.</p>
+<p>Users of our frontend-facing solutions being able to look at documents in connected systems and leverage them for
+clinical decision-making throughout our workflows is something we&#39;ve never taken lightly, therefore support for XDS.b
+and XCA has been there from the start.</p>
+<p>But a couple of years ago - at that time, for the preparation for the 2018 Connectathon in Venice - we also started
+looking into the FHIR parallel of the XDS called MHD.</p>
+<p>Since then, MHD has been improved and changed to be aligned with the new FHIR version(s) and more aligned with real
+production requirements of the data exchange.</p>
+<p>Enter this year - with the shift we&#39;re seeing in the markets we&#39;re present in towards FHIR, we&#39;ve decided to revisit our
+whole MHD compliance and implement it fully.</p>
+<p>With that, Vitaly Platform is able to be any (or all) of the following:</p>
+<p>👉 MHD Document Source - being able to publish documents our users upload or our platform generates in an MHD compliant
+way to third party system</p>
+<p>👉 MHD Document Consumer - integrating into existing MHD registries to empower our users with documents that reside
+externally</p>
+<p>👉 MHD Document Responder - exposing our documents to any other system that would be interested in what our platform
+generates</p>
+<p>👉 MHD Document Recipient - being able to accept documents from other sources</p>
+<h2 id="the-transition">..the transition</h2>
+<p>But the real power of our platform - in my opinion - for the next couple of years of transitioning from XDS towards
+FHIR (or not necessarily transitioning but just both co-existing) is the ability of our platform to be a little of both
+and to provide transformation from one to the other - option called XDS on FHIR.</p>
+<p>Being compliant with XDS on FHIR means that our platform can accept MHD documents and transform them into XDS Provide
+and Register transactions, and accept MHD queries and transform them into XDS Registry Stored Queries.</p>
+<p>This means we can play an intermediary role between all those systems that are FHIR but not XDS compliant. It also means
+we&#39;re able to be a facade to existing XDS architectures that would want to expose their functionalities through the
+modern FHIR.</p>
+<p><img src="../renaissance-vitalys-interoperable-core/xds-on-fhir.png" alt="xds-on-fhir.png">
+<em>Vitaly XDS on FHIR capabilities</em></p>
+<h2 id="international-patient-summary">International Patient Summary</h2>
+<p>Through the use cases we provide, Vitaly can be an important source of patient&#39;s clinical data and, thus, a participant
+system among those building a patient&#39;s summary.</p>
+<p>For that data to be shareable with others, we have support for the International Patient Summary and can generate a
+patient summary in FHIR (DSTU3 and R4) format and in a CDA.</p>
+<p>Likewise, the ability to import an IPS to our Clinical Data Repository in any of those formats is also there (with the
+help of mXDE).</p>
+<p>Together with XDS, MHD and QEDm profiles, we also have a variety of ways of getting that data in and out of our system (
+closely following sIPS development).</p>
+<h2 id="cda-and-mxde">CDA and mXDE</h2>
+<p>The ability to fetch and render CDA has been one of our features for a while.</p>
+<p>With this major upgrade and the support of IPS CDA, we have also added support for mXDE and can create FHIR Resources
+from a CDA that are later available via QEDm transactions.</p>
+<p>Again, being able to play an intermediary role between CDA, XDS and FHIR, QEDm. Magic.</p>
+<p><img src="../renaissance-vitalys-interoperable-core/qedm.png" alt="qedm.png"></p>
+<h2 id="qedm-pixm-pdqm">QEDm, PIXm, PDQm</h2>
+<p>FHIR from the DSTU2 times has been deeply embedded in the core of our platform, so from the very beginning of Vitaly1.0,
+we were already able to expose clinical data that we produce in a standardized FHIR way.</p>
+<p>So, there were no major extra steps that needed to be done in order to support FHIR Profiles for clinical data and for
+patient data exchange. But IHE profiles always have some bits and pieces you don&#39;t normally support unless you
+deliberately do it, and this is something we&#39;ve done now.</p>
+<p>Our platform&#39;s ability to integrate with other FHIR servers has been validated and is now just one of many other ways
+how we empower our end users with external data throughout our workflows.</p>
+<p><img src="../renaissance-vitalys-interoperable-core/pixmpdqm.png" alt="pixmpdqm.png"></p>
+<h2 id="fhir-federation">FHIR Federation</h2>
+<p>The more FHIR is gaining traction, the more we&#39;re seeing a need for some kind of a FHIR Federation.</p>
+<p>While this hasn&#39;t strictly been tested at the Connectathon, with the QEDm and MHD consumers we are slowly implementing
+support for a FHIR gateway as well.</p>
+<p>A component of our platform that would be able to accept a single query and multiply it against several other FHIR
+servers, all while taking care of different authentication mechanism each one of those would require, different context
+propagation, terminology, semantics, ... and then simultaneously trying to put everything it gets back on a common
+denominator, so the consumer of the gateway lives in the ignorance of the federating magic that has happened.</p>
+<p><img src="../renaissance-vitalys-interoperable-core/federation.png" alt="federation.png"></p>
+<h2 id="xds-b-i-xca-i-xcpd">XDS.b(+I), XCA(+I), XCPD</h2>
+<p>Arguments are being made that these dinosaurs are passé, but from what we&#39;re seeing, this is far from reality.</p>
+<p>Surely, other standards are eating into the share XDS/XCA had years ago, and while it&#39;s true the scale may tip one or
+the other way, I doubt we&#39;re near the extinction of these species.</p>
+<p>That&#39;s why this year, we&#39;ve validated once again all our XDS components and even added compliance to server-side actors
+as well - therefore, Vitaly can be any or all of the: Registry, Repository, Initiating GW, Responding GW, Consumer,
+Source, ...</p>
+<h2 id="vitaly-juggling-ux-and-interoperability">Vitaly juggling UX and Interoperability</h2>
+<p>Being a use-case-driven company that primarily focuses on the value we bring to our end users, we&#39;re never supporting
+new standards and profiles just for the sake of it.</p>
+<p>Whatever we support, we support because it makes sense to do so for our vision and for our end users.</p>
+<p>We understand that integration alone presents no meaning, and likewise, functionalities without the integrated data are
+useless.</p>
+<p>Imagine having a perfect user interface with the best workflow ever but without the documents, patients, and clinical
+data that exists in a hospital information system. No one would use it.</p>
+<p>Similarly, if you have support for all IHE acronyms that exist but don&#39;t have a good use case behind it, what value does
+it really bring?</p>
+<p>Therefore, we are always trying to have a balance between the two. Standards that make sense for our solutions and
+integration options that empower our end-users on their journey through Vitaly. With these extended capabilities we&#39;ve
+added to our platform, we&#39;ve definitely done a huge step forward in that regard.</p>
+
+            </article>
+
+            <aside class="article-sidebar">
+                <div class="sidebar-card">
+                    <div class="sidebar-card-title">Table of contents</div>
+                    <ul class="toc-list">
+                        <li><a href="#introduction">Introduction</a></li>
+                        <li><a href="#mhd-amp-xds-on-fhir">MHD &amp;amp; XDS on FHIR</a></li>
+                        <li><a href="#the-transition">..the transition</a></li>
+                        <li><a href="#international-patient-summary">International Patient Summary</a></li>
+                        <li><a href="#cda-and-mxde">CDA and mXDE</a></li>
+                        <li><a href="#qedm-pixm-pdqm">QEDm, PIXm, PDQm</a></li>
+                        <li><a href="#fhir-federation">FHIR Federation</a></li>
+                        <li><a href="#xds-b-i-xca-i-xcpd">XDS.b(+I), XCA(+I), XCPD</a></li>
+                        <li><a href="#vitaly-juggling-ux-and-interoperability">Vitaly juggling UX and Interoperability</a></li>
+                    </ul>
+                </div>
+
+                <div class="sidebar-card">
+                    <div class="sidebar-card-title">Author</div>
+                    <div class="sidebar-author-name">Gasper Andrejc</div>
+                    <div class="sidebar-author-role">Healthcare Interoperability Architect &amp; Consultant at Syntaric. 10+ years building FHIR, openEHR, and IHE solutions across Europe and the US.</div>
+                    <a href="https://www.linkedin.com/in/andrejcgasper/" target="_blank" class="sidebar-author-link">
+                        LinkedIn profile
+                        <svg viewBox="0 0 24 24"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>
+                    </a>
+                </div>
+
+                <div class="sidebar-card">
+                    <div class="sidebar-card-title">Topics</div>
+                    <div class="sidebar-tags">
+                        <span class="sidebar-tag">FHIR</span>
+                        <span class="sidebar-tag">IHE</span>
+                        <span class="sidebar-tag">XDS</span>
+                        <span class="sidebar-tag">MHD</span>
+                        <span class="sidebar-tag">IPS</span>
+                        <span class="sidebar-tag">QEDm</span>
+                        <span class="sidebar-tag">Connectathon</span>
+                    </div>
+                </div>
+            </aside>
+        </div>
+    </div>
+
+    <footer>
+        <div class="container">
+            <div class="footer-inner">
+                <div><span class="footer-logo-name">Syntaric</span></div>
+                <div class="footer-right">
+                    <p>&copy; 2025 Syntaric d.o.o. · Healthcare Interoperability Consulting</p>
+                    <p>VAT SI24333611 · Reg. 9746927000</p>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+</body>
+</html>

@@ -1,0 +1,12 @@
+{
+  "name": "syntaric-landing",
+  "version": "1.0.0",
+  "private": true,
+  "scripts": {
+    "build:blog": "node blog/build.js",
+    "blog": "node blog/build.js"
+  },
+  "dependencies": {
+    "marked": "^12.0.0"
+  }
+}

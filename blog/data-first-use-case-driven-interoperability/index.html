@@ -1,0 +1,390 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Data First: Use-Case Driven Interoperability | Syntaric</title>
+    <meta name="description" content="When the data is there, the real opportunity is using it. An overview of two use-case-driven solutions built on top of an interoperable platform core.">
+    <meta name="robots" content="index, follow">
+    <link rel="canonical" href="https://syntaric.com/blog/data-first-use-case-driven-interoperability/">
+
+    <!-- Open Graph -->
+    <meta property="og:type" content="article">
+    <meta property="og:url" content="https://syntaric.com/blog/data-first-use-case-driven-interoperability/">
+    <meta property="og:title" content="Data First: Use-Case Driven Interoperability | Syntaric">
+    <meta property="og:description" content="When the data is there, the real opportunity is using it. An overview of two use-case-driven solutions built on top of an interoperable platform core.">
+    <meta property="og:image" content="https://syntaric.com/blog/images/data-first-use-case-driven-interoperability.jpg">
+    <meta property="og:site_name" content="Syntaric">
+    <meta property="article:published_time" content="2022-11-24">
+    <meta property="article:author" content="Gasper Andrejc">
+    <meta property="article:tag" content="FHIR">
+    <meta property="article:tag" content="Interoperability">
+    <meta property="article:tag" content="MDT">
+    <meta property="article:tag" content="Care Planning">
+    <meta property="article:tag" content="Architecture">
+
+    <!-- Twitter Card -->
+    <meta name="twitter:card" content="summary">
+    <meta name="twitter:title" content="Data First: Use-Case Driven Interoperability | Syntaric">
+    <meta name="twitter:description" content="When the data is there, the real opportunity is using it. An overview of two use-case-driven solutions built on top of an interoperable platform core.">
+    <meta name="twitter:image" content="https://syntaric.com/blog/images/data-first-use-case-driven-interoperability.jpg">
+
+    <!-- JSON-LD: Article -->
+    <script type="application/ld+json">{
+  "@context": "https://schema.org",
+  "@type": "Article",
+  "headline": "Data First: Use-Case Driven Interoperability",
+  "description": "When the data is there, the real opportunity is using it. An overview of two use-case-driven solutions built on top of an interoperable platform core.",
+  "datePublished": "2022-11-24",
+  "author": {
+    "@type": "Person",
+    "name": "Gasper Andrejc",
+    "url": "https://www.linkedin.com/in/andrejcgasper/"
+  },
+  "publisher": {
+    "@type": "Organization",
+    "name": "Syntaric",
+    "@id": "https://syntaric.com/#organization",
+    "logo": {
+      "@type": "ImageObject",
+      "url": "https://syntaric.com/blog/images/data-first-use-case-driven-interoperability.jpg"
+    }
+  },
+  "mainEntityOfPage": {
+    "@type": "WebPage",
+    "@id": "https://syntaric.com/blog/data-first-use-case-driven-interoperability/"
+  },
+  "keywords": "FHIR, Interoperability, MDT, Care Planning, Architecture"
+}</script>
+
+    <link rel="icon" type="image/png" href="../../favicon-96x96.png" sizes="96x96" />
+    <link rel="icon" type="image/svg+xml" href="../../favicon.svg" />
+    <link rel="shortcut icon" href="../../favicon.ico" />
+    <link rel="apple-touch-icon" sizes="180x180" href="../../apple-touch-icon.png" />
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=DM+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+
+        :root {
+            --ink: #0d1117;
+            --ink-light: #4a5568;
+            --ink-muted: #718096;
+            --surface: #ffffff;
+            --surface-2: #f7f8fc;
+            --surface-3: #eef0f6;
+            --border: #e2e8f0;
+            --accent: #0052cc;
+            --accent-light: #e8f0fe;
+            --accent-glow: rgba(0, 82, 204, 0.12);
+            --green: #0f7b55;
+            --green-light: #e6f4f0;
+            --radius: 12px;
+            --radius-lg: 20px;
+            --shadow-sm: 0 1px 3px rgba(0,0,0,0.06), 0 1px 2px rgba(0,0,0,0.04);
+            --shadow: 0 4px 16px rgba(0,0,0,0.07), 0 1px 4px rgba(0,0,0,0.04);
+            --shadow-lg: 0 16px 48px rgba(0,0,0,0.1), 0 4px 12px rgba(0,0,0,0.06);
+            --nav-h: 68px;
+        }
+
+        html { scroll-behavior: smooth; }
+
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+            color: var(--ink);
+            background: var(--surface);
+            line-height: 1.6;
+            -webkit-font-smoothing: antialiased;
+        }
+
+        .container { max-width: 1160px; margin: 0 auto; padding: 0 24px; }
+
+        /* ─── NAV ─── */
+        header {
+            position: sticky; top: 0; z-index: 200;
+            background: rgba(255,255,255,0.88);
+            backdrop-filter: blur(16px); -webkit-backdrop-filter: blur(16px);
+            border-bottom: 1px solid var(--border);
+            height: var(--nav-h);
+        }
+        nav { height: 100%; display: flex; align-items: center; justify-content: space-between; }
+        .logo { display: flex; align-items: center; gap: 10px; text-decoration: none; }
+        .logo img { height: 36px; width: auto; }
+        .logo-name { font-size: 1.2rem; font-weight: 700; color: var(--ink); letter-spacing: -0.02em; }
+        .nav-links { display: flex; align-items: center; gap: 2rem; list-style: none; }
+        .nav-links a { font-size: 0.9rem; font-weight: 500; color: var(--ink-light); text-decoration: none; transition: color 0.2s; }
+        .nav-links a:hover { color: var(--ink); }
+        .nav-links a.active { color: var(--accent); }
+        .nav-cta { background: var(--ink) !important; color: var(--surface) !important; padding: 0.55rem 1.25rem !important; border-radius: 8px !important; font-size: 0.875rem !important; transition: background 0.2s, opacity 0.2s !important; }
+        .nav-cta:hover { opacity: 0.85; }
+        @media (max-width: 640px) { .nav-links { display: none; } }
+
+        /* ─── FOOTER ─── */
+        footer { background: var(--ink); color: rgba(255,255,255,0.5); padding: 36px 0; }
+        .footer-inner { display: flex; align-items: center; justify-content: space-between; gap: 24px; flex-wrap: wrap; }
+        .footer-logo-name { font-size: 1.1rem; font-weight: 700; color: white; letter-spacing: -0.02em; }
+        .footer-right { text-align: right; font-size: 0.825rem; line-height: 1.6; }
+        @media (max-width: 640px) { .footer-right { text-align: left; } }
+
+        /* ─── ANIMATIONS ─── */
+        @keyframes fade-up { from { opacity: 0; transform: translateY(18px); } to { opacity: 1; transform: translateY(0); } }
+        .animate { animation: fade-up 0.55s ease both; }
+        .delay-1 { animation-delay: 0.1s; }
+        .delay-2 { animation-delay: 0.2s; }
+        .delay-3 { animation-delay: 0.3s; }
+
+        /* ─── ARTICLE HERO ─── */
+        .article-hero {
+            background: linear-gradient(135deg, #0a1832 0%, #0d2160 40%, #0052cc 80%, #1a6fff 100%);
+            padding: 80px 0 72px; position: relative; overflow: hidden;
+        }
+        .article-hero::before { content: ''; position: absolute; top: -100px; right: -100px; width: 600px; height: 600px; background: radial-gradient(circle, rgba(255,255,255,0.06) 0%, transparent 70%); pointer-events: none; }
+        .article-hero::after  { content: ''; position: absolute; bottom: -80px; left: -80px; width: 400px; height: 400px; background: radial-gradient(circle, rgba(26,111,255,0.2) 0%, transparent 70%); pointer-events: none; }
+        .article-hero-inner { position: relative; z-index: 1; max-width: 800px; }
+        .breadcrumb { display: flex; align-items: center; gap: 8px; margin-bottom: 2rem; }
+        .breadcrumb a { font-size: 0.85rem; font-weight: 500; color: rgba(255,255,255,0.6); text-decoration: none; transition: color 0.2s; }
+        .breadcrumb a:hover { color: rgba(255,255,255,0.9); }
+        .breadcrumb-sep { color: rgba(255,255,255,0.3); font-size: 0.85rem; }
+        .breadcrumb-current { font-size: 0.85rem; color: rgba(255,255,255,0.5); overflow: hidden; text-overflow: ellipsis; white-space: nowrap; max-width: 300px; }
+        .article-tag { display: inline-flex; align-items: center; font-size: 0.75rem; font-weight: 600; letter-spacing: 0.08em; text-transform: uppercase; color: rgba(255,255,255,0.9); background: rgba(255,255,255,0.14); border: 1px solid rgba(255,255,255,0.2); padding: 5px 12px; border-radius: 100px; margin-bottom: 1.5rem; }
+        .article-hero h1 { font-size: clamp(1.8rem, 3.5vw, 2.8rem); font-weight: 700; line-height: 1.15; letter-spacing: -0.03em; color: white; margin-bottom: 1.5rem; }
+        .article-hero-meta { display: flex; align-items: center; gap: 16px; flex-wrap: wrap; }
+        .article-meta-author { display: flex; align-items: center; gap: 10px; }
+        .article-meta-avatar { width: 36px; height: 36px; border-radius: 50%; background: rgba(255,255,255,0.15); border: 2px solid rgba(255,255,255,0.3); display: flex; align-items: center; justify-content: center; font-size: 0.75rem; font-weight: 700; color: white; }
+        .article-meta-name { font-size: 0.9rem; font-weight: 600; color: rgba(255,255,255,0.9); }
+        .article-meta-role { font-size: 0.8rem; color: rgba(255,255,255,0.55); margin-top: 1px; }
+        .article-meta-sep { width: 3px; height: 3px; border-radius: 50%; background: rgba(255,255,255,0.25); }
+        .article-meta-date, .article-meta-read { font-size: 0.85rem; color: rgba(255,255,255,0.55); }
+
+        /* ─── ARTICLE LAYOUT ─── */
+        .article-layout { display: grid; grid-template-columns: 1fr 300px; gap: 48px; padding: 64px 0 96px; align-items: start; }
+        @media (max-width: 900px) { .article-layout { grid-template-columns: 1fr; gap: 40px; } .article-sidebar { order: -1; } }
+        @media (max-width: 640px) { .article-layout { padding: 40px 0 72px; } }
+
+        /* ─── ARTICLE BODY ─── */
+        .article-body { min-width: 0; }
+        .article-body h2 { font-size: 1.5rem; font-weight: 700; line-height: 1.25; letter-spacing: -0.02em; color: var(--ink); margin: 2.5rem 0 1rem; padding-top: 2rem; border-top: 1px solid var(--border); }
+        .article-body h2:first-child { margin-top: 0; padding-top: 0; border-top: none; }
+        .article-body h3 { font-size: 1.15rem; font-weight: 600; color: var(--ink); margin: 1.75rem 0 0.75rem; }
+        .article-body p { font-size: 1.05rem; line-height: 1.8; color: var(--ink-light); margin-bottom: 1.25rem; }
+        .article-body strong { color: var(--ink); font-weight: 600; }
+        .article-body a { color: var(--accent); text-decoration: underline; text-decoration-color: rgba(0,82,204,0.3); text-underline-offset: 3px; transition: text-decoration-color 0.2s; }
+        .article-body a:hover { text-decoration-color: var(--accent); }
+        .article-body ul, .article-body ol { margin: 1rem 0 1.25rem 1.5rem; display: flex; flex-direction: column; gap: 0.5rem; }
+        .article-body li { font-size: 1.05rem; line-height: 1.7; color: var(--ink-light); }
+        .article-body li strong { color: var(--ink); }
+        .article-body pre { background: var(--ink); color: #e2e8f0; border-radius: var(--radius); padding: 20px 24px; overflow-x: auto; margin: 1.5rem 0; font-size: 0.9rem; line-height: 1.6; }
+        .article-body code { font-family: 'JetBrains Mono', 'Fira Code', 'Cascadia Code', monospace; }
+        .article-body p code, .article-body li code { background: var(--surface-3); color: var(--accent); padding: 2px 6px; border-radius: 4px; font-size: 0.9em; }
+        .article-body img { max-width: 100%; border-radius: var(--radius); border: 1px solid var(--border); margin: 1.5rem 0; }
+        .article-body hr { border: none; border-top: 1px solid var(--border); margin: 2.5rem 0; }
+        .article-body table { width: 100%; border-collapse: collapse; margin: 1.5rem 0; font-size: 0.95rem; }
+        .article-body th { background: var(--surface-2); font-weight: 600; color: var(--ink); text-align: left; padding: 10px 14px; border: 1px solid var(--border); }
+        .article-body td { padding: 10px 14px; border: 1px solid var(--border); color: var(--ink-light); }
+        .article-body tr:hover td { background: var(--surface-2); }
+
+        /* ─── COVER IMAGE ─── */
+        .article-cover { width: 100%; max-height: 480px; object-fit: cover; border-radius: var(--radius-lg); margin-bottom: 48px; border: 1px solid var(--border); display: block; }
+
+        /* ─── CALLOUT ─── */
+        .callout { background: var(--accent-light); border-left: 3px solid var(--accent); border-radius: 0 var(--radius) var(--radius) 0; padding: 20px 24px; margin: 1.75rem 0; }
+        .callout p { margin: 0; color: var(--ink); font-size: 0.975rem; }
+
+        /* ─── SIDEBAR ─── */
+        .article-sidebar { position: sticky; top: calc(var(--nav-h) + 24px); }
+        .sidebar-card { background: var(--surface-2); border: 1px solid var(--border); border-radius: var(--radius-lg); padding: 24px; margin-bottom: 20px; }
+        .sidebar-card-title { font-size: 0.75rem; font-weight: 600; letter-spacing: 0.08em; text-transform: uppercase; color: var(--ink-muted); margin-bottom: 16px; }
+        .toc-list { list-style: none; display: flex; flex-direction: column; gap: 2px; }
+        .toc-list a { display: block; font-size: 0.875rem; color: var(--ink-light); text-decoration: none; padding: 6px 10px; border-radius: 6px; transition: background 0.15s, color 0.15s; line-height: 1.4; }
+        .toc-list a:hover { background: var(--surface-3); color: var(--ink); }
+        .sidebar-tags { display: flex; flex-wrap: wrap; gap: 8px; }
+        .sidebar-tag { font-size: 0.78rem; font-weight: 500; color: var(--accent); background: var(--accent-light); padding: 4px 10px; border-radius: 100px; }
+        .sidebar-author-name { font-size: 0.95rem; font-weight: 600; color: var(--ink); margin-bottom: 4px; }
+        .sidebar-author-role { font-size: 0.83rem; color: var(--ink-muted); margin-bottom: 16px; line-height: 1.5; }
+        .sidebar-author-link { display: inline-flex; align-items: center; gap: 6px; font-size: 0.83rem; font-weight: 500; color: var(--accent); text-decoration: none; transition: opacity 0.2s; }
+        .sidebar-author-link:hover { opacity: 0.75; }
+        .sidebar-author-link svg { width: 14px; height: 14px; stroke: currentColor; fill: none; stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; }
+    </style>
+</head>
+<body>
+
+    <header>
+        <nav class="container">
+            <a href="../../" class="logo">
+                <img src="../../etc/syntaric_logo_2.png" alt="Syntaric">
+                <span class="logo-name">Syntaric</span>
+            </a>
+            <ul class="nav-links">
+                <li><a href="../../#services">Services</a></li>
+                <li><a href="../../#engagements">Engagements</a></li>
+                <li><a href="../../#openfhir">openFHIR</a></li>
+                <li><a href="../../#expertise">Expertise</a></li>
+                <li><a href="../../#collaborators">Collaborators</a></li>
+                <li><a href="../../blog/" class="active">Blog</a></li>
+                <li><a href="../../#contact" class="nav-cta">Contact</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <!-- ─── ARTICLE HERO ─── -->
+    <section class="article-hero">
+        <div class="container">
+            <div class="article-hero-inner animate">
+                <div class="breadcrumb">
+                    <a href="../../">Home</a>
+                    <span class="breadcrumb-sep">/</span>
+                    <a href="../">Blog</a>
+                    <span class="breadcrumb-sep">/</span>
+                    <span class="breadcrumb-current">Data First Interoperability</span>
+                </div>
+                <span class="article-tag">Interoperability</span>
+                <h1>Data First: Use-Case Driven Interoperability</h1>
+                <div class="article-hero-meta">
+                    <div class="article-meta-author">
+                        <div class="article-meta-avatar">GA</div>
+                        <div>
+                            <div class="article-meta-name">Gasper Andrejc</div>
+                            <div class="article-meta-role">Healthcare Interoperability Architect</div>
+                            <div class="article-meta-role"><strong>Written as:</strong> Open Line Vitaly Interoperability Specialist</div>
+                        </div>
+                    </div>
+                    <span class="article-meta-sep"></span>
+                    <span class="article-meta-date">November 24, 2022</span>
+                    <span class="article-meta-sep"></span>
+                    <span class="article-meta-read">5 min read</span>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ─── ARTICLE CONTENT ─── -->
+    <div class="container">
+        <div class="article-layout">
+            <article class="article-body animate">
+<img src="../../blog/data-first-use-case-driven-interoperability/cover.jpeg" alt="Data First: Use-Case Driven Interoperability" class="article-cover">
+<h2 id="introduction">Introduction</h2>
+<p>I’ve posted a piece on the <a href="../pragmatic-approach-interoperability">pragmatism of interoperability</a> a couple of weeks
+ago where I outlined what approaches we took
+at the <a href="https://www.linkedin.com/company/openlinevitaly/?lipi=urn%3Ali%3Apage%3Ad_flagship3_pulse_read%3B3g32dQJ0QsOeSgsQPisA%2Bw%3D%3D">Open Line Vitaly</a> to avoid the rabbit hole one can get themselves into when building interoperable solutions (
+often with the sole purpose of interoperability). And the path we were on positioned us on the market quite nicely with
+the configurable and low-code platform that we have now.</p>
+<p>This article is a bit less about that - about how data exchange is happening with other systems - and a bit more about
+the value of data and what we can achieve with it.</p>
+<h2 id="the-data-is-there-lets-use-it">The data is there, lets use it</h2>
+<p>Let’s assume the data is there - most often than not it is now connected, integrated and seamlessly shared between
+different systems. This is what we achieved on a technical (arguably also semantical) level with open standards, with
+profiles, with frameworks and initiatives. But now that we have that, the next phase of the &quot;evolution&quot; is to make sense
+of that data.</p>
+<p>A holistic approach with the data being used as a foundation stone we can now build use-case driven solutions on. All to
+improve quality of care, make collaboration feasible and have patients benefit from everything that the data makes
+possible now. You have the data. You have your software. You know market’s requirements. The world is your oyster! (well
+as long as you conform to security restrictions, GDPR, audit considerations, consent modelling, .. but as I said:
+oyster!).</p>
+<p>So what did we do? A lot. And then we pivoted. And made a version two… and pivoted again. A couple of such moves later,
+we have two main solutions on the market actively used by clinicians in different regions in the world – Coordinated
+Care and Collaborative Decision Making.</p>
+<h2 id="collaborative-decision-making-enabling-effective-cross-specialist-mdt-discussions">Collaborative decision making enabling effective cross-specialist MDT discussions</h2>
+<p>Collaborative Decision Making or a (how I and everyone else except our marketing team calls it) “Multidisciplinary Team
+Meetings (MDT) application” is a solution that enables clinicians from anywhere to participate in online tumor boards.</p>
+<p>It follows the IHE specified XTB-WD, which is short for “many different phases all with clearly defined inputs and
+outputs which at the end result in a patient to be holistically and thoroughly discussed on a board”, meaning clinicians
+from very different specialities can participate (online!), prepare, review relevant documentation, write notes, minutes
+of meeting, final report, etc. All with the help of a very intuitive user interface that guides users through the
+otherwise quite complex workflow definition.</p>
+<p><img src="../data-first-use-case-driven-interoperability/xtbwd.png" alt="xtbwd.png"></p>
+<p>Data coming from other systems obviously gives meaning to such a solution. Without it, there would be very little to
+prepare on, much less to discuss on the board. Obviously users could manually create patients and manually upload
+clinical documentation they had previously downloaded from their systems, but that’s such a.. 2020 thing. We live in the
+future now. Data automatically presents itself now (integrations &amp; open standards ftw).</p>
+<h2 id="interoperable-capabilities">Interoperable capabilities</h2>
+<p>Other than that, interoperable capabilities of our platform allow this to be very tightly and seamlessly integrated to
+existing EMRs that clinicians are so very locked-in..- I mean: fond of using. The solution can be context launched from
+within their familiar software; some clinical data can even be transferred directly to our solution (SMART on FHIR)
+which opens in the same context that the user had within the EMR. It’s not too far fetched to say that step one or two
+of the process is done within one software and the rest of the flow is done using our solution. It’s what data, open
+standards and interoperable capabilities of all vendors enable us to do. Seamless and in-sync functioning of multiple
+systems, empowered end-users, all to enable best outcomes for patients.</p>
+<p><img src="../data-first-use-case-driven-interoperability/vitaly.png" alt="vitaly.png"></p>
+<p>That’s in short one use-case we’ve covered and really thoroughly used data available to us, while at the same time
+publish clinical data produced as a result of that process to the healthcare information exchange (or rather we make it
+available in our standard compliant XDS registry and structured CDR QEDm, thus enabling whoever else to do whatever else
+his mind desires).</p>
+<h2 id="empowering-professionals-and-patient-users-through-coordinated-care">Empowering professionals and patient users through Coordinated care</h2>
+<p>The other solution is the Coordinated Care solution with a pinch of the Vitaly Patient (patient facing application).
+I’ll let the video (from 2:00) do the talking here.</p>
+<p>Essentially, it’s a solution that enables a holistic approach to patient’s treatment and follows progress on a path that
+a disease put them on. Patient-facing app integrated with application for care teams keeps the patient highly engaged,
+less frustrated and on top of their care pathway activities while being safely monitored from the distance.</p>
+<p>With the underlying Dynamic Care Planning (DCP) IHE profile, it gives interoperable possibilities even to third party
+applications that’d want to interact or be part of the pathway.</p>
+<p><img src="../data-first-use-case-driven-interoperability/vitaly2.jpeg" alt="vitaly2.jpeg"></p>
+<p>It’s another excellent use of the data the open standards make possible and fully empower both professionals as well as
+patient users.</p>
+<h2 id="the-vitaly-platform">THE Vitaly platform</h2>
+<p>These were all frontend facing solutions built around use-cases that give our platform and data meaning. Underneath it
+all, there’s a strong foundation. A strong interoperable core.</p>
+<p>Auditing service to ensure an audit trail of everything that is going on. Context launching capabilities. IdP
+capabilities that make NHS Login or DigiD integration possible. DCP service for the care planning. XDW service for
+support of the workflow module. Master Patient Index to ensure proper patient management. Messaging, appointments,
+metrics, FHIR compliant CDR (QEDm), XDS, OpenEHR, HL7v2, HL7v3, …..</p>
+<p><img src="../data-first-use-case-driven-interoperability/arch.png" alt="arch.png"></p>
+<p>Underneath it all, there’s a foundation that - while frontend solutions were trying to find themselves and kept on
+pivoting – grew stronger, kept on improving and bulking-up. It became something that is now purely with configuration
+and low-code adaptability able to cater to a variety of different needs in the ecosystem. And most importantly, the
+foundation is now something that enables our frontend solutions to take “data” for granted. <strong>To only care about doing
+what’s best for the patient. To give the data meaning and purpose.</strong></p>
+
+            </article>
+
+            <aside class="article-sidebar">
+                <div class="sidebar-card">
+                    <div class="sidebar-card-title">Table of contents</div>
+                    <ul class="toc-list">
+                        <li><a href="#introduction">Introduction</a></li>
+                        <li><a href="#the-data-is-there-lets-use-it">The data is there, lets use it</a></li>
+                        <li><a href="#collaborative-decision-making-enabling-effective-cross-specialist-mdt-discussions">Collaborative decision making enabling effective cross-specialist MDT discussions</a></li>
+                        <li><a href="#interoperable-capabilities">Interoperable capabilities</a></li>
+                        <li><a href="#empowering-professionals-and-patient-users-through-coordinated-care">Empowering professionals and patient users through Coordinated care</a></li>
+                        <li><a href="#the-vitaly-platform">THE Vitaly platform</a></li>
+                    </ul>
+                </div>
+
+                <div class="sidebar-card">
+                    <div class="sidebar-card-title">Author</div>
+                    <div class="sidebar-author-name">Gasper Andrejc</div>
+                    <div class="sidebar-author-role">Healthcare Interoperability Architect &amp; Consultant at Syntaric. 10+ years building FHIR, openEHR, and IHE solutions across Europe and the US.</div>
+                    <a href="https://www.linkedin.com/in/andrejcgasper/" target="_blank" class="sidebar-author-link">
+                        LinkedIn profile
+                        <svg viewBox="0 0 24 24"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>
+                    </a>
+                </div>
+
+                <div class="sidebar-card">
+                    <div class="sidebar-card-title">Topics</div>
+                    <div class="sidebar-tags">
+                        <span class="sidebar-tag">FHIR</span>
+                        <span class="sidebar-tag">Interoperability</span>
+                        <span class="sidebar-tag">MDT</span>
+                        <span class="sidebar-tag">Care Planning</span>
+                        <span class="sidebar-tag">Architecture</span>
+                    </div>
+                </div>
+            </aside>
+        </div>
+    </div>
+
+    <footer>
+        <div class="container">
+            <div class="footer-inner">
+                <div><span class="footer-logo-name">Syntaric</span></div>
+                <div class="footer-right">
+                    <p>&copy; 2025 Syntaric d.o.o. · Healthcare Interoperability Consulting</p>
+                    <p>VAT SI24333611 · Reg. 9746927000</p>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+</body>
+</html>
