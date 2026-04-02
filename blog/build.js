@@ -39,6 +39,10 @@ function parseFrontmatter(src) {
     // Arrays: "[a, b, c]" inline style
     if (val.startsWith('[') && val.endsWith(']')) {
       val = val.slice(1, -1).split(',').map(s => s.trim().replace(/^['"]|['"]$/g, ''));
+    } else if (val === 'true') {
+      val = true;
+    } else if (val === 'false') {
+      val = false;
     } else {
       val = val.replace(/^['"]|['"]$/g, ''); // strip optional surrounding quotes
     }
@@ -278,7 +282,7 @@ function buildPostPage(meta, bodyHtml, toc) {
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>${esc(meta.title)} | Syntaric</title>
     <meta name="description" content="${desc}">
-    <meta name="robots" content="index, follow">
+    <meta name="robots" content="${meta.publish === false ? 'noindex, nofollow' : 'index, follow'}">
     <link rel="canonical" href="${canonUrl}">
 
     <!-- Open Graph -->
@@ -726,19 +730,21 @@ function main() {
     fs.mkdirSync(postDir, { recursive: true });
     const postHtml = buildPostPage(meta, bodyHtml, toc);
     fs.writeFileSync(path.join(postDir, 'index.html'), postHtml, 'utf8');
-    console.log(`  ✓ blog/${slug}/index.html`);
 
-    posts.push({ meta, body, slug });
+    const published = meta.publish !== false;
+    posts.push({ meta, body, slug, published });
+    console.log(`  ✓ blog/${slug}/index.html${published ? '' : '  (draft — not listed)'}`);
   }
 
-  // Write blog index
-  const indexHtml = buildIndexPage(posts);
+  // Write blog index (published only)
+  const publishedPosts = posts.filter(p => p.published);
+  const indexHtml = buildIndexPage(publishedPosts);
   fs.writeFileSync(path.join(__dirname, 'index.html'), indexHtml, 'utf8');
-  console.log(`  ✓ blog/index.html  (${posts.length} post${posts.length !== 1 ? 's' : ''})`);
+  console.log(`  ✓ blog/index.html  (${publishedPosts.length} post${publishedPosts.length !== 1 ? 's' : ''})`);
 
-  // Write sitemap.xml
+  // Write sitemap.xml (published only)
   const today = new Date().toISOString().split('T')[0];
-  const postUrls = posts.map(p => `
+  const postUrls = publishedPosts.map(p => `
   <url>
     <loc>https://syntaric.com/blog/${p.slug}/</loc>
     <lastmod>${p.meta.date || today}</lastmod>
@@ -763,7 +769,7 @@ function main() {
 </urlset>`;
 
   fs.writeFileSync(path.join(ROOT, 'sitemap.xml'), sitemap, 'utf8');
-  console.log(`  ✓ sitemap.xml  (${posts.length + 2} URLs)`);
+  console.log(`  ✓ sitemap.xml  (${publishedPosts.length + 2} URLs)`);
 
   console.log('\nDone.');
 }
