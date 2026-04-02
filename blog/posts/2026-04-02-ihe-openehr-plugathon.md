@@ -9,7 +9,7 @@ author: Gasper Andrejc
 authorRole: Healthcare Interoperability Architect
 authorBio: Healthcare Interoperability Architect & Consultant at Syntaric. 10+ years building FHIR, openEHR, and IHE solutions across Europe and the US.
 authorLinkedIn: https://www.linkedin.com/in/andrejcgasper/
-date: 2026-04-05
+date: 2026-04-02
 breadcrumb: openEHR & IHE Plugathon
 topics: [ FHIR, openEHR, IHE ]
 publish: false

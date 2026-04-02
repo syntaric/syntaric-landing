@@ -412,7 +412,7 @@ ${navHtml('../../', true)}
                         <div>
                             <div class="article-meta-name">${esc(meta.author || '')}</div>
                             <div class="article-meta-role">${esc(meta.authorRole || '')}</div>
-                            <div class="article-meta-role"><strong>Written as:</strong> ${esc(meta.authorAssumingRole || '')}</div>
+                            ${meta.authorAssumingRole ? `<div class="article-meta-role"><strong>Written as:</strong> ${esc(meta.authorAssumingRole)}</div>` : ''}
                         </div>
                     </div>
                     <span class="article-meta-sep"></span>
