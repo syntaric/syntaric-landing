@@ -334,8 +334,8 @@ function buildPostPage(meta, bodyHtml, toc) {
 
         /* ─── ARTICLE LAYOUT ─── */
         .article-layout { display: grid; grid-template-columns: 1fr 300px; gap: 48px; padding: 64px 0 96px; align-items: start; }
-        @media (max-width: 900px) { .article-layout { grid-template-columns: 1fr; gap: 40px; } .article-sidebar { order: -1; } }
-        @media (max-width: 640px) { .article-layout { padding: 40px 0 72px; } }
+        @media (max-width: 900px) { .article-layout { grid-template-columns: 1fr; gap: 40px; } .article-sidebar { order: -1; position: static; } }
+        @media (max-width: 640px) { .article-layout { padding: 40px 0 72px; .article-sidebar { order: -1; position: static; } } }
 
         /* ─── ARTICLE BODY ─── */
         .article-body { min-width: 0; }
@@ -352,7 +352,7 @@ function buildPostPage(meta, bodyHtml, toc) {
         .article-body pre { background: var(--ink); color: #e2e8f0; border-radius: var(--radius); padding: 20px 24px; overflow-x: auto; margin: 1.5rem 0; font-size: 0.9rem; line-height: 1.6; }
         .article-body code { font-family: 'JetBrains Mono', 'Fira Code', 'Cascadia Code', monospace; }
         .article-body p code, .article-body li code { background: var(--surface-3); color: var(--accent); padding: 2px 6px; border-radius: 4px; font-size: 0.9em; }
-        .article-body img { max-width: 100%; border-radius: var(--radius); border: 1px solid var(--border); margin: 1.5rem 0; }
+        .article-body img { max-width: 100%; border-radius: var(--radius); border: 1px solid var(--border); margin: 0 0 1.5rem;}
         .article-body hr { border: none; border-top: 1px solid var(--border); margin: 2.5rem 0; }
         .article-body table { width: 100%; border-collapse: collapse; margin: 1.5rem 0; font-size: 0.95rem; }
         .article-body th { background: var(--surface-2); font-weight: 600; color: var(--ink); text-align: left; padding: 10px 14px; border: 1px solid var(--border); }
@@ -380,6 +380,9 @@ function buildPostPage(meta, bodyHtml, toc) {
         .sidebar-author-link { display: inline-flex; align-items: center; gap: 6px; font-size: 0.83rem; font-weight: 500; color: var(--accent); text-decoration: none; transition: opacity 0.2s; }
         .sidebar-author-link:hover { opacity: 0.75; }
         .sidebar-author-link svg { width: 14px; height: 14px; stroke: currentColor; fill: none; stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; }
+        .share-linkedin { display: flex; align-items: center; gap: 10px; font-size: 0.875rem; font-weight: 600; color: #fff; background: #0a66c2; padding: 10px 16px; border-radius: 8px; text-decoration: none; transition: background 0.2s; }
+        .share-linkedin:hover { background: #004182; }
+        .share-linkedin svg { width: 16px; height: 16px; fill: currentColor; flex-shrink: 0; }
     </style>
 </head>
 <body>
@@ -447,6 +450,14 @@ ${tagsHtml ? `                <div class="sidebar-card">
 ${tagsHtml}
                     </div>
                 </div>` : ''}
+
+                <div class="sidebar-card">
+                    <div class="sidebar-card-title">Share</div>
+                    <a href="https://www.linkedin.com/sharing/share-offsite/?url=${encodeURIComponent(canonUrl)}" target="_blank" rel="noopener" class="share-linkedin">
+                        <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M20.45 20.45h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.354V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.284zM5.337 7.433a2.062 2.062 0 0 1-2.063-2.065 2.064 2.064 0 1 1 2.063 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z"/></svg>
+                        Share on LinkedIn
+                    </a>
+                </div>
             </aside>
         </div>
     </div>
