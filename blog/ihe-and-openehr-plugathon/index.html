@@ -296,7 +296,7 @@ defined by clinicians. This allows systems to store, share, and interpret health
 emphasizes semantic interoperability, enabling different healthcare systems to understand and reuse clinical information
 accurately across organizations and applications.</p>
 <h2 id="the-gap">The Gap</h2>
-<p>IHE primarily focuses on interoperability and the exchange of information between systems, rather than how data is
+<p>IHE primarily focuses on interoperability and the exchange of information between systems, rather than on how data is
 stored internally. IHE profiles define workflows, transactions, and communication patterns using standards like HL7 and
 DICOM, ensuring that systems can reliably share data. However, IHE provides little guidance on persistence mechanisms or
 detailed information models. Decisions about how data is structured, stored, and managed internally are left to
@@ -304,31 +304,31 @@ individual implementations.</p>
 <p>And this is the gap: openEHR is fundamentally about defining a thorough information model that is
 reflected in persistence itself, not just in how data is exchanged. Relying on interoperability at the exchange layer
 alone risks losing the semantic richness that is of utmost importance in healthcare. Yet IHE has always been about
-that, which isn&#39;t a weird thing, right? You can&#39;t force healthcare vendors to conform to <em>your idea</em> of an information
+that, which isn&#39;t a weird thing, right? You can&#39;t force healthcare vendors to conform to <em>your idea</em> of information
 model <em>just</em> to be able to exchange data. But it is where openEHR adds it&#39;s true value and is an important aspect in
-the future health IT world we&#39;re moving towards - a data centric one, instead of a vendor centric one, where
+the future health IT world we&#39;re moving towards - a data-centric one, instead of a vendor-centric one, where
 interoperability
-is built in it&#39;s core rather than an add-on.</p>
+is built in its core rather than an add-on.</p>
 <h2 id="plugathon">Plugathon</h2>
 <p>openEHR International and IHE set out to do a <em>Plugathon</em> in the Connectathon week in Brussels, with the idea of
 identifying
 potential collaboration opportunities and existing (or new?) IHE profiles where openEHR could be one of the standards.
-Immediate ares of exploration were MHD, mXDE and QEDm profiles and how they work with openEHR foundation underneath. We
-furthermore decided to focus on EHDS and IPS use case, to make it more tangible.</p>
+Immediate areas of exploration were MHD, mXDE and QEDm profiles and how they work with openEHR foundation underneath. We
+furthermore decided to focus on EHDS and IPS use case to make it more tangible.</p>
 <h3 id="qedm">QEDm</h3>
-<p>..stands for Query Existing Data (mobile - signaling that&#39;s it follows a RESTful pattern). It describes behavior of a
+<p>..stands for Query Existing Data (mobile - signaling that it follows a RESTful pattern). It describes the behavior of a
 client
-and a server side component when one is querying for discrete data from (for example) an IPS section. Apart from
+and a server-side component when one is querying for discrete data from (for example) an IPS section. Apart from
 describing
-the transactions, it furthermore describes how Provenance is tracked, what security considerations need to be obeyed and
-what are responsibilities of each actors. When one of the actors is an openEHR CDR (for server side component), there
+the transactions, it furthermore describes how Provenance is tracked, what security considerations need to be obeyed, and
+what are the responsibilities of each actor. When one of the actors is an openEHR CDR (for server-side component), there
 are various
 details that could be specified, bringing the whole QEDm closer to openEHR <em>stack</em> and making it a standard actor
 grouping.</p>
 <h3 id="mxde">mXDE</h3>
 <p>..goes hand in hand with QEDm, because it&#39;s all about how data is extracted from a structured data source (say: openEHR)
 and then exposed via QEDm. In the sequence diagram below, mXDE and &quot;<em>Document Sharing Infrastructure</em>&quot; would be a role
-for openEHR CDR bundled with a FHIRConnect engine (such as openFHIR). mXDE and QEDm profiles could further specify how
+for openEHR CDR bundled with a FHIRConnect engine (such as <a href="https://open-fhir.com">openFHIR</a>). mXDE and QEDm profiles could further specify how
 the extraction and transactions look like when structured clinical content is openEHR. And a good first use case for
 this
 could be International Patient Summary (in EHDS landscape).</p>
@@ -353,36 +353,36 @@ used in IHE profiles, if <em>all that matters is exchange</em>? QEDm is QEDm, it
 of how
 data
 is actually represented at the source (in our case that would be openEHR), right?</p>
-<p>That&#39;s true.. to a point. And we could leave it at that and openEHR could just be one of many data sources that has a
+<p>That&#39;s true.. to a point. And we could leave it at that, and openEHR could just be one of many data sources that has a
 FHIR facade on top,
 which is entirely possible now with a <a href="https://sevkohler.github.io/FHIRconnect-spec/">FHIRConnect</a> standard. But the obvious added value of openEHR means that with it,
 you
-have a <strong>standard, reproducable and scalable stack based entirely on open standards</strong>. A vendor neutral architecture where
+have a <strong>standard, reproducible and scalable stack based entirely on open standards</strong>. A vendor-neutral architecture where
 both
-information model as well as exchange is standardized, community driven and interopeable out of the box, easily scalable
+information model and the exchange is standardized, community driven and interoperable out of the box, easily scalable
 in all
 possible dimensions - between vendors,
 between nations and furthermore easily scalable to other use cases. It&#39;s no longer about adding an exchange layer and
 proprietary mapping of <em>your data</em>, but <strong>being interoperable at-source</strong>. Adding this whole stack to an IHE profile is no
 longer about
 putting a plaster on proprietary systems for the reason of exchange, but making a fundamental shift towards how open
-vendor neutral
+vendor-neutral
 systems should look like in the future (and can now, already).</p>
 <p>There are many hospitals (..) that are looking at IHE compliance by vendors when choosing their system. And IHE
-complicance
-of a vendor is the next best thing, because it still promises some sort of interopreability and solution to a vendor
+compliance
+of a vendor is the next best thing, because it still promises some sort of interoperability and solution to a vendor
 lock-in,
 but it stops at that.. it stops at the bare minimum. What if there was an IHE profile completely mandating these
 three open standards (FHIR, FHIRConnect and
-openEHR) based on which vendors would 100% be able to deliver a vendor neutral architecture, and not just a plug on the
-proprietary system, sufficing the bare minimum to get the <em>ribbon</em> of being interoperable? Having that kind of <em>ribbon</em>
+openEHR) based on which vendors would 100% be able to deliver a vendor-neutral architecture, and not just a plug on the
+proprietary system, sufficing with the bare minimum to get the <em>ribbon</em> of being interoperable? Having that kind of <em>ribbon</em>
 as
-a vendor an IHE proving that kind of a capability is next level and would truly mean something to a hospital or a care
+a vendor, and IHE proving that kind of capability is next level and would truly mean something to a hospital or a care
 provider.</p>
 <h2 id="architecture">Architecture</h2>
-<p>Couple levels deeper, this is how data flow would look like when openEHR acts as a Data Source in an architecture of IHE
+<p>A couple levels deeper, this is how data flow would look like when openEHR acts as a Data Source in an architecture of IHE
 compliant actors (PIXm, PDQm, mXDE, QEDm, ..) that leverage FHIR. If you want to know more, feel free to ask <a href="https://www.linkedin.com/in/seref-arikan">Seref Arikan, PhD</a>
-about an <a href="https://www.linkedin.com/in/seref-arikan">&quot;EHR Sandwich&quot;</a>.</p>
+about an <a href="https://www.linkedin.com/feed/update/urn:li:activity:7446890913676562432">&quot;EHR Slice&quot;</a>.</p>
 <p><img src="../ihe-and-openehr-plugathon/pluml.png" alt="pluml.png"></p>
 <h2 id="key-focus-points">Key focus points</h2>
 <p>The plugathon was filled with discussion, but we always came back to what&#39;s the first use case we&#39;re trying to solve.
