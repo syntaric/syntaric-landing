@@ -24,7 +24,7 @@
     <meta property="og:description" content="A technical look at how the Dutch Ministry of Health's Generic Functions program works alongside openEHR for national health data exchange.">
     <meta property="og:image" content="https://syntaric.com/blog/images/dutch-generic-functions-openehr.jpg">
     <meta property="og:site_name" content="Syntaric">
-    <meta property="article:published_time" content="2026-04-22">
+    <meta property="article:published_time" content="2026-04-23">
     <meta property="article:author" content="Gasper Andrejc">
     <meta property="article:tag" content="FHIR">
     <meta property="article:tag" content="openEHR">
@@ -47,7 +47,7 @@
   "@type": "Article",
   "headline": "Dutch Generic Functions and openEHR - Building Blocks for National Health Data Exchange",
   "description": "A technical look at how the Dutch Ministry of Health's Generic Functions program works alongside openEHR for national health data exchange.",
-  "datePublished": "2026-04-22",
+  "datePublished": "2026-04-23",
   "author": {
     "@type": "Person",
     "name": "Gasper Andrejc",
@@ -261,11 +261,11 @@
                         <div>
                             <div class="article-meta-name">Gasper Andrejc</div>
                             <div class="article-meta-role">Healthcare Interoperability Architect</div>
-                            <div class="article-meta-role"><strong>Written as:</strong> Syntaric Consultant</div>
+                            <div class="article-meta-role"><strong>Written as:</strong> Syntaric Consultant, member of a Centraal OntwikkelTeam</div>
                         </div>
                     </div>
                     <span class="article-meta-sep"></span>
-                    <span class="article-meta-date">April 22, 2026</span>
+                    <span class="article-meta-date">April 23, 2026</span>
                     <span class="article-meta-sep"></span>
                     <span class="article-meta-read">5 min read</span>
                 </div>
@@ -277,24 +277,24 @@
     <div class="container">
         <div class="article-layout">
             <article class="article-body animate">
-<img style="margin-bottom: 0px" src="../../blog/dutch-generic-functions-openehr/img.png" alt="Dutch Generic Functions and openEHR - Building Blocks for National Health Data Exchange" class="article-cover">
-                <div style="text-align: center"><small>(source: https://www.datavoorgezondheid.nl/onderwerpen/g/generieke-functies)</small></div>
+<img src="../../blog/dutch-generic-functions-openehr/img.png" alt="Dutch Generic Functions and openEHR - Building Blocks for National Health Data Exchange" class="article-cover">
 <h2 id="what-are-generic-functions">What are Generic Functions?</h2>
 <p>If you work in Dutch health IT, you have probably heard the term <em>generieke functies</em> thrown around in the last year or
-two. If you haven&#39;t, here is the short version: the Ministry of Health, Welfare and Sport (VWS) is building a set of
-reusable national building blocks for health data exchange.</p>
+two. If you haven&#39;t, the Ministry of Health, Welfare and Sport (VWS) is building a set of
+reusable national building blocks for health data exchange and they&#39;re called generic functions.</p>
 <p>The idea is that instead of every use case (eOverdracht, PZP, BgZ, ..) solving the same infrastructure
 problems from scratch, a shared foundation handles them once. Those shared capabilities are the Generic Functions, and
 they cover things like addressing, routing, localization, consent, identification, authentication, and authorization.</p>
 <p>The specification is published here:
 <a href="https://minvws.github.io/generiekefuncties-docs/">https://minvws.github.io/generiekefuncties-docs/</a></p>
 <h2 id="what-they-cover">What They Cover</h2>
-<p>At a high level, the seven functions carve up the interoperability problem like this:</p>
+<p>At a high level:</p>
 <p><strong>Addressing and Routing</strong> handle the <em>where</em> and <em>what</em>. A national Care Services Directory (built on IHE mCSD) lets
 any system discover care providers, their services, and their digital endpoints. Routing builds on top of that to
 select the right destination for a referral or order.</p>
 <p><strong>Localization</strong> (the Nationale Verwijs Index) answers the question &quot;which organizations hold data about this patient?&quot;.
-It does this through a dedicated <strong>Pseudonymisation</strong> function, which is a national Pseudonymisation Register Service (PRS) that
+It does this through a dedicated <strong>Pseudonymisation</strong> function, which is a national Pseudonymisation Register Service (
+PRS) that
 converts the BSN into recipient-scoped pseudonyms using HKDF and OPRF blinding, so no single party ever sees the raw
 identifier. Different recipients receive different pseudonyms from the same BSN, preventing cross-service correlation.
 The PRS itself stores nothing and every response is a single-use JWE encrypted to
@@ -310,10 +310,11 @@ with Rego as the mandatory policy language.</p>
 <p>Generic Functions do not care what format your clinical data lives in. They care about
 <em>how</em> systems find each other, <em>how</em> consent is checked, <em>how</em> identities are verified. The data model underneath is
 your business.</p>
-<p>An openEHR CDR participates in this ecosystem by exposing an API. The Generic Functions infrastructure sees that API,
+<p>An openEHR CDR participates in this ecosystem by exposing an API. The Generic Functions infrastructure <em>sees</em> that API,
 registered in the Care Services Directory, operating under the shared consent and
-authentication framework. What sits behind that endpoint, openEHR, a proprietary schema, or anything else, is
-invisible to the infrastructure layer.</p>
+authentication framework. What is really behind that endpoint, be it openEHR, XDS, FHR, a proprietary schema, it really
+doesn&#39;t matter for the generic function (with some nuances where it does matter, when you start applying smart on fhir
+scopes etc, but perhaps more on that at some other time).</p>
 <h2 id="openehr-behind-generic-functions-how-it-actually-works">openEHR Behind Generic Functions - How It Actually Works</h2>
 <p>The practical question is: what does an openEHR-based system need to do to participate?</p>
 <p><strong>Addressing</strong>: your system registers an openEHR endpoint in an Administration Directory with a URA identifier. The
@@ -322,10 +323,12 @@ you via mCSD queries. Your openEHR CDR is now visible to other participants via 
 or perhaps a FHIR endpoint if you&#39;re leveraging FHIRConnect for mapping between one and the other.</p>
 <p><strong>Localization</strong>: when your CDR holds data relevant to a patient, you register a localization record in the Nationale
 Verwijs Index. Meaning you specify for which care context you&#39;re holding data of a specific patient and that&#39;s it.
-openEHR, FHIR, XDS, .. makes no difference, but it is an integration point for you as an openEHR vendor to make - you need to
+openEHR, FHIR, XDS, .. makes no difference, but it is an integration point for you as an openEHR vendor to make - you
+need to
 publish a localization record in the NVI.</p>
 <p><strong>Consent</strong>: before serving any data, your system needs to actively query Mitz to verify that the patient has given
-consent for the requesting party. Meaning your openEHR stack needs to wire in a Mitz consent evaluation call as part of its
+consent for the requesting party. Meaning your openEHR stack needs to wire in a Mitz consent evaluation call as part of
+its
 authorization flow.</p>
 <p>I demonstrated this end-to-end in
 the <a href="/posts/eoverdracht-hybrid-architecture-openehr-fhir">eOverdracht hybrid architecture PoC</a>:
@@ -335,13 +338,13 @@ addressing. The receiving side was pure FHIR and it had no idea the sender was o
 <h2 id="why-openehr-vendors-should-pay-attention">Why openEHR Vendors Should Pay Attention</h2>
 <p>The Generic Functions program is not specifically about FHIR. It is about national infrastructure that any health data
 exchange use case in the Netherlands will eventually plug into, whether that exchange uses FHIR, XDS, openEHR APIs,
-or something else entirely. Addressing, consent, localization, authentication: these problems need to be solved
+or something else entirely. Addressing, consent, localization, authentication are all problems need to be solved
 regardless of what format the data travels in.</p>
-<p>Right now, the implementation guides are heavily FHIR-oriented, which reflects where most active Dutch use cases
+<p>Right now, the use cases being tested are heavily FHIR-oriented, which reflects where most active Dutch use cases
 (eOverdracht, BgZ, PZP) currently live. But the underlying functions are format-agnostic, and the landscape is
-broader than FHIR alone.</p>
-<p>For openEHR vendors operating in the Netherlands, this is worth following. Not because anything is broken today, but
-because the Generic Functions will increasingly become the assumed baseline for national health data exchange. Use
+broader than FHIR alone. <em>Ministry PoCs</em> did test this on imaging exchange as well, for example (XCA-I).</p>
+<p>For openEHR vendors operating in the Netherlands, this is worth following. Mainly because we believe Generic Functions
+will increasingly become the assumed baseline for national health data exchange. Use
 cases that currently feel distant will start requiring addressing registration, NVI localization records, and Mitz
 consent integration. Getting familiar with what that means for an openEHR stack, and where the integration points
 are, is a reasonable thing to do sooner rather than later.</p>
@@ -403,7 +406,7 @@ you need a proof-of-concept for your specific use case, feel free to reach out a
             <div class="footer-inner">
                 <div><span class="footer-logo-name">Syntaric</span></div>
                 <div class="footer-right">
-                    <p>&copy; 2026Syntaric d.o.o. · Healthcare Interoperability Consulting</p>
+                    <p>&copy; 2026 Syntaric d.o.o. · Healthcare Interoperability Consulting</p>
                     <p>VAT SI24333611 · Reg. 9746927000</p>
                 </div>
             </div>

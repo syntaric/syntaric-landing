@@ -7,10 +7,10 @@ excerpt: The Dutch Ministry of Health (VWS) is building reusable national infras
 tag: Architecture
 author: Gasper Andrejc
 authorRole: Healthcare Interoperability Architect
-authorAssumingRole: Syntaric Consultant
+authorAssumingRole: Syntaric Consultant, member of a Centraal OntwikkelTeam
 authorBio: Healthcare Interoperability Architect & Consultant at Syntaric. 10+ years building FHIR, openEHR, and IHE solutions across Europe and the US.
 authorLinkedIn: https://www.linkedin.com/in/andrejcgasper/
-date: 2026-04-22
+date: 2026-04-23
 breadcrumb: Dutch Generic Functions & openEHR
 topics: [ FHIR, openEHR, Netherlands, mCSD, IHE, Architecture, Generic Functions, VWS ]
 publish: true
@@ -19,8 +19,8 @@ publish: true
 ## What are Generic Functions?
 
 If you work in Dutch health IT, you have probably heard the term _generieke functies_ thrown around in the last year or
-two. If you haven't, here is the short version: the Ministry of Health, Welfare and Sport (VWS) is building a set of
-reusable national building blocks for health data exchange.
+two. If you haven't, the Ministry of Health, Welfare and Sport (VWS) is building a set of
+reusable national building blocks for health data exchange and they're called generic functions.
 
 The idea is that instead of every use case (eOverdracht, PZP, BgZ, ..) solving the same infrastructure
 problems from scratch, a shared foundation handles them once. Those shared capabilities are the Generic Functions, and
@@ -31,14 +31,15 @@ https://minvws.github.io/generiekefuncties-docs/
 
 ## What They Cover
 
-At a high level, the seven functions carve up the interoperability problem like this:
+At a high level:
 
 **Addressing and Routing** handle the _where_ and _what_. A national Care Services Directory (built on IHE mCSD) lets
 any system discover care providers, their services, and their digital endpoints. Routing builds on top of that to
 select the right destination for a referral or order.
 
 **Localization** (the Nationale Verwijs Index) answers the question "which organizations hold data about this patient?".
-It does this through a dedicated **Pseudonymisation** function, which is a national Pseudonymisation Register Service (PRS) that
+It does this through a dedicated **Pseudonymisation** function, which is a national Pseudonymisation Register Service (
+PRS) that
 converts the BSN into recipient-scoped pseudonyms using HKDF and OPRF blinding, so no single party ever sees the raw
 identifier. Different recipients receive different pseudonyms from the same BSN, preventing cross-service correlation.
 The PRS itself stores nothing and every response is a single-use JWE encrypted to
@@ -59,10 +60,11 @@ Generic Functions do not care what format your clinical data lives in. They care
 _how_ systems find each other, _how_ consent is checked, _how_ identities are verified. The data model underneath is
 your business.
 
-An openEHR CDR participates in this ecosystem by exposing an API. The Generic Functions infrastructure sees that API,
+An openEHR CDR participates in this ecosystem by exposing an API. The Generic Functions infrastructure _sees_ that API,
 registered in the Care Services Directory, operating under the shared consent and
-authentication framework. What sits behind that endpoint, openEHR, a proprietary schema, or anything else, is
-invisible to the infrastructure layer.
+authentication framework. What is really behind that endpoint, be it openEHR, XDS, FHR, a proprietary schema, it really
+doesn't matter for the generic function (with some nuances where it does matter, when you start applying smart on fhir
+scopes etc, but perhaps more on that at some other time).
 
 ## openEHR Behind Generic Functions - How It Actually Works
 
@@ -75,11 +77,13 @@ or perhaps a FHIR endpoint if you're leveraging FHIRConnect for mapping between 
 
 **Localization**: when your CDR holds data relevant to a patient, you register a localization record in the Nationale
 Verwijs Index. Meaning you specify for which care context you're holding data of a specific patient and that's it.
-openEHR, FHIR, XDS, .. makes no difference, but it is an integration point for you as an openEHR vendor to make - you need to
+openEHR, FHIR, XDS, .. makes no difference, but it is an integration point for you as an openEHR vendor to make - you
+need to
 publish a localization record in the NVI.
 
 **Consent**: before serving any data, your system needs to actively query Mitz to verify that the patient has given
-consent for the requesting party. Meaning your openEHR stack needs to wire in a Mitz consent evaluation call as part of its
+consent for the requesting party. Meaning your openEHR stack needs to wire in a Mitz consent evaluation call as part of
+its
 authorization flow.
 
 I demonstrated this end-to-end in
@@ -92,15 +96,15 @@ addressing. The receiving side was pure FHIR and it had no idea the sender was o
 
 The Generic Functions program is not specifically about FHIR. It is about national infrastructure that any health data
 exchange use case in the Netherlands will eventually plug into, whether that exchange uses FHIR, XDS, openEHR APIs,
-or something else entirely. Addressing, consent, localization, authentication: these problems need to be solved
+or something else entirely. Addressing, consent, localization, authentication are all problems need to be solved
 regardless of what format the data travels in.
 
-Right now, the implementation guides are heavily FHIR-oriented, which reflects where most active Dutch use cases
+Right now, the use cases being tested are heavily FHIR-oriented, which reflects where most active Dutch use cases
 (eOverdracht, BgZ, PZP) currently live. But the underlying functions are format-agnostic, and the landscape is
-broader than FHIR alone.
+broader than FHIR alone. _Ministry PoCs_ did test this on imaging exchange as well, for example (XCA-I).
 
-For openEHR vendors operating in the Netherlands, this is worth following. Not because anything is broken today, but
-because the Generic Functions will increasingly become the assumed baseline for national health data exchange. Use
+For openEHR vendors operating in the Netherlands, this is worth following. Mainly because we believe Generic Functions
+will increasingly become the assumed baseline for national health data exchange. Use
 cases that currently feel distant will start requiring addressing registration, NVI localization records, and Mitz
 consent integration. Getting familiar with what that means for an openEHR stack, and where the integration points
 are, is a reasonable thing to do sooner rather than later.
