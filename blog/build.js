@@ -219,7 +219,7 @@ const FOOTER_HTML = `    <footer>
             <div class="footer-inner">
                 <div><span class="footer-logo-name">Syntaric</span></div>
                 <div class="footer-right">
-                    <p>&copy; 2025 Syntaric d.o.o. · Healthcare Interoperability Consulting</p>
+                    <p>&copy; 2026Syntaric d.o.o. · Healthcare Interoperability Consulting</p>
                     <p>VAT SI24333611 · Reg. 9746927000</p>
                 </div>
             </div>

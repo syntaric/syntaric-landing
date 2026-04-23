@@ -35,7 +35,7 @@ large-scale, unstructured document workflows that remain central to patient care
 
 ## FHIR
 
-Similarly, FHIR adoption is rapidly accelerating worldwide. According to the 2025 State of FHIR Survey with 82 expert
+Similarly, FHIR adoption is rapidly accelerating worldwide. According to the 2026State of FHIR Survey with 82 expert
 respondents from 52 countries - 71% reported active FHIR use in at least some use cases, up from 66% in 2024. Nearly
 half of countries now have a national FHIR implementation guide, and about half have a FHIR-based terminology server -
 showing both policy momentum and growing infrastructure maturity.
