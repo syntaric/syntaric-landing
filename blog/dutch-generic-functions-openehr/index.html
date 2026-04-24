@@ -306,7 +306,7 @@ hop in the chain.</p>
 <p><strong>Identification, Authentication, and Authorization</strong> form the security stack. Identification standardizes which
 identifier applies to which entity (BSN for patients, URA for organizations, UZI/DEZI for practitioners). Authentication
 is built on W3C Decentralized Identifiers and Verifiable Credentials. Authorization uses policy-based access control
-with Rego as the mandatory policy language.</p>
+with Rego as the mandatory policy language.* (*proposal phase)</p>
 <h2 id="infrastructure-vs-a-data-model">Infrastructure vs a Data Model</h2>
 <p>Generic Functions do not care what format your clinical data lives in. They care about
 <em>how</em> systems find each other, <em>how</em> consent is checked, <em>how</em> identities are verified. The data model underneath is
@@ -317,14 +317,14 @@ authentication framework. What is really behind that endpoint, be it openEHR, XD
 doesn&#39;t matter for the generic function (with some nuances where it does matter, when you start applying smart on fhir
 scopes etc, but perhaps more on that at some other time).</p>
 <h2 id="openehr-behind-generic-functions-how-it-actually-works">openEHR Behind Generic Functions - How It Actually Works</h2>
-<p>The practical question is: what does an openEHR-based system need to do to participate?</p>
+<p>So what does an openEHR-based system need to do to participate?</p>
 <p><strong>Addressing</strong>: your system registers an openEHR endpoint in an Administration Directory with a URA identifier. The
 national Update Client picks it up and consolidates it into the Query Directory. Any other system can then discover
-you via mCSD queries. Your openEHR CDR is now visible to other participants via your AQL endpoint, Composition endpoint
+you via mCSD queries and your openEHR CDR is now visible to other participants via your AQL endpoint, Composition endpoint
 or perhaps a FHIR endpoint if you&#39;re leveraging FHIRConnect for mapping between one and the other.</p>
 <p><strong>Localization</strong>: when your CDR holds data relevant to a patient, you register a localization record in the Nationale
 Verwijs Index. Meaning you specify for which care context you&#39;re holding data of a specific patient and that&#39;s it.
-openEHR, FHIR, XDS, .. makes no difference, but it is an integration point for you as an openEHR vendor to make - you
+openEHR, FHIR, XDS, .. makes no difference, but it is an integration point for you as an openEHR vendor to make, as you
 need to
 publish a localization record in the NVI.</p>
 <p><strong>Consent</strong>: before serving any data, your system needs to actively query Mitz to verify that the patient has given
