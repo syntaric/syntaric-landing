@@ -679,6 +679,112 @@
             filter: brightness(1) invert(1);
         }
 
+        /* ─── UNIO ────────────────────────────────────────────────── */
+        .unio {
+            background: var(--surface);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .unio::before {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background: radial-gradient(ellipse at 20% 50%, rgba(18,138,138,0.10) 0%, transparent 60%);
+            pointer-events: none;
+        }
+
+        .unio-layout {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 5rem;
+            align-items: center;
+            position: relative;
+        }
+
+        .unio-tag {
+            font-size: 0.78rem;
+            font-weight: 600;
+            letter-spacing: 0.08em;
+            text-transform: uppercase;
+            color: #128a8a;
+            margin-bottom: 0.75rem;
+        }
+
+        .unio h2 {
+            font-size: clamp(1.8rem, 3vw, 2.4rem);
+            font-weight: 700;
+            letter-spacing: -0.025em;
+            line-height: 1.15;
+            color: var(--ink);
+            margin-bottom: 1.25rem;
+        }
+
+        .unio-desc {
+            font-size: 1rem;
+            color: var(--ink-light);
+            line-height: 1.75;
+            margin-bottom: 2rem;
+        }
+
+        .unio-features {
+            list-style: none;
+            display: flex;
+            flex-direction: column;
+            gap: 0.6rem;
+            margin-bottom: 2.5rem;
+        }
+
+        .unio-features li {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            font-size: 0.88rem;
+            color: var(--ink-light);
+        }
+
+        .unio-features li::before {
+            content: '';
+            width: 5px;
+            height: 5px;
+            border-radius: 50%;
+            background: #128a8a;
+            flex-shrink: 0;
+        }
+
+        .btn-unio {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            background: #0c2842;
+            color: #fff;
+            padding: 0.85rem 1.8rem;
+            border-radius: 10px;
+            font-size: 0.9rem;
+            font-weight: 600;
+            text-decoration: none;
+            transition: box-shadow 0.2s, transform 0.2s;
+        }
+
+        .btn-unio:hover {
+            box-shadow: 0 8px 32px rgba(12,40,66,0.25);
+            transform: translateY(-1px);
+        }
+
+        .unio-visual {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .unio-img {
+            width: 100%;
+            height: auto;
+            display: block;
+            border-radius: var(--radius-lg);
+            box-shadow: 0 24px 64px rgba(12,40,66,0.25);
+        }
+
         /* ─── COLLABORATORS ───────────────────────────────────────── */
         .collaborators {
             background: var(--surface-2);
@@ -1086,6 +1192,7 @@
 
             .expertise-layout,
             .openfhir-layout,
+            .unio-layout,
             .contact-layout {
                 grid-template-columns: 1fr;
                 gap: 2.5rem;
@@ -1169,7 +1276,7 @@
             <ul class="nav-links">
                 <li><a href="#services">Services</a></li>
                 <li><a href="#engagements">Engagements</a></li>
-                <li><a href="#openfhir">openFHIR</a></li>
+                <li><a href="#products">Our products</a></li>
                 <li><a href="#expertise">Expertise</a></li>
                 <li><a href="#collaborators">Collaborators</a></li>
                 <li><a href="blog/">Blog</a></li>
@@ -1196,7 +1303,7 @@
                     Collaborate
                     <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
                 </a>
-                <a href="#openfhir" class="btn-ghost">Explore openFHIR</a>
+                <a href="#products" class="btn-ghost">Explore our products</a>
             </div>
             <div class="hero-trust">
                 <p class="hero-trust-label">Trusted by teams at</p>
@@ -1504,6 +1611,9 @@
         </div>
     </section>
 
+    <!-- ─── OUR PRODUCTS ─── -->
+    <div id="products">
+
     <!-- ─── OPENFHIR ─── -->
     <section id="openfhir" class="openfhir">
         <div class="container">
@@ -1530,6 +1640,35 @@
             </div>
         </div>
     </section>
+
+    <!-- ─── UNIO ─── -->
+    <section id="unio" class="unio">
+        <div class="container">
+            <div class="unio-layout">
+                <div class="unio-visual">
+                    <img src="/images/unio-img.png" alt="Unio operator console showing requests, source availability and latency across a federation" class="unio-img" loading="lazy">
+                </div>
+                <div>
+                    <p class="unio-tag">Our Product</p>
+                    <h2>Unio: One patient record across all your openEHR repositories</h2>
+                    <p class="unio-desc">Unio is our openEHR federation gateway. It sits in front of the repositories a region, network or hospital already runs and exposes them as a single openEHR endpoint — resolving the patient centrally, querying members in parallel and merging the results with provenance, while every record stays where it was created.</p>
+                    <ul class="unio-features">
+                        <li>One standard openEHR endpoint for the whole federation — existing applications need no changes</li>
+                        <li>Works with any repository that exposes the openEHR REST API; nothing to install on the member's side</li>
+                        <li>Unreachable members never block the others; partial responses are clearly marked</li>
+                        <li>Full operational audit without clinical data or patient identifiers</li>
+                        <li>Reachable over FHIR by placing openFHIR in front of the federation</li>
+                    </ul>
+                    <a href="https://unio.syntaric.com" target="_blank" class="btn-unio">
+                        Explore Unio
+                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+                    </a>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    </div>
 
     <!-- ─── COLLABORATORS ─── -->
     <section id="collaborators" class="collaborators">

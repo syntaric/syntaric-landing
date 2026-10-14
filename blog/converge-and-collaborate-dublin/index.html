@@ -130,18 +130,6 @@
         .nav-cta:hover { opacity: 0.85; }
         @media (max-width: 640px) { .nav-links { display: none; } }
 
-
-        /* ─── DEMO BOX ─── */
-        .demo-box { background: linear-gradient(135deg, #0a1832 0%, #0d2160 60%, #0052cc 100%); border-radius: var(--radius-lg); padding: 28px 32px; margin: 2rem 0; display: flex; align-items: center; justify-content: space-between; gap: 20px; flex-wrap: wrap; }
-        .demo-box-text {}
-        .demo-box-label { font-size: 0.72rem; font-weight: 600; letter-spacing: 0.09em; text-transform: uppercase; color: rgba(255,255,255,0.55); margin-bottom: 6px; }
-        .demo-box-title { font-size: 1.1rem; font-weight: 700; color: #fff; margin-bottom: 6px; letter-spacing: -0.01em; }
-        .demo-box-desc { font-size: 0.9rem; color: rgba(255,255,255,0.65); line-height: 1.5; }
-        .demo-box-btn { display: inline-flex; align-items: center; gap: 8px; background: #fff; color: var(--accent); font-size: 0.875rem; font-weight: 700; padding: 11px 22px; border-radius: 8px; text-decoration: none; white-space: nowrap; transition: opacity 0.2s; flex-shrink: 0; }
-        .demo-box-btn:hover { opacity: 0.88; }
-        .demo-box-btn svg { width: 14px; height: 14px; stroke: currentColor; fill: none; stroke-width: 2.5; stroke-linecap: round; stroke-linejoin: round; }
-
-
         /* ─── FOOTER ─── */
         footer { background: var(--ink); color: rgba(255,255,255,0.5); padding: 36px 0; }
         .footer-inner { display: flex; align-items: center; justify-content: space-between; gap: 24px; flex-wrap: wrap; }
@@ -243,7 +231,7 @@
             <ul class="nav-links">
                 <li><a href="../../#services">Services</a></li>
                 <li><a href="../../#engagements">Engagements</a></li>
-                <li><a href="../../#openfhir">openFHIR</a></li>
+                <li><a href="../../#products">Our products</a></li>
                 <li><a href="../../#expertise">Expertise</a></li>
                 <li><a href="../../#collaborators">Collaborators</a></li>
                 <li><a href="../../blog/" class="active">Blog</a></li>
@@ -271,7 +259,7 @@
                         <div>
                             <div class="article-meta-name">Gasper Andrejc</div>
                             <div class="article-meta-role">Healthcare Interoperability Architect</div>
-
+                            
                         </div>
                     </div>
                     <span class="article-meta-sep"></span>
@@ -356,17 +344,6 @@ profile, routes the whole bundle to openFHIR, which maps it to an openEHR compos
 <li>[Query IPS] <strong>Retrieve the IPS</strong> via <code>GET /Patient/{id}/$summary</code>. The plugin queries the CDR via AQL, openFHIR maps the
 composition back to FHIR, and a valid IPS Bundle comes out.</li>
 </ol>
-<div class="demo-box">
-    <div class="demo-box-text">
-        <div class="demo-box-label">Live demo</div>
-        <div class="demo-box-title">IPS via openFHIR</div>
-        <div class="demo-box-desc">See the mXDE / QEDm stack in action — International Patient Summary generated from an openEHR CDR using FHIRConnect and openFHIR.</div>
-    </div>
-    <a href="https://ips.open-fhir.com/" target="_blank" rel="noopener" class="demo-box-btn">
-        Try the demo
-        <svg viewBox="0 0 24 24"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>
-    </a>
-</div>
 <p><img src="../converge-and-collaborate-dublin/fhir_query.png" alt="q.png">
 <img src="../converge-and-collaborate-dublin/fhir_store.png" alt="s.png">
 <img src="../converge-and-collaborate-dublin/fhir_summary.png" alt="summary.png"></p>

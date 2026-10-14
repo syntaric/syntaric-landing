@@ -204,7 +204,7 @@ function navHtml(root, activeBlog) {
             <ul class="nav-links">
                 <li><a href="${root}#services">Services</a></li>
                 <li><a href="${root}#engagements">Engagements</a></li>
-                <li><a href="${root}#openfhir">openFHIR</a></li>
+                <li><a href="${root}#products">Our products</a></li>
                 <li><a href="${root}#expertise">Expertise</a></li>
                 <li><a href="${root}#collaborators">Collaborators</a></li>
                 <li><a href="${root}blog/"${activeBlog ? ' class="active"' : ''}>Blog</a></li>
