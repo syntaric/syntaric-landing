@@ -82,11 +82,18 @@ behind the text).
 *   **Proof line:** a 1 px `--ink` rule above, a `--hair` rule below,
     `--s-5` vertical padding, max-width 44rem.
 *   **Hire list items:** separated by `--hair` rules; name at `--t-l`;
-    facts as a two-column grid (6.5rem keys in `--mono` `--t-xs` `--ink-3`,
-    values in `--t-s` `--ink-2`). Two columns from 960 px. No icons,
-    badges or numbering.
-*   **Product block:** text and figure side by side from 960 px (1 : 1.1),
-    stacked below. Link out as a text link.
+    under it a quiet format line (`--mono` `--t-xs` `--ink-3`), then two
+    plain sentences in `--t-s` `--ink-2` (when it fits, what you get) and
+    the technical detail in `--t-xs` `--ink-3` (plain-language pass, 2.5;
+    the key/value grid is gone). Two columns from 960 px. No icons, badges
+    or numbering.
+*   **Contact details:** a two-column key/value grid with no rule above;
+    the divider strand before the section is the only separator (owner,
+    2.5 review).
+*   **Product block:** the product logo as the heading, text and product
+    image side by side from 960 px (1 : 1.1), stacked below; the openFHIR
+    image at most 26rem wide, the Unio screenshot in a thin frame (2.4).
+    Link out as a text link.
 *   **Figure caption:** `--t-s`, `--ink-2`, max-width `--measure`, below
     the figure.
 

@@ -8,7 +8,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Syntaric | Healthcare interoperability consultancy</title>
-    <meta name="description" content="Syntaric designs, reviews and builds data integration for hospitals, national health programmes and health IT vendors, using FHIR, openEHR and IHE.">
+    <meta name="description" content="Syntaric helps hospitals, regions and national health programmes share patient information between their systems, using open standards such as FHIR, openEHR and IHE.">
     <meta name="robots" content="index, follow">
     <link rel="canonical" href="https://syntaric.com/">
 
@@ -16,7 +16,7 @@
     <meta property="og:type" content="website">
     <meta property="og:url" content="https://syntaric.com/">
     <meta property="og:title" content="Syntaric | Healthcare interoperability consultancy">
-    <meta property="og:description" content="Syntaric designs, reviews and builds data integration for hospitals, national health programmes and health IT vendors, using FHIR, openEHR and IHE.">
+    <meta property="og:description" content="Syntaric helps hospitals, regions and national health programmes share patient information between their systems, using open standards such as FHIR, openEHR and IHE.">
     <meta property="og:image" content="https://syntaric.com/assets/share/home.png">
     <meta property="og:image:width" content="1200">
     <meta property="og:image:height" content="627">
@@ -27,7 +27,7 @@
     <!-- Twitter Card -->
     <meta name="twitter:card" content="summary_large_image">
     <meta name="twitter:title" content="Syntaric | Healthcare interoperability consultancy">
-    <meta name="twitter:description" content="Syntaric designs, reviews and builds data integration for hospitals, national health programmes and health IT vendors, using FHIR, openEHR and IHE.">
+    <meta name="twitter:description" content="Syntaric helps hospitals, regions and national health programmes share patient information between their systems, using open standards such as FHIR, openEHR and IHE.">
     <meta name="twitter:image" content="https://syntaric.com/assets/share/home.png">
 
     <!-- JSON-LD: Organization, WebSite, products. The personal LinkedIn
@@ -730,18 +730,23 @@ h3 {
     border-bottom: 1px solid var(--hair);
 }
 
-.facts {
+/* Plain-language pass (2.5): each item is a heading, a quiet format line,
+   two plain sentences (when it fits, what you get) and the technical detail. */
+.items > li p {
     margin-top: var(--s-3);
-    display: grid;
-    grid-template-columns: 6.5rem minmax(0, 1fr);
-    gap: var(--s-2) var(--s-4);
+    max-width: var(--measure);
     font-size: var(--t-s);
     color: var(--ink-2);
 }
 
-.facts dt {
-    padding-top: 2px;
+.items > li .item-meta {
+    margin-top: var(--s-1);
     font-family: var(--mono);
+    font-size: var(--t-xs);
+    color: var(--ink-3);
+}
+
+.items > li .item-detail {
     font-size: var(--t-xs);
     color: var(--ink-3);
 }
@@ -756,9 +761,6 @@ h3 {
 
 .formats {
     margin-top: var(--s-5);
-    display: flex;
-    flex-wrap: wrap;
-    gap: var(--s-2) var(--s-5);
     font-size: var(--t-s);
     color: var(--ink-2);
 }
@@ -1004,8 +1006,6 @@ figcaption {
     display: grid;
     grid-template-columns: 6.5rem minmax(0, 1fr);
     gap: var(--s-3) var(--s-4);
-    padding-top: var(--s-4);
-    border-top: 1px solid var(--ink);
 }
 
 .contact-details dt {
@@ -1080,7 +1080,7 @@ figcaption {
             <div class="wrap hero-grid">
                 <div class="hero-text">
                     <h1>Boutique healthcare interoperability consultancy</h1>
-                    <p class="who">A small team that designs, reviews and builds data integration for hospitals, national health programmes and health IT vendors. We also make two products, openFHIR and Unio.</p>
+                    <p class="who">We help hospitals, regions and national health programmes share patient information between their systems, using open standards. We also make two products, openFHIR and Unio.</p>
                     <div class="actions">
                         <a class="btn" href="#contact" data-goatcounter-click="hero-contact">Contact</a>
                         <a class="text-link" href="#products">openFHIR and Unio</a>
@@ -1100,7 +1100,7 @@ figcaption {
         <!-- ─── PROOF LINE ─── -->
         <section class="proof" aria-label="Proof">
             <div class="wrap">
-                <p>Member of the openEHR Specifications Editorial Committee Experts Panel since 2026. We drafted the openEHR Federation specification with RSO Zuid-Limburg. The openEHR SEC approved version 1.0.0 in October 2026, and our gateway Unio implements it.</p>
+                <p>We sit on the expert panel that reviews new openEHR standards. With RSO Zuid-Limburg, a Dutch regional care network, we wrote the standard for joining up a region's patient records. It was approved in October 2026, and our product Unio is built on it.</p>
             </div>
         </section>
 
@@ -1111,51 +1111,40 @@ figcaption {
                 <ul class="items">
                     <li>
                         <h3>Architecture review</h3>
-                        <dl class="facts">
-                            <dt>For</dt><dd>Teams with an integration architecture in place or on paper.</dd>
-                            <dt>Format</dt><dd>Fixed scope</dd>
-                            <dt>Length</dt><dd>1–2 weeks</dd>
-                            <dt>You receive</dt><dd>A written report of findings, gaps and prioritised recommendations, a check against FHIR, IHE and openEHR, and one follow-up question session.</dd>
-                        </dl>
+                        <p class="item-meta">Fixed scope · 1–2 weeks</p>
+                        <p>You have an integration plan, on paper or already running, and want an independent second opinion before you commit more to it.</p>
+                        <p>You get a written report on what works, what is missing and what to fix first, and one follow-up session to go through it.</p>
+                        <p class="item-detail">Checked against FHIR, IHE and openEHR.</p>
                     </li>
                     <li>
                         <h3>Project consulting</h3>
-                        <dl class="facts">
-                            <dt>For</dt><dd>A team running a FHIR, openEHR or IHE integration project, including integrations with Epic, Cerner Millennium and ChipSoft HiX.</dd>
-                            <dt>Format</dt><dd>Time and materials; we work inside your team.</dd>
-                            <dt>Length</dt><dd>Weeks to months</dd>
-                            <dt>You receive</dt><dd>Design and implementation support, architecture documentation and regular check-ins with your team.</dd>
-                        </dl>
+                        <p class="item-meta">Time and materials · weeks to months</p>
+                        <p>Your team is connecting systems, for example to Epic, Cerner Millennium or ChipSoft HiX, and wants experienced people working alongside it.</p>
+                        <p>You get design and hands-on help inside your team, the architecture written down, and regular check-ins.</p>
+                        <p class="item-detail">FHIR, openEHR and IHE projects.</p>
                     </li>
                     <li>
                         <h3>Strategic advisory</h3>
-                        <dl class="facts">
-                            <dt>For</dt><dd>Organisations that want an interoperability expert on call.</dd>
-                            <dt>Format</dt><dd>Retainer. Think of it as a fractional Chief Interoperability Officer.</dd>
-                            <dt>Length</dt><dd>Ongoing</dd>
-                            <dt>You receive</dt><dd>An async support channel, a monthly strategy and roadmap session, priority answers to urgent questions and a quarterly architecture review.</dd>
-                        </dl>
+                        <p class="item-meta">Retainer · ongoing</p>
+                        <p>You want an experienced person to call on whenever decisions about health data come up. Think of it as a part-time, or fractional, Chief Interoperability Officer.</p>
+                        <p>You get a direct line for questions, a monthly planning session, quick answers when something is urgent, and a review of your architecture every quarter.</p>
                     </li>
                     <li>
                         <h3>Training and workshops</h3>
-                        <dl class="facts">
-                            <dt>For</dt><dd>Health IT teams, new to the standards or experienced.</dd>
-                            <dt>Format</dt><dd>Fixed scope, remote or on site.</dd>
-                            <dt>Length</dt><dd>Half a day to 2 days</dd>
-                            <dt>You receive</dt><dd>FHIR fundamentals or advanced implementation, openEHR archetypes and templates, IHE profiles in practice, or a curriculum built for your team.</dd>
-                        </dl>
+                        <p class="item-meta">Fixed scope · half a day to 2 days</p>
+                        <p>Your people are new to the health data standards, or need to go deeper.</p>
+                        <p>You get a session of half a day to two days, remote or on site, built around your team's own work.</p>
+                        <p class="item-detail">FHIR basics or advanced implementation, openEHR archetypes and templates, IHE profiles in practice, or a curriculum built for your team.</p>
                     </li>
                     <li>
                         <h3>Software development</h3>
-                        <dl class="facts">
-                            <dt>For</dt><dd>When you need it built, not only designed.</dd>
-                            <dt>Format</dt><dd>Time and materials or fixed scope.</dd>
-                            <dt>Length</dt><dd>Ongoing or fixed</dd>
-                            <dt>You receive</dt><dd>FHIR layers and APIs, openEHR–FHIR transformation, IHE profile implementations (XDS, XDW, ATNA, QEDm, PIX, PDQ, PIXm and PDQm) and connectors to Epic, Cerner and HiX. Built in Java (Jakarta EE, Spring), .NET or Go.</dd>
-                        </dl>
+                        <p class="item-meta">Time and materials or fixed scope</p>
+                        <p>You need it built, not only designed.</p>
+                        <p>You get working software that connects your systems: translation between standards, links to hospital systems such as Epic, Cerner and HiX, and the standard ways of exchanging documents and finding patients.</p>
+                        <p class="item-detail">FHIR layers and APIs, openEHR–FHIR transformation, IHE profiles (XDS, XDW, ATNA, QEDm, PIX, PDQ, PIXm and PDQm). Built in Java (Jakarta EE, Spring), .NET or Go.</p>
                     </li>
                 </ul>
-                <p class="formats" id="engagements"><span class="label">Engagement formats</span><span>Fixed scope</span><span>Time and materials</span><span>Retainer</span></p>
+                <p class="formats" id="engagements">Ways to work with us: a fixed scope, time and materials, or a retainer.</p>
             </div>
         </section>
 
@@ -1168,26 +1157,28 @@ figcaption {
                 <div class="cases">
                     <article class="case">
                         <p class="label">RSO Zuid-Limburg · 2026</p>
-                        <h3>One query across a region's openEHR repositories</h3>
-                        <p>In Zuid-Limburg each care provider keeps patient data in its own openEHR repository, on purpose. An application that needed a patient's full record had to know every repository and query each one itself.</p>
-                        <p>With RSO Zuid-Limburg and the openEHR SEC we drafted a specification for federating openEHR repositories, wrote an open reference implementation and built Unio on it. <strong>The SEC approved version 1.0.0 in October 2026.</strong></p>
+                        <h3>One view of a patient across a region's care providers</h3>
+                        <p>In Zuid-Limburg every care provider keeps its own patient records, on purpose. An application that needed a patient's full history had to ask each of them separately.</p>
+                        <p>With RSO Zuid-Limburg and the openEHR standards committee we wrote a specification for federating openEHR repositories, so they answer as one. We built an open reference implementation and our product Unio on it. <strong>The specification was approved in October 2026.</strong></p>
                         <a class="text-link" href="/blog/openehr-federation-spec-approved-unio/">Read about the approval</a>
                     </article>
                     <article class="case">
                         <p class="label">HL7 Converge &amp; Collaborate, Dublin · 2026</p>
-                        <h3>A FHIR facade on an openEHR repository, built live</h3>
-                        <p>We ran the hands-on "Let's Build" session. Participants assembled an openEHR repository, Firely Server and openFHIR into one setup that returns stored data as a FHIR International Patient Summary and stores incoming FHIR data in openEHR.</p>
+                        <h3>Two health data standards working together, built live in a workshop</h3>
+                        <p>We ran the hands-on "Let's Build" session. In one afternoon, participants connected a patient record system to an international exchange standard: stored records came out as an international patient summary, and incoming data was stored in the record.</p>
+                        <p>The setup: an openEHR repository, Firely Server and openFHIR, returning a FHIR International Patient Summary.</p>
                         <a class="text-link" href="/blog/converge-and-collaborate-dublin/">Read the session write-up</a>
                     </article>
                     <article class="case">
                         <p class="label">Proof of concept · 2026</p>
-                        <h3>The Dutch care-transfer standard on openEHR and FHIR</h3>
-                        <p>eOverdracht is the Dutch national standard for handing over nursing and care information between providers. We built a working proof of concept of eOverdracht in a hybrid openEHR and FHIR architecture, with the routing and care-services building blocks of the Dutch Generic Functions programme.</p>
+                        <h3>Nursing handover between care organisations, on open standards</h3>
+                        <p>When a patient moves from a hospital to a nursing home or home care, the nurses' handover has to go with them. In the Netherlands that handover follows a national standard, eOverdracht.</p>
+                        <p>We built a working proof of concept of eOverdracht on a hybrid openEHR and FHIR architecture, using the routing and care-services building blocks of the Dutch Generic Functions programme.</p>
                         <a class="text-link" href="/blog/eoverdracht-hybrid-architecture-openehr-fhir/">Read the proof of concept</a>
                     </article>
                 </div>
 
-                <p class="credentials">IHE certified professional. Member of the openEHR Specifications Editorial Committee Experts Panel since 2026. Work in the Netherlands, the United Kingdom, Iceland, Slovenia and the United States.</p>
+                <p class="credentials">We have worked with hospitals and health programmes in the Netherlands, the United Kingdom, Iceland, Slovenia and the United States. IHE certified professional; member of the openEHR Specifications Editorial Committee Experts Panel since 2026.</p>
 
                 <div class="clients" id="collaborators">
                     <div>
@@ -1238,13 +1229,14 @@ figcaption {
         <section id="products" class="section">
             <div class="wrap">
                 <h2>Two products from our consulting work</h2>
-                <p class="section-lead">Syntaric is a consultancy. We also build two products: openFHIR, which is open source under the Apache 2.0 licence and has a commercial Enterprise version, and Unio, which is commercial.</p>
+                <p class="section-lead">We are a consultancy first. Two products came out of our project work.</p>
 
                 <div class="product" id="openfhir">
                     <div>
                         <h3><img class="product-logo product-logo--openfhir" src="/assets/brand/openfhir.svg" width="174" height="40" alt="openFHIR"></h3>
-                        <p class="lead">openFHIR maps data between openEHR and FHIR in both directions, so an openEHR repository can exchange data with FHIR systems. It implements <strong>FHIR Connect</strong>, an open specification for describing openEHR–FHIR mappings, which we co-created.</p>
-                        <p class="evidence">It was the bridge between openEHR and FHIR in the "Let's Build" session at HL7 Converge &amp; Collaborate, Dublin 2026, and in our International Patient Summary webinar.</p>
+                        <p class="lead">openFHIR translates patient records between the way one system stores them and the way another expects to receive them, in both directions.</p>
+                        <p class="evidence">It maps between openEHR and FHIR and implements <strong>FHIR Connect</strong>, an open specification for describing these mappings, which we co-created. It was the bridge between openEHR and FHIR in the "Let's Build" session at HL7 Converge &amp; Collaborate, Dublin 2026, and in our International Patient Summary webinar.</p>
+                        <p class="evidence">Open source (Apache 2.0), with a commercial Enterprise version.</p>
                         <a class="text-link" href="https://open-fhir.com" target="_blank" rel="noopener" data-goatcounter-click="out-openfhir">open-fhir.com</a>
                     </div>
                     <figure class="product-image">
@@ -1259,8 +1251,9 @@ figcaption {
                 <div class="product" id="unio">
                     <div>
                         <h3><img class="product-logo" src="/assets/brand/unio.svg" width="98" height="32" alt="Unio"></h3>
-                        <p class="lead">Unio makes several openEHR repositories answer as one. An application queries one openEHR endpoint and gets a patient's records from every member repository, while each record stays where it was created.</p>
-                        <p class="evidence">It implements the openEHR Federation Tier with AQL specification, version 1.0.0, approved by the openEHR SEC in October 2026.</p>
+                        <p class="lead">Unio lets an application see a patient's records from every care provider in a region as if they were in one place, while each record stays where it was created.</p>
+                        <p class="evidence">It makes several openEHR repositories answer as one, and implements the openEHR Federation Tier with AQL specification, version 1.0.0, approved by the openEHR SEC in October 2026.</p>
+                        <p class="evidence">Commercial.</p>
                         <a class="text-link" href="https://unio.syntaric.com" target="_blank" rel="noopener" data-goatcounter-click="out-unio">unio.syntaric.com</a>
                     </div>
                     <figure class="product-image shot">
@@ -1311,7 +1304,7 @@ figcaption {
             <div class="wrap contact-grid">
                 <div>
                     <h2>Talk to us about your project</h2>
-                    <p class="section-lead">Write to us about an integration project, an architecture you want reviewed, or openFHIR and Unio. We reply within two working days.</p>
+                    <p class="section-lead">Write to us about a project that needs systems to share data, a plan you want a second opinion on, or openFHIR and Unio. We reply within two working days.</p>
                 </div>
                 <dl class="contact-details">
                     <dt>Email</dt><dd><a href="mailto:info@syntaric.com" data-goatcounter-click="contact-email">info@syntaric.com</a></dd>

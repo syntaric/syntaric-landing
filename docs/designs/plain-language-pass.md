@@ -213,6 +213,14 @@ site (LinkedIn previews, external testers).
 *   **2.5** Plain copy applied to the rest of the page (who-for line, proof
     line, hire items without the For/Format/Length table, cases, products,
     credentials, contact), meta and OG descriptions included.
+    *   **As built (2.5)**: §4 of `docs/content-inventory.md`, as approved.
+        Hire items: heading, a quiet format line in mono (the owner kept
+        mono, P3), "when it fits" and "you get" sentences (the latter now
+        open with "You get", as the label is gone), and the technical
+        detail in small type. Meta, OG and Twitter descriptions updated;
+        the JSON-LD descriptions are unchanged. At the review the owner
+        removed the rule above the contact details: the divider strand is
+        enough.
 *   **2.6** Jargon check in `npm run check` (below).
 *   **2.7** Tests on the finished pass (below), after a push.
 
