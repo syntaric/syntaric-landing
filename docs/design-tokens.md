@@ -52,6 +52,7 @@ for paths, data and labels (decision #7). Self-hosted, see
 | `--t-m` | `1.0625rem` (17 px) | Body, line-height 1.55 |
 | `--t-l` | `1.375rem` (22 px) | Item names, the proof line from 640 px |
 | `--t-xl` | `1.75rem` (28 px) | Section headings, line-height 1.2 |
+| `--t-post` | `clamp(1.875rem, 2.6vw + 1.1rem, 2.75rem)` | Blog post titles: 30-44 px, line-height 1.12, max-width 22ch. Added in 0.5: post titles are longer than the home H1, so `--t-hero` would wrap them to 4+ lines |
 | `--t-hero` | `clamp(2.125rem, 5.2vw + 0.9rem, 3.5rem)` | H1: 34 px at 390, 56 px from about 1100 px; line-height 1.08, weight 700, letter-spacing -0.02em, max-width 14ch |
 
 Headings are weight 700. The proof line is 19 px (`1.1875rem`, line-height
@@ -101,12 +102,31 @@ Defined, not yet used (Stage 1).
 
 `prefers-reduced-motion: reduce` sets both durations to 0.
 
+## Blog (commit 0.5, from the tokens above)
+
+*   **Post header:** on the ground, no gradient. Breadcrumb in `--t-s`;
+    the post tag as a `--mono` `--t-xs` label (no pill); title at
+    `--t-post`; one meta line (author, role, date, read time) in `--t-s`
+    `--ink-2`; a 1 px `--ink` rule below, as the proof line.
+*   **Post layout:** article first at every width; from 960 px a 17.5rem
+    sidebar, sticky. Body max-width 44rem, text `--t-m` at line-height
+    1.65. Code blocks `--ink` with `--ground` text; inline code on
+    `--panel`. Images, cover and slides: 1 px `--hair` border, `--radius`.
+*   **Sidebar:** sections split by `--hair` rules (the first by `--ink`),
+    mono labels, plain links. No cards, shadows or brand-coloured share
+    button.
+*   **End-of-post block:** `--ink` rule above, the text at `--t-l`, the
+    primary button and a text link.
+*   **Listing:** page title at `--t-hero`; the newest post as a featured
+    row (cover 1.2 : text 1 from 960 px), then a grid of 1 / 2 / 3 columns
+    at < 640 / 640 / 960 px. Covers at 16:9, `object-fit: cover`. No
+    shadows, card borders or hover lift; the title underlines on hover.
+
 ## Not in the mockups yet
 
 These follow from the tokens above and are reviewed with the screenshots of
 the commit that builds them:
 
-*   Blog post hero and listing cards (commit 0.5).
 *   Selected work, Products (Unio), Recent writing and talks, Contact and
     the footer (commit 0.6).
 *   Share-card layout (commit 1.7, decision E9).

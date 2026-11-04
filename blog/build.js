@@ -20,6 +20,7 @@ const fs   = require('fs');
 const path = require('path');
 const { marked } = require('marked');
 const { replaceRegions } = require('../tools/markers');
+const { imageSize } = require('../tools/image-size');
 
 // ─── Paths ────────────────────────────────────────────────────────────────────
 
@@ -101,6 +102,16 @@ function absoluteImageUrl(image, pageUrl) {
   return url.href;
 }
 
+/**
+ * Root-absolute path and pixel size of a front matter image, for <img>
+ * tags on any page. Covers keep their original format (decision E5).
+ */
+function coverImage(image, pageUrl) {
+  const url = new URL(absoluteImageUrl(image, pageUrl));
+  const { width, height } = imageSize(path.join(ROOT, decodeURIComponent(url.pathname)));
+  return { src: url.pathname, width, height };
+}
+
 /** Escape HTML for attribute/text use. */
 function esc(str) {
   return String(str)
@@ -123,6 +134,23 @@ renderer.heading = function(text, level) {
   return `<h${level}>${text}</h${level}>\n`;
 };
 
+// Inline images: width/height from the file (no layout shift), lazy loading.
+// The page URL of the post being rendered resolves relative paths.
+let currentPageUrl = null;
+
+renderer.image = function(href, title, text) {
+  let size = '';
+  try {
+    const url = new URL(href, currentPageUrl);
+    const file = path.join(ROOT, decodeURIComponent(url.pathname));
+    if (url.origin === 'https://syntaric.com' && fs.existsSync(file)) {
+      const { width, height } = imageSize(file);
+      size = ` width="${width}" height="${height}"`;
+    }
+  } catch { /* unknown format or URL: no size attributes */ }
+  return `<img src="${href}" alt="${text}"${title ? ` title="${title}"` : ''}${size} loading="lazy" decoding="async">`;
+};
+
 // Blockquotes become callout boxes (> text → <div class="callout">)
 renderer.blockquote = function(quote) {
   return `<div class="callout">${quote}</div>\n`;
@@ -140,7 +168,7 @@ function buildToc(html) {
     items.push({ level: parseInt(m[1]), id: m[2], text: m[3].replace(/<[^>]+>/g, '') });
   }
   if (!items.length) return '';
-  const lis = items.map(({ id, text }) => `<li><a href="#${id}">${esc(text)}</a></li>`).join('\n                        ');
+  const lis = items.map(({ id, text }) => `<li><a href="#${id}">${text}</a></li>`).join('\n                        ');
   return `<ul class="toc-list">\n                        ${lis}\n                    </ul>`;
 }
 
@@ -179,6 +207,7 @@ function fill(template, vars) {
 const CSS     = loadCss();
 const NAV     = loadPartial('nav.html');
 const FOOTER  = loadPartial('footer.html');
+const POST_CONTACT = loadPartial('post-contact.html');
 
 /** Nav and footer for blog pages: root-absolute links, Blog marked current. */
 const BLOG_NAV    = fill(NAV, { root: '/', blogCurrent: ' aria-current="page"' });
@@ -195,12 +224,11 @@ const FONT_AND_ANALYTICS = [
 const JS_CLASS_SCRIPT = `<script>document.documentElement.classList.add('js')</script>`;
 // ─── Post page template ───────────────────────────────────────────────────────
 
-function buildPostPage(meta, bodyHtml, toc) {
+function buildPostPage(meta, bodyHtml, toc, markdownBody) {
   const tags     = Array.isArray(meta.topics) ? meta.topics : (meta.topics ? [meta.topics] : []);
-  const avatar   = initials(meta.author || 'Author');
   const date     = formatDate(meta.date || '');
   const isoDate  = meta.date || '';
-  const time     = meta.readTime || readTime(bodyHtml);
+  const time     = meta.readTime || readTime(markdownBody);
   const crumb    = esc(meta.breadcrumb || meta.title);
   const desc     = esc(meta.description || meta.excerpt || '');
   const slug     = meta._slug || meta.slug || '';
@@ -208,8 +236,9 @@ function buildPostPage(meta, bodyHtml, toc) {
   const logoUrl  = 'https://syntaric.com/etc/syntaric_logo_2.png';
   const coverUrl = meta.image ? absoluteImageUrl(meta.image, canonUrl) : '';
   const imgUrl   = coverUrl || logoUrl;
+  const cover    = meta.image ? coverImage(meta.image, canonUrl) : null;
 
-  const tagsHtml = tags.map(t => `                        <span class="sidebar-tag">${esc(t)}</span>`).join('\n');
+  const tagsHtml = tags.map(t => `                        <li>${esc(t)}</li>`).join('\n');
   const tocHtml  = toc || '';
 
   const jsonLd = JSON.stringify({
@@ -218,6 +247,7 @@ function buildPostPage(meta, bodyHtml, toc) {
     "headline": meta.title,
     "description": meta.description || meta.excerpt || '',
     "datePublished": isoDate,
+    "dateModified": meta.updated || isoDate,
     "author": {
       "@type": "Person",
       "name": meta.author || '',
@@ -277,74 +307,60 @@ ${JS_CLASS_SCRIPT}
 
 ${BLOG_NAV}
 
-    <!-- ─── ARTICLE HERO ─── -->
+    <!-- ─── ARTICLE HEADER ─── -->
     <section class="article-hero">
         <div class="container">
-            <div class="article-hero-inner animate">
-                <div class="breadcrumb">
-                    <a href="../../">Home</a>
-                    <span class="breadcrumb-sep">/</span>
-                    <a href="../">Blog</a>
-                    <span class="breadcrumb-sep">/</span>
-                    <span class="breadcrumb-current">${crumb}</span>
-                </div>
-                <span class="article-tag">${esc(meta.tag || 'Article')}</span>
-                <h1>${esc(meta.title)}</h1>
-                <div class="article-hero-meta">
-                    <div class="article-meta-author">
-                        <div class="article-meta-avatar">${avatar}</div>
-                        <div>
-                            <div class="article-meta-name">${esc(meta.author || '')}</div>
-                            <div class="article-meta-role">${esc(meta.authorRole || '')}</div>
-                            ${meta.authorAssumingRole ? `<div class="article-meta-role"><strong>Written as:</strong> ${esc(meta.authorAssumingRole)}</div>` : ''}
-                        </div>
-                    </div>
-                    <span class="article-meta-sep"></span>
-                    <span class="article-meta-date">${esc(date)}</span>
-                    <span class="article-meta-sep"></span>
-                    <span class="article-meta-read">${esc(time)}</span>
-                </div>
-            </div>
+            <nav class="breadcrumb" aria-label="Breadcrumb">
+                <a href="/">Home</a>
+                <span aria-hidden="true">/</span>
+                <a href="/blog/">Blog</a>
+                <span aria-hidden="true">/</span>
+                <span class="breadcrumb-current">${crumb}</span>
+            </nav>
+            <p class="label">${esc(meta.tag || 'Article')}</p>
+            <h1>${esc(meta.title)}</h1>
+            <p class="article-meta">
+                <span class="article-meta-name">${esc(meta.author || '')}</span>
+                ${meta.authorRole ? `<span>${esc(meta.authorRole)}</span>` : ''}
+                ${meta.authorAssumingRole ? `<span>Written as ${esc(meta.authorAssumingRole)}</span>` : ''}
+                <span>${esc(date)}</span>
+                <span>${esc(time)}</span>
+            </p>
         </div>
     </section>
 
-    <!-- ─── ARTICLE CONTENT ─── -->
+    <!-- ─── ARTICLE ─── -->
     <div class="container">
         <div class="article-layout">
-            <article class="article-body animate">
-${meta.image ? `<img src="${esc(meta.image)}" alt="${esc(meta.title)}" class="article-cover">` : ''}
+            <article class="article-body">
+${cover ? `<img src="${cover.src}" width="${cover.width}" height="${cover.height}" alt="${esc(meta.title)}" class="article-cover">` : ''}
 ${bodyHtml}
+${POST_CONTACT}
             </article>
 
             <aside class="article-sidebar">
-${tocHtml ? `                <div class="sidebar-card">
-                    <div class="sidebar-card-title">Table of contents</div>
+${tocHtml ? `                <div class="sidebar-section">
+                    <p class="label sidebar-title">Contents</p>
                     ${tocHtml}
                 </div>` : ''}
 
-                <div class="sidebar-card">
-                    <div class="sidebar-card-title">Author</div>
-                    <div class="sidebar-author-name">${esc(meta.author || '')}</div>
-                    <div class="sidebar-author-role">${esc(meta.authorBio || '')}</div>
-                    ${meta.authorLinkedIn ? `<a href="${esc(meta.authorLinkedIn)}" target="_blank" class="sidebar-author-link">
-                        LinkedIn profile
-                        <svg viewBox="0 0 24 24"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>
-                    </a>` : ''}
+                <div class="sidebar-section">
+                    <p class="label sidebar-title">Author</p>
+                    <p class="sidebar-author-name">${esc(meta.author || '')}</p>
+                    <p class="sidebar-author-role">${esc(meta.authorBio || '')}</p>
+                    ${meta.authorLinkedIn ? `<a href="${esc(meta.authorLinkedIn)}" target="_blank" rel="noopener" class="text-link">LinkedIn profile</a>` : ''}
                 </div>
 
-${tagsHtml ? `                <div class="sidebar-card">
-                    <div class="sidebar-card-title">Topics</div>
-                    <div class="sidebar-tags">
+${tagsHtml ? `                <div class="sidebar-section">
+                    <p class="label sidebar-title">Topics</p>
+                    <ul class="sidebar-tags">
 ${tagsHtml}
-                    </div>
+                    </ul>
                 </div>` : ''}
 
-                <div class="sidebar-card">
-                    <div class="sidebar-card-title">Share</div>
-                    <a href="https://www.linkedin.com/sharing/share-offsite/?url=${encodeURIComponent(canonUrl)}" target="_blank" rel="noopener" class="share-linkedin">
-                        <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M20.45 20.45h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.354V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.284zM5.337 7.433a2.062 2.062 0 0 1-2.063-2.065 2.064 2.064 0 1 1 2.063 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z"/></svg>
-                        Share on LinkedIn
-                    </a>
+                <div class="sidebar-section">
+                    <p class="label sidebar-title">Share</p>
+                    <a href="https://www.linkedin.com/sharing/share-offsite/?url=${encodeURIComponent(canonUrl)}" target="_blank" rel="noopener" class="text-link">Share on LinkedIn</a>
                 </div>
             </aside>
         </div>
@@ -358,85 +374,27 @@ ${BLOG_FOOTER}
 
 // ─── Blog index template ──────────────────────────────────────────────────────
 
-// Icon pool — cycled per post so cards look varied
-const ICONS = [
-  `<svg viewBox="0 0 24 24"><path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"/><polyline points="3.27 6.96 12 12.01 20.73 6.96"/><line x1="12" y1="22.08" x2="12" y2="12"/></svg>`,
-  `<svg viewBox="0 0 24 24"><polyline points="16 18 22 12 16 6"/><polyline points="8 6 2 12 8 18"/></svg>`,
-  `<svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><line x1="2" y1="12" x2="22" y2="12"/><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/></svg>`,
-  `<svg viewBox="0 0 24 24"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/><polyline points="10 9 9 9 8 9"/></svg>`,
-  `<svg viewBox="0 0 24 24"><rect x="2" y="3" width="20" height="14" rx="2"/><line x1="8" y1="21" x2="16" y2="21"/><line x1="12" y1="17" x2="12" y2="21"/></svg>`,
-];
-
-function postCardFeatured(post, icon) {
-  const date    = formatDate(post.meta.date || '');
-  const time    = post.meta.readTime || readTime(post.body);
-  const avatar  = initials(post.meta.author || 'A');
+function postCard(post, featured) {
+  const date  = formatDate(post.meta.date || '');
+  const time  = post.meta.readTime || readTime(post.body);
+  const cover = post.meta.image ? coverImage(post.meta.image, `https://syntaric.com/blog/${post.slug}/`) : null;
+  const Tag   = featured ? 'h2' : 'h3';
   return `
-                <!-- Featured post -->
-                <a href="${post.slug}/" class="post-card--featured animate">
-                    <div class="post-visual"${post.meta.image ? ` style="background-image:url('${esc(post.meta.image)}');background-size:cover;background-position:center;"` : ''}>
-                        ${post.meta.image ? '' : `<div class="post-visual-icon">${icon}</div>`}
-                    </div>
+                <a href="/blog/${post.slug}/" class="post-card${featured ? ' post-card--featured' : ''}">
+                    ${cover ? `<img src="${cover.src}" width="${cover.width}" height="${cover.height}" alt="" class="post-cover"${featured ? '' : ' loading="lazy" decoding="async"'}>` : ''}
                     <div class="post-body">
-                        <span class="post-tag">${esc(post.meta.tag || 'Article')}</span>
-                        <h2 class="post-title">${esc(post.meta.title)}</h2>
+                        <p class="label">${esc(post.meta.tag || 'Article')}</p>
+                        <${Tag} class="post-title">${esc(post.meta.title)}</${Tag}>
                         <p class="post-excerpt">${esc(post.meta.excerpt || post.meta.description || '')}</p>
-                        <div class="post-meta">
-                            <div class="post-meta-author">
-                                <div class="post-meta-avatar">${avatar}</div>
-                                ${esc(post.meta.author || '')}
-                            </div>
-                            <span class="post-meta-sep"></span>
-                            <span>${esc(date)}</span>
-                            <span class="post-meta-sep"></span>
-                            <span>${esc(time)}</span>
-                        </div>
-                        <span class="post-read-more">
-                            Read article
-                            <svg viewBox="0 0 24 24"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
-                        </span>
-                    </div>
-                </a>`;
-}
-
-function postCardRegular(post, icon) {
-  const date   = formatDate(post.meta.date || '');
-  const time   = post.meta.readTime || readTime(post.body);
-  const avatar = initials(post.meta.author || 'A');
-  return `
-                <a href="${post.slug}/" class="post-card animate">
-                    <div class="post-visual-sm"${post.meta.image ? ` style="background-image:url('${esc(post.meta.image)}');background-size:cover;background-position:center;"` : ''}>
-                        ${post.meta.image ? '' : `<div class="post-visual-sm-icon">${icon}</div>`}
-                    </div>
-                    <div class="post-body">
-                        <span class="post-tag">${esc(post.meta.tag || 'Article')}</span>
-                        <h2 class="post-title">${esc(post.meta.title)}</h2>
-                        <p class="post-excerpt">${esc(post.meta.excerpt || post.meta.description || '')}</p>
-                        <div class="post-meta">
-                            <div class="post-meta-author">
-                                <div class="post-meta-avatar">${avatar}</div>
-                                ${esc(post.meta.author || '')}
-                            </div>
-                            <span class="post-meta-sep"></span>
-                            <span>${esc(date)}</span>
-                            <span class="post-meta-sep"></span>
-                            <span>${esc(time)}</span>
-                        </div>
-                        <span class="post-read-more">
-                            Read article
-                            <svg viewBox="0 0 24 24"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
-                        </span>
+                        <p class="label post-meta">${esc(date)} · ${esc(time)}</p>
                     </div>
                 </a>`;
 }
 
 function buildIndexPage(posts) {
-  const cards = posts.map((post, i) => {
-    const icon = ICONS[i % ICONS.length];
-    return i === 0 ? postCardFeatured(post, icon) : postCardRegular(post, icon);
-  }).join('\n');
+  const cards = posts.map((post, i) => postCard(post, i === 0)).join('\n');
 
-  const blogDesc = 'Deep dives into FHIR, openEHR, IHE, and the architecture decisions shaping modern health information exchange — by Gasper Andrejc, Syntaric.';
+  const blogDesc = "Articles from Syntaric's FHIR, openEHR and IHE projects, and notes from the events we take part in.";
 
   const blogJsonLd = JSON.stringify({
     "@context": "https://schema.org",
@@ -465,7 +423,7 @@ function buildIndexPage(posts) {
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Blog | Syntaric</title>
-    <meta name="description" content="${blogDesc}">
+    <meta name="description" content="${esc(blogDesc)}">
     <meta name="robots" content="index, follow">
     <link rel="canonical" href="https://syntaric.com/blog/">
 
@@ -473,14 +431,14 @@ function buildIndexPage(posts) {
     <meta property="og:type" content="website">
     <meta property="og:url" content="https://syntaric.com/blog/">
     <meta property="og:title" content="Blog | Syntaric">
-    <meta property="og:description" content="${blogDesc}">
+    <meta property="og:description" content="${esc(blogDesc)}">
     <meta property="og:image" content="https://syntaric.com/etc/syntaric_logo_2.png">
     <meta property="og:site_name" content="Syntaric">
 
     <!-- Twitter Card -->
     <meta name="twitter:card" content="summary">
     <meta name="twitter:title" content="Blog | Syntaric">
-    <meta name="twitter:description" content="${blogDesc}">
+    <meta name="twitter:description" content="${esc(blogDesc)}">
     <meta name="twitter:image" content="https://syntaric.com/etc/syntaric_logo_2.png">
 
     <!-- JSON-LD: Blog -->
@@ -498,15 +456,11 @@ function buildIndexPage(posts) {
 
 ${BLOG_NAV}
 
-    <!-- ─── HERO ─── -->
+    <!-- ─── HEADER ─── -->
     <section class="blog-hero">
         <div class="container">
-            <div class="blog-hero-label animate">
-                <span class="blog-hero-dot"></span>
-                Insights &amp; Research
-            </div>
-            <h1 class="animate delay-1">Thoughts on healthcare interoperability</h1>
-            <p class="blog-hero-desc animate delay-2">Deep dives into FHIR, openEHR, IHE, and the architecture decisions shaping modern health information exchange.</p>
+            <h1>Blog</h1>
+            <p class="blog-hero-desc">Articles from our FHIR, openEHR and IHE projects, and notes from the events we take part in.</p>
         </div>
     </section>
 
@@ -573,10 +527,11 @@ function main() {
     const slug = meta.slug || file.replace(/^\d{4}-\d{2}-\d{2}-/, '').replace(/\.md$/, '');
     meta._slug = slug;
 
+    currentPageUrl = `https://syntaric.com/blog/${slug}/`;
     const bodyHtml = marked.parse(body);
     const toc      = buildToc(bodyHtml);
 
-    outputs.set(path.join(BLOG_DIR, slug, 'index.html'), buildPostPage(meta, bodyHtml, toc));
+    outputs.set(path.join(BLOG_DIR, slug, 'index.html'), buildPostPage(meta, bodyHtml, toc, body));
 
     const published = meta.publish !== false;
     posts.push({ meta, body, slug, published });

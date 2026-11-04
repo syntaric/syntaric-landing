@@ -40,6 +40,7 @@
   "headline": "Renaissance of Vitaly's Interoperable Core",
   "description": "Following IHE Connectathon in Rennes, a review of the Vitaly platform's full compliance with MHD, IPS, mXDE, QEDm, PIXm, PDQm, and XDS profiles.",
   "datePublished": "2023-10-18",
+  "dateModified": "2023-10-18",
   "author": {
     "@type": "Person",
     "name": "Gasper Andrejc",
@@ -424,139 +425,590 @@ footer {
     }
 }
 
-/* ─── ANIMATIONS ─── */
-@keyframes fade-up { from { opacity: 0; transform: translateY(18px); } to { opacity: 1; transform: translateY(0); } }
-.animate { animation: fade-up 0.55s ease both; }
-.delay-1 { animation-delay: 0.1s; }
-.delay-2 { animation-delay: 0.2s; }
-.delay-3 { animation-delay: 0.3s; }
+/* Blog pages in the new system (commit 0.5). Values: docs/design-tokens.md.
+   The home page keeps the old look until commit 0.6, so the new tokens are
+   defined here, and the old names used by the shared nav and footer are
+   pointed at them for blog pages only. */
+:root {
+    --ground: #f6f3ee;
+    --ink: #122e49;
+    --ink-2: #40556a;
+    --ink-3: #56697a;
+    --rule: #bdc2c5;
+    --hair: #dbdbda;
+    --panel: #ece9e3;
 
-/* ─── ARTICLE HERO ─── */
+    --font: 'Atkinson Hyperlegible Next', 'Atkinson Next Fallback', sans-serif;
+    --mono: 'Atkinson Hyperlegible Mono', 'Atkinson Mono Fallback', monospace;
+    --t-xs: 0.8125rem;
+    --t-s: 0.9375rem;
+    --t-m: 1.0625rem;
+    --t-l: 1.375rem;
+    --t-xl: 1.75rem;
+    --t-post: clamp(1.875rem, 2.6vw + 1.1rem, 2.75rem);
+    --t-hero: clamp(2.125rem, 5.2vw + 0.9rem, 3.5rem);
+
+    --s-1: 4px; --s-2: 8px; --s-3: 12px; --s-4: 16px; --s-5: 24px;
+    --s-6: 32px; --s-7: 48px; --s-8: 64px; --s-9: 96px;
+
+    --ease: cubic-bezier(0.2, 0, 0, 1);
+    --dur-short: 200ms;
+    --dur-long: 900ms;
+
+    --measure: 36rem;
+    --page: 72rem;
+    --radius: 4px;
+
+    /* Old names used by the shared nav and footer. */
+    --ink-light: var(--ink-2);
+    --ink-muted: var(--ink-3);
+    --surface: var(--ground);
+    --surface-2: var(--panel);
+    --surface-3: var(--panel);
+    --border: var(--hair);
+    --accent: var(--ink);
+    --accent-light: var(--panel);
+    --shadow: 0 8px 24px rgba(18, 46, 73, 0.10);
+    --nav-h: 64px;
+}
+
+@media (prefers-reduced-motion: reduce) {
+    :root {
+        --dur-short: 0ms;
+        --dur-long: 0ms;
+    }
+}
+
+body {
+    font-family: var(--font);
+    font-size: var(--t-m);
+    line-height: 1.55;
+}
+
+.container {
+    max-width: var(--page);
+    padding: 0 var(--s-5);
+}
+
+header {
+    background: rgba(246, 243, 238, 0.94);
+}
+
+.nav-cta {
+    border-radius: var(--radius) !important;
+}
+
+.nav-toggle {
+    border-color: var(--rule);
+    border-radius: var(--radius);
+}
+
+.label {
+    font-family: var(--mono);
+    font-size: var(--t-xs);
+    color: var(--ink-3);
+}
+
+/* ─── POST: HEADER ──────────────────────────────────────────── */
 .article-hero {
-    background: linear-gradient(135deg, #0a1832 0%, #0d2160 40%, #0052cc 80%, #1a6fff 100%);
-    padding: 80px 0 72px; position: relative; overflow: hidden;
+    padding: var(--s-7) 0 var(--s-6);
+    border-bottom: 1px solid var(--ink);
 }
-.article-hero::before { content: ''; position: absolute; top: -100px; right: -100px; width: 600px; height: 600px; background: radial-gradient(circle, rgba(255,255,255,0.06) 0%, transparent 70%); pointer-events: none; }
-.article-hero::after  { content: ''; position: absolute; bottom: -80px; left: -80px; width: 400px; height: 400px; background: radial-gradient(circle, rgba(26,111,255,0.2) 0%, transparent 70%); pointer-events: none; }
-.article-hero-inner { position: relative; z-index: 1; max-width: 800px; }
-.breadcrumb { display: flex; align-items: center; gap: 8px; margin-bottom: 2rem; }
-.breadcrumb a { font-size: 0.85rem; font-weight: 500; color: rgba(255,255,255,0.6); text-decoration: none; transition: color 0.2s; }
-.breadcrumb a:hover { color: rgba(255,255,255,0.9); }
-.breadcrumb-sep { color: rgba(255,255,255,0.3); font-size: 0.85rem; }
-.breadcrumb-current { font-size: 0.85rem; color: rgba(255,255,255,0.5); overflow: hidden; text-overflow: ellipsis; white-space: nowrap; max-width: 300px; }
-.article-tag { display: inline-flex; align-items: center; font-size: 0.75rem; font-weight: 600; letter-spacing: 0.08em; text-transform: uppercase; color: rgba(255,255,255,0.9); background: rgba(255,255,255,0.14); border: 1px solid rgba(255,255,255,0.2); padding: 5px 12px; border-radius: 100px; margin-bottom: 1.5rem; }
-.article-hero h1 { font-size: clamp(1.8rem, 3.5vw, 2.8rem); font-weight: 700; line-height: 1.15; letter-spacing: -0.03em; color: white; margin-bottom: 1.5rem; }
-.article-hero-meta { display: flex; align-items: center; gap: 16px; flex-wrap: wrap; }
-.article-meta-author { display: flex; align-items: center; gap: 10px; }
-.article-meta-avatar { width: 36px; height: 36px; border-radius: 50%; background: rgba(255,255,255,0.15); border: 2px solid rgba(255,255,255,0.3); display: flex; align-items: center; justify-content: center; font-size: 0.75rem; font-weight: 700; color: white; }
-.article-meta-name { font-size: 0.9rem; font-weight: 600; color: rgba(255,255,255,0.9); }
-.article-meta-role { font-size: 0.8rem; color: rgba(255,255,255,0.55); margin-top: 1px; }
-.article-meta-sep { width: 3px; height: 3px; border-radius: 50%; background: rgba(255,255,255,0.25); }
-.article-meta-date, .article-meta-read { font-size: 0.85rem; color: rgba(255,255,255,0.55); }
 
-/* ─── ARTICLE LAYOUT ─── */
-.article-layout { display: grid; grid-template-columns: 1fr 300px; gap: 48px; padding: 64px 0 96px; align-items: start; }
-@media (max-width: 900px) { .article-layout { grid-template-columns: 1fr; gap: 40px; } .article-sidebar { order: -1; position: static; } }
-@media (max-width: 640px) { .article-layout { padding: 40px 0 72px; } .article-layout .article-sidebar { order: -1; position: static; } }
+.breadcrumb {
+    display: flex;
+    justify-content: flex-start;
+    height: auto;
+    flex-wrap: wrap;
+    gap: var(--s-2);
+    margin-bottom: var(--s-6);
+    font-size: var(--t-s);
+    color: var(--ink-3);
+}
 
-/* ─── ARTICLE BODY ─── */
-.article-body { min-width: 0; }
-.article-body h2 { font-size: 1.5rem; font-weight: 700; line-height: 1.25; letter-spacing: -0.02em; color: var(--ink); margin: 2.5rem 0 1rem; padding-top: 2rem; border-top: 1px solid var(--border); }
-.article-body h2:first-child { margin-top: 0; padding-top: 0; border-top: none; }
-.article-body h3 { font-size: 1.15rem; font-weight: 600; color: var(--ink); margin: 1.75rem 0 0.75rem; }
-.article-body p { font-size: 1.05rem; line-height: 1.8; color: var(--ink-light); margin-bottom: 1.25rem; }
-.article-body strong { color: var(--ink); font-weight: 600; }
-.article-body a { color: var(--accent); text-decoration: underline; text-decoration-color: rgba(0,82,204,0.3); text-underline-offset: 3px; transition: text-decoration-color 0.2s; }
-.article-body a:hover { text-decoration-color: var(--accent); }
-.article-body ul, .article-body ol { margin: 1rem 0 1.25rem 1.5rem; display: flex; flex-direction: column; gap: 0.5rem; }
-.article-body li { font-size: 1.05rem; line-height: 1.7; color: var(--ink-light); }
-.article-body li strong { color: var(--ink); }
-.article-body pre { background: var(--ink); color: #e2e8f0; border-radius: var(--radius); padding: 20px 24px; overflow-x: auto; margin: 1.5rem 0; font-size: 0.9rem; line-height: 1.6; }
-.article-body code { font-family: 'Atkinson Hyperlegible Mono', 'Atkinson Mono Fallback', monospace; }
-.article-body p code, .article-body li code { background: var(--surface-3); color: var(--accent); padding: 2px 6px; border-radius: 4px; font-size: 0.9em; }
-.article-body img { max-width: 100%; border-radius: var(--radius); border: 1px solid var(--border); margin: 0 0 1.5rem;}
-.article-body hr { border: none; border-top: 1px solid var(--border); margin: 2.5rem 0; }
-.article-body table { width: 100%; border-collapse: collapse; margin: 1.5rem 0; font-size: 0.95rem; }
-.article-body th { background: var(--surface-2); font-weight: 600; color: var(--ink); text-align: left; padding: 10px 14px; border: 1px solid var(--border); }
-.article-body td { padding: 10px 14px; border: 1px solid var(--border); color: var(--ink-light); }
-.article-body tr:hover td { background: var(--surface-2); }
+.breadcrumb a {
+    color: var(--ink-2);
+    text-decoration: underline;
+    text-decoration-color: var(--rule);
+    text-underline-offset: 3px;
+}
 
-/* ─── COVER IMAGE ─── */
-.article-cover { width: 100%; max-height: 480px; object-fit: cover; border-radius: var(--radius-lg); margin-bottom: 48px; border: 1px solid var(--border); display: block; }
+.breadcrumb-current {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    max-width: 22rem;
+}
 
-/* ─── CALLOUT ─── */
-.callout { background: var(--accent-light); border-left: 3px solid var(--accent); border-radius: 0 var(--radius) var(--radius) 0; padding: 20px 24px; margin: 1.75rem 0; }
-.callout p { margin: 0; color: var(--ink); font-size: 0.975rem; }
+.article-hero h1 {
+    margin-top: var(--s-3);
+    max-width: 22ch;
+    font-size: var(--t-post);
+    line-height: 1.12;
+    font-weight: 700;
+    letter-spacing: -0.015em;
+}
 
-/* ─── SIDEBAR ─── */
-.article-sidebar { position: sticky; top: calc(var(--nav-h) + 24px); }
-.sidebar-card { background: var(--surface-2); border: 1px solid var(--border); border-radius: var(--radius-lg); padding: 24px; margin-bottom: 20px; }
-.sidebar-card-title { font-size: 0.75rem; font-weight: 600; letter-spacing: 0.08em; text-transform: uppercase; color: var(--ink-muted); margin-bottom: 16px; }
-.toc-list { list-style: none; display: flex; flex-direction: column; gap: 2px; }
-.toc-list a { display: block; font-size: 0.875rem; color: var(--ink-light); text-decoration: none; padding: 6px 10px; border-radius: 6px; transition: background 0.15s, color 0.15s; line-height: 1.4; }
-.toc-list a:hover { background: var(--surface-3); color: var(--ink); }
-.sidebar-tags { display: flex; flex-wrap: wrap; gap: 8px; }
-.sidebar-tag { font-size: 0.78rem; font-weight: 500; color: var(--accent); background: var(--accent-light); padding: 4px 10px; border-radius: 100px; }
-.sidebar-author-name { font-size: 0.95rem; font-weight: 600; color: var(--ink); margin-bottom: 4px; }
-.sidebar-author-role { font-size: 0.83rem; color: var(--ink-muted); margin-bottom: 16px; line-height: 1.5; }
-.sidebar-author-link { display: inline-flex; align-items: center; gap: 6px; font-size: 0.83rem; font-weight: 500; color: var(--accent); text-decoration: none; transition: opacity 0.2s; }
-.sidebar-author-link:hover { opacity: 0.75; }
-.sidebar-author-link svg { width: 14px; height: 14px; stroke: currentColor; fill: none; stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; }
-.share-linkedin { display: flex; align-items: center; gap: 10px; font-size: 0.875rem; font-weight: 600; color: #fff; background: #0a66c2; padding: 10px 16px; border-radius: 8px; text-decoration: none; transition: background 0.2s; }
-.share-linkedin:hover { background: #004182; }
-.share-linkedin svg { width: 16px; height: 16px; fill: currentColor; flex-shrink: 0; }
+.article-meta {
+    margin-top: var(--s-5);
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--s-1) var(--s-5);
+    font-size: var(--t-s);
+    color: var(--ink-2);
+}
 
-/* ─── HERO ─── */
+.article-meta .article-meta-name {
+    color: var(--ink);
+    font-weight: 700;
+}
+
+/* ─── POST: LAYOUT ──────────────────────────────────────────── */
+/* Article first at every width; the sidebar follows it on phones. */
+.article-layout {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr);
+    gap: var(--s-7);
+    padding: var(--s-7) 0 var(--s-9);
+}
+
+@media (min-width: 960px) {
+    .article-layout {
+        grid-template-columns: minmax(0, 1fr) 17.5rem;
+        gap: var(--s-8);
+        align-items: start;
+    }
+
+    .article-sidebar {
+        position: sticky;
+        top: calc(var(--nav-h) + var(--s-5));
+    }
+}
+
+/* ─── POST: BODY ────────────────────────────────────────────── */
+.article-body {
+    min-width: 0;
+    max-width: 44rem;
+}
+
+.article-cover {
+    display: block;
+    width: 100%;
+    height: auto;
+    margin-bottom: var(--s-7);
+    border: 1px solid var(--hair);
+    border-radius: var(--radius);
+}
+
+.article-body h2 {
+    margin: var(--s-7) 0 var(--s-4);
+    padding-top: var(--s-5);
+    border-top: 1px solid var(--hair);
+    font-size: var(--t-xl);
+    line-height: 1.2;
+    letter-spacing: -0.01em;
+}
+
+.article-body h2:first-child {
+    margin-top: 0;
+    padding-top: 0;
+    border-top: none;
+}
+
+.article-body h3 {
+    margin: var(--s-6) 0 var(--s-3);
+    font-size: var(--t-l);
+    line-height: 1.25;
+}
+
+.article-body p,
+.article-body li {
+    font-size: var(--t-m);
+    line-height: 1.65;
+    color: var(--ink);
+}
+
+.article-body p {
+    margin-bottom: var(--s-5);
+}
+
+.article-body a {
+    color: var(--ink);
+    text-decoration: underline;
+    text-decoration-color: var(--rule);
+    text-underline-offset: 3px;
+    transition: text-decoration-color var(--dur-short) var(--ease);
+}
+
+.article-body a:hover {
+    text-decoration-color: var(--ink);
+}
+
+.article-body ul,
+.article-body ol {
+    margin: var(--s-4) 0 var(--s-5) var(--s-5);
+}
+
+.article-body li + li {
+    margin-top: var(--s-2);
+}
+
+.article-body pre {
+    margin: var(--s-5) 0;
+    padding: var(--s-4) var(--s-5);
+    overflow-x: auto;
+    background: var(--ink);
+    color: var(--ground);
+    border-radius: var(--radius);
+    font-size: var(--t-s);
+    line-height: 1.6;
+}
+
+.article-body code {
+    font-family: var(--mono);
+}
+
+.article-body p code,
+.article-body li code {
+    padding: 1px 5px;
+    background: var(--panel);
+    border-radius: 2px;
+    font-size: 0.92em;
+}
+
+.article-body img {
+    max-width: 100%;
+    height: auto;
+    margin: 0 0 var(--s-5);
+    border: 1px solid var(--hair);
+    border-radius: var(--radius);
+}
+
+.article-body hr {
+    margin: var(--s-7) 0;
+    border: none;
+    border-top: 1px solid var(--hair);
+}
+
+.article-body table {
+    width: 100%;
+    margin: var(--s-5) 0;
+    border-collapse: collapse;
+    font-size: var(--t-s);
+}
+
+.article-body th,
+.article-body td {
+    padding: var(--s-2) var(--s-3);
+    border-bottom: 1px solid var(--hair);
+    text-align: left;
+    vertical-align: top;
+}
+
+.article-body th {
+    border-bottom-color: var(--ink);
+    font-weight: 700;
+}
+
+.callout {
+    margin: var(--s-6) 0;
+    padding: var(--s-4) var(--s-5);
+    background: var(--panel);
+    border-left: 3px solid var(--ink);
+}
+
+.callout p {
+    margin: 0;
+}
+
+/* Video and slide viewer used in the webinar post. */
+.video-embed {
+    position: relative;
+    margin: var(--s-5) 0;
+    padding-top: 56.25%;
+    background: var(--panel);
+}
+
+.video-embed iframe {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    border: 0;
+}
+
+.pdf-slider {
+    margin: var(--s-5) 0;
+    border: 1px solid var(--hair);
+    border-radius: var(--radius);
+    overflow: hidden;
+}
+
+.pdf-bar {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: space-between;
+    gap: var(--s-3);
+    padding: var(--s-2) var(--s-4);
+    border-bottom: 1px solid var(--hair);
+    font-size: var(--t-s);
+}
+
+.pdf-buttons {
+    display: flex;
+    gap: var(--s-2);
+}
+
+.pdf-btn {
+    min-height: 36px;
+    padding: 6px 14px;
+    font: inherit;
+    font-size: var(--t-s);
+    color: var(--ink);
+    background: transparent;
+    border: 1px solid var(--rule);
+    border-radius: var(--radius);
+    cursor: pointer;
+}
+
+.pdf-btn:disabled {
+    color: var(--ink-3);
+    cursor: default;
+}
+
+.pdf-info {
+    font-family: var(--mono);
+    font-size: var(--t-xs);
+    color: var(--ink-3);
+}
+
+.article-body a.pdf-download {
+    font-weight: 700;
+}
+
+.pdf-stage {
+    padding: var(--s-4);
+    background: var(--panel);
+    text-align: center;
+}
+
+.pdf-stage canvas {
+    max-width: 100%;
+    border: 1px solid var(--hair);
+}
+
+/* End-of-post block: who Syntaric is and the next step (Goal 7). */
+.post-contact {
+    margin-top: var(--s-8);
+    padding-top: var(--s-5);
+    border-top: 1px solid var(--ink);
+}
+
+.post-contact p {
+    max-width: var(--measure);
+    font-size: var(--t-l);
+    line-height: 1.4;
+}
+
+.post-contact-links {
+    margin-top: var(--s-4);
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--s-3) var(--s-5);
+    align-items: center;
+}
+
+.post-contact .btn {
+    display: inline-block;
+    padding: 12px 22px;
+    font-weight: 700;
+    color: var(--ground);
+    background: var(--ink);
+    border-radius: var(--radius);
+    text-decoration: none;
+}
+
+.text-link,
+.post-contact .text-link {
+    color: var(--ink);
+    text-decoration: underline;
+    text-decoration-color: var(--rule);
+    text-underline-offset: 4px;
+}
+
+/* ─── POST: SIDEBAR ─────────────────────────────────────────── */
+.sidebar-section {
+    padding: var(--s-4) 0 var(--s-5);
+    border-top: 1px solid var(--hair);
+}
+
+.sidebar-section:first-child {
+    border-top: 1px solid var(--ink);
+}
+
+.sidebar-title {
+    margin-bottom: var(--s-3);
+}
+
+.toc-list {
+    list-style: none;
+}
+
+.toc-list a {
+    display: block;
+    padding: 5px 0;
+    font-size: var(--t-s);
+    line-height: 1.4;
+    color: var(--ink-2);
+    text-decoration: none;
+}
+
+.toc-list a:hover {
+    color: var(--ink);
+    text-decoration: underline;
+    text-decoration-color: var(--rule);
+}
+
+.sidebar-author-name {
+    font-weight: 700;
+}
+
+.sidebar-author-role {
+    margin: var(--s-1) 0 var(--s-3);
+    font-size: var(--t-s);
+    line-height: 1.5;
+    color: var(--ink-2);
+}
+
+.sidebar-tags {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--s-1) var(--s-4);
+    font-size: var(--t-s);
+    color: var(--ink-2);
+    list-style: none;
+}
+
+.sidebar-section .text-link {
+    font-size: var(--t-s);
+}
+
+/* ─── LISTING ───────────────────────────────────────────────── */
 .blog-hero {
-    padding: 80px 0 64px;
-    background:
-        linear-gradient(to bottom, rgba(255,255,255,0.94) 0%, rgba(255,255,255,0.88) 50%, rgba(255,255,255,0.98) 100%),
-        url('https://open-fhir.com/images/openFHIR-hero-background-image.jpg') center/cover no-repeat;
-    position: relative; overflow: hidden;
+    padding: var(--s-7) 0 var(--s-6);
+    border-bottom: 1px solid var(--ink);
 }
-.blog-hero::before { content: ''; position: absolute; top: -120px; right: -160px; width: 600px; height: 600px; background: radial-gradient(circle, rgba(0,82,204,0.07) 0%, transparent 70%); pointer-events: none; }
-.blog-hero-label { display: inline-flex; align-items: center; gap: 8px; font-size: 0.8rem; font-weight: 600; letter-spacing: 0.08em; text-transform: uppercase; color: var(--accent); background: var(--accent-light); padding: 6px 14px; border-radius: 100px; margin-bottom: 1.5rem; }
-.blog-hero-dot { width: 6px; height: 6px; border-radius: 50%; background: var(--accent); }
-.blog-hero h1 { font-size: clamp(2rem, 4vw, 3rem); font-weight: 700; line-height: 1.1; letter-spacing: -0.03em; color: var(--ink); max-width: 600px; margin-bottom: 1rem; }
-.blog-hero-desc { font-size: 1.1rem; color: var(--ink-light); max-width: 520px; line-height: 1.7; }
 
-/* ─── POSTS GRID ─── */
-.blog-posts { padding: 72px 0 96px; }
-.posts-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 28px; }
-@media (max-width: 900px) { .posts-grid { grid-template-columns: repeat(2, 1fr); } }
-@media (max-width: 640px) { .posts-grid { grid-template-columns: 1fr; } }
+.blog-hero h1 {
+    font-size: var(--t-hero);
+    line-height: 1.08;
+    letter-spacing: -0.02em;
+}
 
-/* Featured */
-.post-card--featured { grid-column: 1 / -1; display: grid; grid-template-columns: 1fr 1fr; background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius-lg); overflow: hidden; box-shadow: var(--shadow); transition: box-shadow 0.2s, transform 0.2s; text-decoration: none; color: inherit; }
-.post-card--featured:hover { box-shadow: var(--shadow-lg); transform: translateY(-2px); }
-@media (max-width: 900px) { .post-card--featured { grid-template-columns: 1fr; } }
-.post-card--featured .post-visual { background: linear-gradient(135deg, #0d1f4d 0%, #0052cc 50%, #1a6fff 100%); min-height: 280px; display: flex; align-items: center; justify-content: center; padding: 48px; position: relative; overflow: hidden; }
-.post-card--featured .post-visual::before { content: ''; position: absolute; top: -60px; right: -60px; width: 300px; height: 300px; background: radial-gradient(circle, rgba(255,255,255,0.08) 0%, transparent 70%); }
-.post-visual-icon { width: 80px; height: 80px; background: rgba(255,255,255,0.12); border-radius: 20px; display: flex; align-items: center; justify-content: center; border: 1px solid rgba(255,255,255,0.2); }
-.post-visual-icon svg { width: 40px; height: 40px; stroke: rgba(255,255,255,0.9); fill: none; stroke-width: 1.5; stroke-linecap: round; stroke-linejoin: round; }
-.post-card--featured .post-body { padding: 48px; display: flex; flex-direction: column; justify-content: center; }
+.blog-hero-desc {
+    margin-top: var(--s-4);
+    max-width: var(--measure);
+    font-size: 1.1875rem;
+    line-height: 1.5;
+    color: var(--ink-2);
+}
 
-/* Regular */
-.post-card { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius-lg); overflow: hidden; box-shadow: var(--shadow-sm); transition: box-shadow 0.2s, transform 0.2s; text-decoration: none; color: inherit; display: flex; flex-direction: column; }
-.post-card:hover { box-shadow: var(--shadow); transform: translateY(-2px); }
-.post-visual-sm { background: linear-gradient(135deg, #0d1f4d 0%, #0052cc 60%, #1a6fff 100%); height: 160px; display: flex; align-items: center; justify-content: center; position: relative; overflow: hidden; }
-.post-visual-sm::before { content: ''; position: absolute; top: -40px; right: -40px; width: 200px; height: 200px; background: radial-gradient(circle, rgba(255,255,255,0.07) 0%, transparent 70%); }
-.post-visual-sm-icon { width: 48px; height: 48px; background: rgba(255,255,255,0.12); border-radius: 12px; display: flex; align-items: center; justify-content: center; border: 1px solid rgba(255,255,255,0.2); }
-.post-visual-sm-icon svg { width: 24px; height: 24px; stroke: rgba(255,255,255,0.9); fill: none; stroke-width: 1.5; stroke-linecap: round; stroke-linejoin: round; }
-.post-card .post-body { padding: 28px; flex: 1; display: flex; flex-direction: column; }
+.blog-posts {
+    padding: var(--s-7) 0 var(--s-9);
+}
 
-/* Shared card */
-.post-tag { display: inline-flex; font-size: 0.75rem; font-weight: 600; letter-spacing: 0.06em; text-transform: uppercase; color: var(--accent); background: var(--accent-light); padding: 4px 10px; border-radius: 100px; margin-bottom: 1rem; width: fit-content; }
-.post-title { font-size: 1.25rem; font-weight: 700; line-height: 1.3; letter-spacing: -0.02em; color: var(--ink); margin-bottom: 0.75rem; }
-.post-card--featured .post-title { font-size: 1.6rem; margin-bottom: 1rem; }
-.post-excerpt { font-size: 0.95rem; color: var(--ink-light); line-height: 1.65; flex: 1; margin-bottom: 1.5rem; }
-.post-meta { display: flex; align-items: center; gap: 16px; font-size: 0.825rem; color: var(--ink-muted); }
-.post-meta-author { display: flex; align-items: center; gap: 8px; font-weight: 500; color: var(--ink-light); }
-.post-meta-avatar { width: 28px; height: 28px; border-radius: 50%; background: linear-gradient(135deg, var(--accent) 0%, #1a6fff 100%); display: flex; align-items: center; justify-content: center; font-size: 0.7rem; font-weight: 700; color: white; flex-shrink: 0; }
-.post-meta-sep { width: 3px; height: 3px; border-radius: 50%; background: var(--border); }
-.post-read-more { display: inline-flex; align-items: center; gap: 6px; font-size: 0.875rem; font-weight: 600; color: var(--accent); margin-top: 1.5rem; }
-.post-read-more svg { width: 16px; height: 16px; stroke: currentColor; fill: none; stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; transition: transform 0.2s; }
-.post-card:hover .post-read-more svg, .post-card--featured:hover .post-read-more svg { transform: translateX(3px); }
+.posts-grid {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr);
+    gap: var(--s-7) var(--s-6);
+}
+
+@media (min-width: 640px) {
+    .posts-grid {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+}
+
+@media (min-width: 960px) {
+    .posts-grid {
+        grid-template-columns: repeat(3, minmax(0, 1fr));
+    }
+}
+
+.post-card {
+    display: flex;
+    flex-direction: column;
+    color: inherit;
+    text-decoration: none;
+}
+
+.post-card--featured {
+    grid-column: 1 / -1;
+    padding-bottom: var(--s-7);
+    border-bottom: 1px solid var(--hair);
+}
+
+@media (min-width: 960px) {
+    .post-card--featured {
+        display: grid;
+        grid-template-columns: 1.2fr 1fr;
+        gap: var(--s-7);
+        align-items: center;
+    }
+}
+
+.post-cover {
+    display: block;
+    width: 100%;
+    height: auto;
+    aspect-ratio: 16 / 9;
+    object-fit: cover;
+    border: 1px solid var(--hair);
+    border-radius: var(--radius);
+}
+
+.post-body {
+    padding-top: var(--s-4);
+}
+
+.post-card--featured .post-body {
+    padding-top: var(--s-5);
+}
+
+@media (min-width: 960px) {
+    .post-card--featured .post-body {
+        padding-top: 0;
+    }
+}
+
+.post-title {
+    margin-top: var(--s-2);
+    font-size: var(--t-l);
+    line-height: 1.25;
+}
+
+.post-card--featured .post-title {
+    font-size: var(--t-xl);
+    line-height: 1.2;
+}
+
+.post-card:hover .post-title {
+    text-decoration: underline;
+    text-decoration-color: var(--rule);
+    text-underline-offset: 4px;
+}
+
+.post-excerpt {
+    margin-top: var(--s-2);
+    font-size: var(--t-s);
+    line-height: 1.55;
+    color: var(--ink-2);
+}
+
+.post-meta {
+    margin-top: var(--s-3);
+}
     </style>
 </head>
 <body>
@@ -600,42 +1052,33 @@ footer {
         })();
     </script>
 
-    <!-- ─── ARTICLE HERO ─── -->
+    <!-- ─── ARTICLE HEADER ─── -->
     <section class="article-hero">
         <div class="container">
-            <div class="article-hero-inner animate">
-                <div class="breadcrumb">
-                    <a href="../../">Home</a>
-                    <span class="breadcrumb-sep">/</span>
-                    <a href="../">Blog</a>
-                    <span class="breadcrumb-sep">/</span>
-                    <span class="breadcrumb-current">Renaissance of Vitaly's Interoperable Core</span>
-                </div>
-                <span class="article-tag">IHE</span>
-                <h1>Renaissance of Vitaly's Interoperable Core</h1>
-                <div class="article-hero-meta">
-                    <div class="article-meta-author">
-                        <div class="article-meta-avatar">GA</div>
-                        <div>
-                            <div class="article-meta-name">Gasper Andrejc</div>
-                            <div class="article-meta-role">Healthcare Interoperability Architect</div>
-                            <div class="article-meta-role"><strong>Written as:</strong> Open Line Vitaly Interoperability Specialist</div>
-                        </div>
-                    </div>
-                    <span class="article-meta-sep"></span>
-                    <span class="article-meta-date">October 18, 2023</span>
-                    <span class="article-meta-sep"></span>
-                    <span class="article-meta-read">7 min read</span>
-                </div>
-            </div>
+            <nav class="breadcrumb" aria-label="Breadcrumb">
+                <a href="/">Home</a>
+                <span aria-hidden="true">/</span>
+                <a href="/blog/">Blog</a>
+                <span aria-hidden="true">/</span>
+                <span class="breadcrumb-current">Renaissance of Vitaly's Interoperable Core</span>
+            </nav>
+            <p class="label">IHE</p>
+            <h1>Renaissance of Vitaly's Interoperable Core</h1>
+            <p class="article-meta">
+                <span class="article-meta-name">Gasper Andrejc</span>
+                <span>Healthcare Interoperability Architect</span>
+                <span>Written as Open Line Vitaly Interoperability Specialist</span>
+                <span>October 18, 2023</span>
+                <span>7 min read</span>
+            </p>
         </div>
     </section>
 
-    <!-- ─── ARTICLE CONTENT ─── -->
+    <!-- ─── ARTICLE ─── -->
     <div class="container">
         <div class="article-layout">
-            <article class="article-body animate">
-<img src="../../blog/renaissance-vitalys-interoperable-core/cover.png" alt="Renaissance of Vitaly's Interoperable Core" class="article-cover">
+            <article class="article-body">
+<img src="/blog/renaissance-vitalys-interoperable-core/cover.png" width="1219" height="385" alt="Renaissance of Vitaly's Interoperable Core" class="article-cover">
 <h2 id="introduction">Introduction</h2>
 <p>A couple of weeks ago, we attended an adrenaline sporting event - the IHE Connectathon in Rennes.</p>
 <p>An amazing experience for our team, both in terms of what we&#39;ve learned and what we&#39;ve achieved, as well as the number
@@ -649,7 +1092,7 @@ in the world of digital health - follows below.</p>
 <p>It is not a full description of what our interoperable core offers - that list is a lot longer - but summarizes
 capabilities we&#39;ve added to our platform as a result of the work in the last couple of months preparing for the
 Connectathon.</p>
-<p><img src="../renaissance-vitalys-interoperable-core/arch.png" alt="arch.png"></p>
+<p><img src="../renaissance-vitalys-interoperable-core/arch.png" alt="arch.png" width="1488" height="879" loading="lazy" decoding="async"></p>
 <h2 id="mhd-amp-xds-on-fhir">MHD &amp; XDS on FHIR</h2>
 <p>The ability of our platform to exchange documents has been one of the most important ones since the beginning of time.</p>
 <p>Users of our frontend-facing solutions being able to look at documents in connected systems and leverage them for
@@ -678,7 +1121,7 @@ and Register transactions, and accept MHD queries and transform them into XDS Re
 <p>This means we can play an intermediary role between all those systems that are FHIR but not XDS compliant. It also means
 we&#39;re able to be a facade to existing XDS architectures that would want to expose their functionalities through the
 modern FHIR.</p>
-<p><img src="../renaissance-vitalys-interoperable-core/xds-on-fhir.png" alt="xds-on-fhir.png">
+<p><img src="../renaissance-vitalys-interoperable-core/xds-on-fhir.png" alt="xds-on-fhir.png" width="1341" height="441" loading="lazy" decoding="async">
 <em>Vitaly XDS on FHIR capabilities</em></p>
 <h2 id="international-patient-summary">International Patient Summary</h2>
 <p>Through the use cases we provide, Vitaly can be an important source of patient&#39;s clinical data and, thus, a participant
@@ -694,7 +1137,7 @@ closely following sIPS development).</p>
 <p>With this major upgrade and the support of IPS CDA, we have also added support for mXDE and can create FHIR Resources
 from a CDA that are later available via QEDm transactions.</p>
 <p>Again, being able to play an intermediary role between CDA, XDS and FHIR, QEDm. Magic.</p>
-<p><img src="../renaissance-vitalys-interoperable-core/qedm.png" alt="qedm.png"></p>
+<p><img src="../renaissance-vitalys-interoperable-core/qedm.png" alt="qedm.png" width="823" height="691" loading="lazy" decoding="async"></p>
 <h2 id="qedm-pixm-pdqm">QEDm, PIXm, PDQm</h2>
 <p>FHIR from the DSTU2 times has been deeply embedded in the core of our platform, so from the very beginning of Vitaly1.0,
 we were already able to expose clinical data that we produce in a standardized FHIR way.</p>
@@ -703,7 +1146,7 @@ patient data exchange. But IHE profiles always have some bits and pieces you don
 deliberately do it, and this is something we&#39;ve done now.</p>
 <p>Our platform&#39;s ability to integrate with other FHIR servers has been validated and is now just one of many other ways
 how we empower our end users with external data throughout our workflows.</p>
-<p><img src="../renaissance-vitalys-interoperable-core/pixmpdqm.png" alt="pixmpdqm.png"></p>
+<p><img src="../renaissance-vitalys-interoperable-core/pixmpdqm.png" alt="pixmpdqm.png" width="711" height="624" loading="lazy" decoding="async"></p>
 <h2 id="fhir-federation">FHIR Federation</h2>
 <p>The more FHIR is gaining traction, the more we&#39;re seeing a need for some kind of a FHIR Federation.</p>
 <p>While this hasn&#39;t strictly been tested at the Connectathon, with the QEDm and MHD consumers we are slowly implementing
@@ -712,7 +1155,7 @@ support for a FHIR gateway as well.</p>
 servers, all while taking care of different authentication mechanism each one of those would require, different context
 propagation, terminology, semantics, ... and then simultaneously trying to put everything it gets back on a common
 denominator, so the consumer of the gateway lives in the ignorance of the federating magic that has happened.</p>
-<p><img src="../renaissance-vitalys-interoperable-core/federation.png" alt="federation.png"></p>
+<p><img src="../renaissance-vitalys-interoperable-core/federation.png" alt="federation.png" width="1121" height="751" loading="lazy" decoding="async"></p>
 <h2 id="xds-b-i-xca-i-xcpd">XDS.b(+I), XCA(+I), XCPD</h2>
 <p>Arguments are being made that these dinosaurs are passé, but from what we&#39;re seeing, this is far from reality.</p>
 <p>Surely, other standards are eating into the share XDS/XCA had years ago, and while it&#39;s true the scale may tip one or
@@ -734,14 +1177,21 @@ it really bring?</p>
 integration options that empower our end-users on their journey through Vitaly. With these extended capabilities we&#39;ve
 added to our platform, we&#39;ve definitely done a huge step forward in that regard.</p>
 
+            <aside class="post-contact" aria-label="About Syntaric">
+                <p>Syntaric is a small healthcare interoperability consultancy for hospitals, national health programmes and health IT vendors. If you are working on something similar, write to us.</p>
+                <div class="post-contact-links">
+                    <a class="btn" href="/#contact">Contact</a>
+                    <a class="text-link" href="/">Syntaric home</a>
+                </div>
+            </aside>
             </article>
 
             <aside class="article-sidebar">
-                <div class="sidebar-card">
-                    <div class="sidebar-card-title">Table of contents</div>
+                <div class="sidebar-section">
+                    <p class="label sidebar-title">Contents</p>
                     <ul class="toc-list">
                         <li><a href="#introduction">Introduction</a></li>
-                        <li><a href="#mhd-amp-xds-on-fhir">MHD &amp;amp; XDS on FHIR</a></li>
+                        <li><a href="#mhd-amp-xds-on-fhir">MHD &amp; XDS on FHIR</a></li>
                         <li><a href="#the-transition">..the transition</a></li>
                         <li><a href="#international-patient-summary">International Patient Summary</a></li>
                         <li><a href="#cda-and-mxde">CDA and mXDE</a></li>
@@ -752,35 +1202,29 @@ added to our platform, we&#39;ve definitely done a huge step forward in that reg
                     </ul>
                 </div>
 
-                <div class="sidebar-card">
-                    <div class="sidebar-card-title">Author</div>
-                    <div class="sidebar-author-name">Gasper Andrejc</div>
-                    <div class="sidebar-author-role">Healthcare Interoperability Architect &amp; Consultant at Syntaric. 10+ years building FHIR, openEHR, and IHE solutions across Europe and the US.</div>
-                    <a href="https://www.linkedin.com/in/andrejcgasper/" target="_blank" class="sidebar-author-link">
-                        LinkedIn profile
-                        <svg viewBox="0 0 24 24"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>
-                    </a>
+                <div class="sidebar-section">
+                    <p class="label sidebar-title">Author</p>
+                    <p class="sidebar-author-name">Gasper Andrejc</p>
+                    <p class="sidebar-author-role">Healthcare Interoperability Architect &amp; Consultant at Syntaric. 10+ years building FHIR, openEHR, and IHE solutions across Europe and the US.</p>
+                    <a href="https://www.linkedin.com/in/andrejcgasper/" target="_blank" rel="noopener" class="text-link">LinkedIn profile</a>
                 </div>
 
-                <div class="sidebar-card">
-                    <div class="sidebar-card-title">Topics</div>
-                    <div class="sidebar-tags">
-                        <span class="sidebar-tag">FHIR</span>
-                        <span class="sidebar-tag">IHE</span>
-                        <span class="sidebar-tag">XDS</span>
-                        <span class="sidebar-tag">MHD</span>
-                        <span class="sidebar-tag">IPS</span>
-                        <span class="sidebar-tag">QEDm</span>
-                        <span class="sidebar-tag">Connectathon</span>
-                    </div>
+                <div class="sidebar-section">
+                    <p class="label sidebar-title">Topics</p>
+                    <ul class="sidebar-tags">
+                        <li>FHIR</li>
+                        <li>IHE</li>
+                        <li>XDS</li>
+                        <li>MHD</li>
+                        <li>IPS</li>
+                        <li>QEDm</li>
+                        <li>Connectathon</li>
+                    </ul>
                 </div>
 
-                <div class="sidebar-card">
-                    <div class="sidebar-card-title">Share</div>
-                    <a href="https://www.linkedin.com/sharing/share-offsite/?url=https%3A%2F%2Fsyntaric.com%2Fblog%2Frenaissance-vitalys-interoperable-core%2F" target="_blank" rel="noopener" class="share-linkedin">
-                        <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M20.45 20.45h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.354V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.284zM5.337 7.433a2.062 2.062 0 0 1-2.063-2.065 2.064 2.064 0 1 1 2.063 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z"/></svg>
-                        Share on LinkedIn
-                    </a>
+                <div class="sidebar-section">
+                    <p class="label sidebar-title">Share</p>
+                    <a href="https://www.linkedin.com/sharing/share-offsite/?url=https%3A%2F%2Fsyntaric.com%2Fblog%2Frenaissance-vitalys-interoperable-core%2F" target="_blank" rel="noopener" class="text-link">Share on LinkedIn</a>
                 </div>
             </aside>
         </div>

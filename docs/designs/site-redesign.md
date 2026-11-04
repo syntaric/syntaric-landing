@@ -1316,6 +1316,14 @@ chosen (decision E1 below).
     *   `prefers-reduced-motion: reduce` sets all durations to 0.
 *   **Why**: the new visual system lands on the blog first (decision #7).
 
+*   **As built**: the new tokens live in the `@page blog` block for now;
+    the old variable names used by the shared nav and footer are pointed
+    at them on blog pages only, so the home page keeps its look until
+    0.6. Also fixed: the table of contents showed `&amp;amp;` for `&`.
+    Inline post images get `width`, `height` and lazy loading through the
+    `marked` image renderer. The LinkedIn share button is a plain text
+    link (no third-party brand colour).
+
 ##### 21. `partials/post-contact.html` (Create)
 
 *   **Proposed Changes**: two sentences: what Syntaric is (the who-for line

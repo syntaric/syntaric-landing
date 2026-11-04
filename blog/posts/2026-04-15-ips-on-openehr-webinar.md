@@ -20,21 +20,21 @@ opportunity and a platform.
 
 ## Webinar Recording
 
-<div style="padding:56.25% 0 0 0;position:relative;"><iframe src="https://player.vimeo.com/video/1183048650?h=317159c3bc" style="position:absolute;top:0;left:0;width:100%;height:100%;" frameborder="0" allow="autoplay; fullscreen; picture-in-picture" allowfullscreen></iframe></div>
+<div class="video-embed"><iframe src="https://player.vimeo.com/video/1183048650?h=317159c3bc&amp;dnt=1" title="IPS on openEHR webinar recording" allow="autoplay; fullscreen; picture-in-picture" allowfullscreen></iframe></div>
 
 ## Slides
 
-<div id="pdf-slider" style="background:#f7f8fc;border:1px solid #e2e8f0;border-radius:12px;overflow:hidden;margin:1.5rem 0;">
-  <div style="display:flex;align-items:center;justify-content:space-between;padding:10px 16px;background:#fff;border-bottom:1px solid #e2e8f0;gap:12px;flex-wrap:wrap;">
-    <div style="display:flex;align-items:center;gap:8px;">
-      <button id="pdf-prev" onclick="pdfChangePage(-1)" style="padding:6px 14px;border:1px solid #e2e8f0;border-radius:6px;background:#fff;cursor:pointer;font-size:0.875rem;color:#4a5568;">&#8592; Prev</button>
-      <button id="pdf-next" onclick="pdfChangePage(1)" style="padding:6px 14px;border:1px solid #e2e8f0;border-radius:6px;background:#fff;cursor:pointer;font-size:0.875rem;color:#4a5568;">Next &#8594;</button>
+<div id="pdf-slider" class="pdf-slider">
+  <div class="pdf-bar">
+    <div class="pdf-buttons">
+      <button id="pdf-prev" class="pdf-btn" type="button" onclick="syntaricPdfChangePage(-1)">&#8592; Prev</button>
+      <button id="pdf-next" class="pdf-btn" type="button" onclick="syntaricPdfChangePage(1)">Next &#8594;</button>
     </div>
-    <span id="pdf-page-info" style="font-size:0.875rem;color:#718096;">Loading…</span>
-    <a href="../ips-on-openehr-webinar/openFHIR_IPS_Webinar_april26.pdf" download style="font-size:0.875rem;font-weight:500;color:#0052cc;text-decoration:none;">&#8595; Download PDF</a>
+    <span id="pdf-page-info" class="pdf-info">Loading…</span>
+    <a href="../ips-on-openehr-webinar/openFHIR_IPS_Webinar_april26.pdf" download class="pdf-download">&#8595; Download PDF</a>
   </div>
-  <div style="text-align:center;padding:16px;background:#f7f8fc;">
-    <canvas id="pdf-canvas" style="max-width:100%;border-radius:8px;box-shadow:0 2px 8px rgba(0,0,0,0.08);"></canvas>
+  <div class="pdf-stage">
+    <canvas id="pdf-canvas"></canvas>
   </div>
 </div>
 
@@ -66,15 +66,16 @@ opportunity and a platform.
     });
   }
 
-  window.pdfChangePage = function(delta) {
+  window.syntaricPdfChangePage = function(delta) {
     var n = pageNum + delta;
     if (n < 1 || n > pdfDoc.numPages) return;
     pageNum = n;
     if (pageRendering) { pageNumPending = n; } else { renderPage(n); }
   };
 
-  loadScript('https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js', function() {
-    pdfjsLib.GlobalWorkerOptions.workerSrc = 'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.worker.min.js';
+  // pdf.js 3.11.174, self-hosted (assets/vendor/pdfjs/, Apache-2.0)
+  loadScript('/assets/vendor/pdfjs/pdf.min.js', function() {
+    pdfjsLib.GlobalWorkerOptions.workerSrc = '/assets/vendor/pdfjs/pdf.worker.min.js';
     pdfjsLib.getDocument(pdfUrl).promise.then(function(doc) {
       pdfDoc = doc;
       renderPage(pageNum);
