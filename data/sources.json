@@ -13,7 +13,7 @@
       "id": "unio-federation",
       "origin": "synthetic",
       "licence": "Syntaric",
-      "use": "unio figure. Written by the implementer, to be approved by the owner at the 1.5 gate.",
+      "use": "unio figure. Written by the implementer; approved by the owner at the 1.5 review, 2026-11-04.",
       "values": {
         "query": "AQL · EVALUATION.adverse_reaction_risk.v2",
         "repositories": [

@@ -1845,8 +1845,11 @@ Step 6).
     `assets/img/` until the owner's review decides). Three dividers sit
     before Selected work, Products and Contact (`divider-1` … `divider-3`);
     their notes are the other three mapping pairs, shown from 640 px. The
-    figures are static; their motion is commit 1.6. Awaiting the owner's
-    review on a phone: the synthetic Unio text and the notch.
+    figures are static; their motion is commit 1.6.
+*   **1.5 review (owner, 2026-11-04)**: synthetic Unio text approved as
+    written; the Unio figure replaces the screenshot (files deleted); the
+    three dividers stay; the notch is to be drawn as the feather's hook,
+    shown to the owner before it is used.
 
 #### Commit 1.6: scroll moments
 
