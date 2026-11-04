@@ -86,8 +86,12 @@ function outline(from, to, { width, profile = PROFILE, notch = false, bow = BLAD
   const L = len(sub(to, from));
   const end = Math.max(0, Math.min(1, t));
   const left = [], right = [];
-  for (let i = 0; i <= steps; i++) {
-    const s = (end * i) / steps;
+  // sample on a fixed grid over the whole strand, so a partly drawn frame has
+  // exactly the outline of the finished strand up to its cut
+  const grid = [];
+  for (let i = 0; i <= steps; i++) { const s = i / steps; if (s < end) grid.push(s); }
+  grid.push(end);
+  for (const s of grid) {
     const p = bezier2(c, s); const n = perp(norm(bezier2d(c, s)));
     let hl = (width / 2) * bezier1(profile, s); const hr = hl;
     if (notch) {
@@ -99,7 +103,8 @@ function outline(from, to, { width, profile = PROFILE, notch = false, bow = BLAD
   }
   const ring = left.concat(right.slice().reverse());
   const d = `M${fmt(left[0])}${smooth(left)}L${fmt(right[right.length - 1])}${smooth(right.slice().reverse())}Z`;
-  return { d, polygon: ring };
+  const axis = `M${fmt(c[0])}C${fmt(c[1])} ${fmt(c[2])} ${fmt(c[3])}`;
+  return { d, polygon: ring, axis };
 }
 
 /** One strand as an SVG <path>. */
@@ -180,7 +185,10 @@ function mappingPairs(snapshot) {
  * ending aligned. layout 'wide' (from 960 px, behind the text, clear of
  * `textZone`) or 'narrow' (phones, below the text).
  */
-function hero(snapshot, { textZone, t = 1, layout = 'wide' } = {}) {
+function hero(snapshot, { textZone, t = 1, layout = 'wide', frame } = {}) {
+  // `frame` (video renderer): per-strand progress and the labels' state;
+  // the same choreography motion.js plays (docs/strand-rules.md).
+  const f = frame || { a: t, b: t, labelOpacity: 1, labelDx: 0 };
   const pair = mappingPairs(snapshot)[0];
   const L = layout === 'wide'
     ? { w: 1440, h: 640, zone: textZone || { x: 0, y: 0, width: 760, height: 640 }, size: 22, small: 16,
@@ -191,8 +199,8 @@ function hero(snapshot, { textZone, t = 1, layout = 'wide' } = {}) {
   const n = perp(norm(sub(L.a[1], L.a[0])));
   // the two strands end side by side: aligned, one GAP apart
   const aEnd = add(L.a[1], mul([0, -1], off)); const bEnd = add(L.b[1], mul([0, 1], off));
-  const sa = outline(L.a[0], aEnd, { width: L.width, t, notch: true });
-  const sb = outline(L.b[0], bEnd, { width: L.width, t, notch: true });
+  const sa = outline(L.a[0], aEnd, { width: L.width, t: f.a });
+  const sb = outline(L.b[0], bEnd, { width: L.width, t: f.b });
   const labels = [
     { x: L.la[0], y: L.la[1], text: pair.fhir, size: L.size },
     { x: L.lb[0], y: L.lb[1], text: pair.openehr, size: L.size },
@@ -207,12 +215,20 @@ function hero(snapshot, { textZone, t = 1, layout = 'wide' } = {}) {
     }
   }
   void n;
+  // Draw motion: each strand is masked by a stroked copy of its centre line
+  // (pathLength 1). Without motion the stroke is solid, so the mask shows the
+  // whole strand; motion.js animates stroke-dashoffset from 1 to 0.
+  const masks = [['a', sa], ['b', sb]].map(([k, s]) =>
+    `<mask id="hero-${layout}-${k}" maskUnits="userSpaceOnUse" x="0" y="0" width="${L.w}" height="${L.h}">` +
+    `<path class="draw-axis" d="${s.axis}" fill="none" stroke="#fff" stroke-width="${r1(L.width * 1.3)}" pathLength="1"/></mask>`).join('');
   const body =
     `<g class="fig-strands" data-motion="draw" data-motion-start="load">` +
-    `<path class="strand" fill="${INK}" d="${sa.d}"/><path class="strand" fill="${INK}" d="${sb.d}"/></g>` +
-    `<g class="fig-labels" data-motion="align" data-motion-start="load">` +
+    `<path class="strand" fill="${INK}" mask="url(#hero-${layout}-a)" d="${sa.d}"/>` +
+    `<path class="strand" fill="${INK}" mask="url(#hero-${layout}-b)" d="${sb.d}"/></g>` +
+    `<g class="fig-labels" data-motion="align" data-motion-start="load"` +
+    (frame ? ` opacity="${r1(f.labelOpacity * 100) / 100}" transform="translate(${r1(f.labelDx)} 0)"` : '') + '>' +
     labels.map(l => label(l.x, l.y, l.text, l.size, { fill: l.fill })).join('') + '</g>';
-  return svgRoot(`fig fig-hero fig-hero--${layout}`, L.w, L.h, body);
+  return svgRoot(`fig fig-hero fig-hero--${layout}`, L.w, L.h, body, masks);
 }
 
 /** openFHIR: the mapping pairs, each FHIR path joined to its openEHR path by a fire strand. */
@@ -225,7 +241,7 @@ function openfhirFigure(snapshot, { t = 1 } = {}) {
   body += '<g class="fig-strands" data-motion="draw" data-motion-start="view">';
   pairs.forEach((p, i) => {
     const y = top + i * row;
-    body += `<path class="strand" fill="url(#fire)" d="${outline([10, y + 17], [W - 10, y + 43], { width: 13, t, notch: true }).d}"/>`;
+    body += `<path class="strand" fill="url(#fire)" d="${outline([10, y + 17], [W - 10, y + 43], { width: 13, t }).d}"/>`;
   });
   body += '</g><g class="fig-labels">';
   pairs.forEach((p, i) => {
@@ -247,7 +263,7 @@ function unioFigure(snapshot, { t = 1 } = {}) {
   let body = label(0, 18, v.query, 11) + '<g class="fig-strands" data-motion="fanout" data-motion-start="view">';
   v.repositories.forEach((r, i) => {
     const down = r.status === 'unreachable';
-    body += `<path class="strand${down ? ' strand--down' : ''}" fill="${down ? UNIO.hair : fills[i]}" d="${outline(origin, ends[i], { width: 18, t, notch: !down }).d}"/>`;
+    body += `<path class="strand${down ? ' strand--down' : ''}" fill="${down ? UNIO.hair : fills[i]}" d="${outline(origin, ends[i], { width: 18, t }).d}"/>`;
   });
   body += '</g><g class="fig-labels">';
   v.repositories.forEach((r, i) => {

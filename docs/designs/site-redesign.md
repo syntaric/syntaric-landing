@@ -1769,6 +1769,17 @@ Step 6).
 *   **Why**: GitHub Pages serves only the main branch, and the owner must
     view both prototypes inside the LinkedIn app.
 
+*   **As built (1.3)**: the production page shows the static hero only:
+    the wide figure behind the text from 960 px (strands in the 40 % navy
+    tint `#9ba4ac`, labels at full ink), the narrow one below the text on
+    phones. The prototypes are `preview/k7h2q9xw4m3tz8/a.html` and
+    `b.html`, written by `tools/make-hero-previews.js` from the built home
+    page (with `<base href="/">`). Prototype B has a video per layout
+    (`hero-wide.mp4` 35 KB, `hero-narrow.mp4` 43 KB) and a poster for each;
+    the wide one is rendered at the viewBox size, 1440 × 640, not at 2x of
+    a 1280 px layout, which the budget does not need. The notch is not
+    drawn (see `docs/strand-rules.md`, Known limits).
+
 #### Commit 1.4: gate
 
 *   Owner views both on an older iPhone and a mid-range Android inside the

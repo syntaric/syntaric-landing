@@ -50,6 +50,11 @@ Defined in `docs/design-tokens.md`; used from commit 1.3.
 | fan-out | the Unio strands spread from one point | `transform`, `opacity` |
 
 One easing curve (`--ease`), two durations (`--dur-short`, `--dur-long`).
+
+**Hero choreography (both prototypes):** the FHIR strand draws over 900 ms
+from 0 ms; the openEHR strand draws over 900 ms from 200 ms; the labels
+slide in (12 px, opacity 0 to 1) over 900 ms from 540 ms. Done at 1.44 s.
+The video holds the finished frame until 5 s, then loops.
 `hero(…, { t })` draws the frame at progress `t` (0 to 1) by cutting the
 strand at `t` of its length; the video renderer (item 47) uses it.
 
@@ -75,6 +80,12 @@ where a figure sits behind text (brief 4.2: light navy tints behind the
 text, labels at full ink).
 
 ## Known limits
+
+*   **The notch is not drawn yet (commit 1.3).** The feather's notch is a
+    hook: a small separate tip with a wedge cut behind it. The `NOTCH`
+    rule as a smooth pocket in a strand's edge reads as a pinch, not a
+    hook, so the figures render without it. The hook drawing is an open
+    item for the 1.4 gate; the measured values stay above.
 
 *   The profile is one symmetric-ended curve; the real blade's width rises
     in a step where the notch's hook adds material (around 0.5 of the

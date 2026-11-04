@@ -1,0 +1,1367 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <script>document.documentElement.classList.add('js')</script>
+    <meta charset="UTF-8">
+    <base href="/">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Hero prototype B: video</title>
+    <meta name="description" content="Syntaric designs, reviews and builds data integration for hospitals, national health programmes and health IT vendors, using FHIR, openEHR and IHE.">
+    <meta name="robots" content="noindex, nofollow">
+    <link rel="canonical" href="https://syntaric.com/">
+
+    <!-- Open Graph -->
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://syntaric.com/">
+    <meta property="og:title" content="Syntaric | Healthcare interoperability consultancy">
+    <meta property="og:description" content="Syntaric designs, reviews and builds data integration for hospitals, national health programmes and health IT vendors, using FHIR, openEHR and IHE.">
+    <meta property="og:image" content="https://syntaric.com/etc/syntaric_logo_2.png">
+    <meta property="og:site_name" content="Syntaric">
+    <meta property="og:locale" content="en_US">
+
+    <!-- Twitter Card -->
+    <meta name="twitter:card" content="summary">
+    <meta name="twitter:title" content="Syntaric | Healthcare interoperability consultancy">
+    <meta name="twitter:description" content="Syntaric designs, reviews and builds data integration for hospitals, national health programmes and health IT vendors, using FHIR, openEHR and IHE.">
+    <meta name="twitter:image" content="https://syntaric.com/etc/syntaric_logo_2.png">
+
+    <!-- JSON-LD: Organization, WebSite, products. The personal LinkedIn
+         profile belongs to the founder, not the company (decision #2). -->
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@graph": [
+        {
+          "@type": "Organization",
+          "@id": "https://syntaric.com/#organization",
+          "name": "Syntaric",
+          "url": "https://syntaric.com/",
+          "logo": "https://syntaric.com/assets/brand/syntaric-512.png",
+          "description": "Healthcare interoperability consultancy: FHIR, openEHR and IHE.",
+          "founder": {
+            "@type": "Person",
+            "name": "Gasper Andrejc",
+            "jobTitle": "Lead architect",
+            "sameAs": ["https://www.linkedin.com/in/andrejcgasper/"]
+          },
+          "address": {
+            "@type": "PostalAddress",
+            "streetAddress": "Parižlje 117",
+            "addressLocality": "Braslovče",
+            "postalCode": "3314",
+            "addressCountry": "SI"
+          },
+          "email": "info@syntaric.com",
+          "telephone": "+38641551431"
+        },
+        {
+          "@type": "WebSite",
+          "@id": "https://syntaric.com/#website",
+          "url": "https://syntaric.com/",
+          "name": "Syntaric",
+          "publisher": { "@id": "https://syntaric.com/#organization" }
+        },
+        {
+          "@type": "SoftwareApplication",
+          "name": "openFHIR",
+          "url": "https://open-fhir.com",
+          "applicationCategory": "DeveloperApplication",
+          "description": "Maps data between openEHR and FHIR in both directions; implements the FHIR Connect specification.",
+          "license": "https://www.apache.org/licenses/LICENSE-2.0",
+          "creator": { "@id": "https://syntaric.com/#organization" }
+        },
+        {
+          "@type": "SoftwareApplication",
+          "name": "Unio",
+          "url": "https://unio.syntaric.com",
+          "applicationCategory": "BusinessApplication",
+          "description": "openEHR federation gateway: several openEHR repositories answer as one endpoint.",
+          "creator": { "@id": "https://syntaric.com/#organization" }
+        }
+      ]
+    }
+    </script>
+
+    <link rel="icon" type="image/png" href="favicon-96x96.png" sizes="96x96" />
+    <link rel="icon" type="image/svg+xml" href="favicon.svg" />
+    <link rel="shortcut icon" href="favicon.ico" />
+    <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png" />
+    <link rel="manifest" href="site.webmanifest" />
+    <link rel="preload" href="/assets/fonts/atkinson-hyperlegible-next.woff2" as="font" type="font/woff2" crossorigin>
+    <script data-goatcounter="https://syntaric.goatcounter.com/count" async src="https://gc.zgo.at/count.js"></script>
+    <!-- @css -->
+    <style>
+/*
+ * assets/site.css — the single stylesheet source (decision #13).
+ * blog/build.js inlines it into every page: home gets @shared + @page home,
+ * blog pages get @shared + @page blog. Edit here, then run `npm run build`.
+ * The three marker comments split the file; keep each on its own line.
+ * No nested CSS (older WebViews), no animation-timeline.
+ */
+
+/* ─── FONTS ───────────────────────────────────────────────── */
+/* Self-hosted, subset to Latin-1 + Latin Extended-A + common punctuation
+   (assets/fonts/OFL.txt). The fallback faces are local fonts scaled to the
+   web font's metrics, so the swap moves text by almost nothing. */
+@font-face {
+    font-family: 'Atkinson Hyperlegible Next';
+    src: url('/assets/fonts/atkinson-hyperlegible-next.woff2') format('woff2');
+    font-weight: 200 800;
+    font-style: normal;
+    font-display: swap;
+}
+
+@font-face {
+    font-family: 'Atkinson Hyperlegible Mono';
+    src: url('/assets/fonts/atkinson-hyperlegible-mono.woff2') format('woff2');
+    font-weight: 400;
+    font-style: normal;
+    font-display: swap;
+}
+
+@font-face {
+    font-family: 'Atkinson Next Fallback';
+    src: local('Arial'), local('ArialMT'), local('Liberation Sans'), local('Helvetica');
+    size-adjust: 100%;
+    ascent-override: 98.4%;
+    descent-override: 31.6%;
+    line-gap-override: 0%;
+}
+
+@font-face {
+    font-family: 'Atkinson Mono Fallback';
+    src: local('Courier New'), local('CourierNewPSMT'), local('Liberation Mono'), local('Courier');
+    size-adjust: 105.3%;
+    ascent-override: 93.4%;
+    descent-override: 30%;
+    line-gap-override: 0%;
+}
+
+*, *::before, *::after {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+:root {
+    --ground: #f6f3ee;
+    --ink: #122e49;
+    --ink-2: #40556a;
+    --ink-3: #56697a;
+    --rule: #bdc2c5;
+    --hair: #dbdbda;
+    --panel: #ece9e3;
+
+    --font: 'Atkinson Hyperlegible Next', 'Atkinson Next Fallback', sans-serif;
+    --mono: 'Atkinson Hyperlegible Mono', 'Atkinson Mono Fallback', monospace;
+    --t-xs: 0.8125rem;
+    --t-s: 0.9375rem;
+    --t-m: 1.0625rem;
+    --t-l: 1.375rem;
+    --t-xl: 1.75rem;
+    --t-post: clamp(1.875rem, 2.6vw + 1.1rem, 2.75rem);
+    --t-hero: clamp(2.125rem, 5.2vw + 0.9rem, 3.5rem);
+
+    --s-1: 4px; --s-2: 8px; --s-3: 12px; --s-4: 16px; --s-5: 24px;
+    --s-6: 32px; --s-7: 48px; --s-8: 64px; --s-9: 96px;
+
+    --ease: cubic-bezier(0.2, 0, 0, 1);
+    --dur-short: 200ms;
+    --dur-long: 900ms;
+
+    --measure: 36rem;
+    --page: 72rem;
+    --radius: 4px;
+
+    /* Old names used by the shared nav and footer. */
+    --ink-light: var(--ink-2);
+    --ink-muted: var(--ink-3);
+    --surface: var(--ground);
+    --surface-2: var(--panel);
+    --surface-3: var(--panel);
+    --border: var(--hair);
+    --accent: var(--ink);
+    --accent-light: var(--panel);
+    --shadow: 0 8px 24px rgba(18, 46, 73, 0.10);
+    --nav-h: 64px;
+}
+
+@media (prefers-reduced-motion: reduce) {
+    :root {
+        --dur-short: 0ms;
+        --dur-long: 0ms;
+    }
+}
+
+html {
+    scroll-behavior: smooth;
+}
+
+body {
+    color: var(--ink);
+    background: var(--ground);
+    -webkit-font-smoothing: antialiased;
+}
+
+/* ─── NAV ─────────────────────────────────────────────────── */
+header {
+    position: sticky;
+    top: 0;
+    z-index: 200;
+    background: rgba(255,255,255,0.88);
+    backdrop-filter: blur(16px);
+    -webkit-backdrop-filter: blur(16px);
+    border-bottom: 1px solid var(--border);
+    height: var(--nav-h);
+}
+
+nav {
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.logo {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    text-decoration: none;
+}
+
+.logo img {
+    height: 36px;
+    width: auto;
+}
+
+.logo-name {
+    font-size: 1.2rem;
+    font-weight: 700;
+    color: var(--ink);
+    letter-spacing: -0.02em;
+}
+
+.nav-links {
+    display: flex;
+    align-items: center;
+    gap: 2rem;
+    list-style: none;
+}
+
+.nav-links a {
+    font-size: 0.9rem;
+    font-weight: 500;
+    color: var(--ink-light);
+    text-decoration: none;
+    transition: color 0.2s;
+}
+
+.nav-links a:hover {
+    color: var(--ink);
+}
+
+.nav-cta {
+    background: var(--ink) !important;
+    color: var(--surface) !important;
+    padding: 0.55rem 1.25rem !important;
+    border-radius: 8px !important;
+    font-size: 0.875rem !important;
+    transition: background 0.2s, opacity 0.2s !important;
+}
+
+.nav-cta:hover {
+    opacity: 0.85;
+}
+
+/* ─── NAV: link groups and mobile menu ───────────────────── */
+/* Below 640 px the section links fold into a menu; Blog and Contact stay
+   beside the Menu button. Without JavaScript (no html.js) the full list
+   shows as a wrapping row and the button stays hidden. */
+.nav-right {
+    display: flex;
+    align-items: center;
+    gap: 2rem;
+}
+
+.nav-links a[aria-current="page"] {
+    color: var(--accent);
+}
+
+.nav-toggle {
+    display: none;
+    align-items: center;
+    min-width: 24px;
+    min-height: 36px;
+    padding: 0.4rem 0.8rem;
+    font: inherit;
+    font-size: 0.875rem;
+    font-weight: 500;
+    color: var(--ink);
+    background: transparent;
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    cursor: pointer;
+}
+
+@media (max-width: 640px) {
+    header {
+        height: auto;
+        min-height: var(--nav-h);
+    }
+
+    nav {
+        flex-wrap: wrap;
+        gap: 0.5rem 1rem;
+        padding-top: 14px;
+        padding-bottom: 14px;
+    }
+
+    .nav-right,
+    .nav-links {
+        flex-wrap: wrap;
+        gap: 0.5rem 1.25rem;
+    }
+
+    html.js header {
+        height: var(--nav-h);
+    }
+
+    html.js nav {
+        flex-wrap: nowrap;
+        padding-top: 0;
+        padding-bottom: 0;
+    }
+
+    html.js .nav-right,
+    html.js .nav-keep {
+        flex-wrap: nowrap;
+        gap: 0.75rem;
+    }
+
+    html.js .nav-keep .nav-cta {
+        padding: 0.45rem 0.85rem !important;
+    }
+
+    html.js .nav-toggle {
+        display: inline-flex;
+        padding: 0.4rem 0.65rem;
+    }
+
+    html.js .nav-main {
+        display: none;
+    }
+
+    html.js body.nav-open .nav-main {
+        display: flex;
+        position: absolute;
+        top: 100%;
+        left: 0;
+        right: 0;
+        flex-direction: column;
+        align-items: stretch;
+        gap: 0;
+        padding: 8px 24px 16px;
+        background: var(--surface);
+        border-bottom: 1px solid var(--border);
+        box-shadow: var(--shadow);
+    }
+
+    html.js body.nav-open .nav-main a {
+        display: block;
+        padding: 12px 0;
+        font-size: 1rem;
+    }
+}
+
+/* Narrow phones: the mark alone, so logo, Blog, Contact and Menu fit one row. */
+@media (max-width: 380px) {
+    html.js .logo-name {
+        display: none;
+    }
+}
+
+/* ─── FOOTER ──────────────────────────────────────────────── */
+footer {
+    background: var(--ink);
+    padding: 32px 0;
+    border-top: 1px solid rgba(255,255,255,0.06);
+}
+
+.footer-inner {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: 1rem;
+}
+
+.footer-left {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.footer-logo-name {
+    font-size: 0.9rem;
+    font-weight: 700;
+    color: rgba(255,255,255,0.8);
+}
+
+.footer-right {
+    font-size: 0.78rem;
+    color: rgba(255,255,255,0.7);
+    text-align: right;
+}
+
+.footer-right p + p {
+    margin-top: 2px;
+}
+
+.footer-nav ul {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.4rem 1.25rem;
+    list-style: none;
+}
+
+.footer-nav a,
+.footer-contact a {
+    font-size: 0.82rem;
+    color: rgba(255,255,255,0.8);
+    text-decoration: none;
+    transition: color 0.2s;
+}
+
+.footer-nav a:hover,
+.footer-contact a:hover {
+    color: rgba(255,255,255,0.9);
+}
+
+.footer-contact {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+}
+
+/* Logo, links and contact on the first row; the legal lines below. */
+.footer-inner {
+    align-items: flex-start;
+    row-gap: 1.25rem;
+}
+
+.footer-inner .footer-right {
+    flex-basis: 100%;
+    padding-top: 1rem;
+    text-align: left;
+    border-top: 1px solid rgba(255,255,255,0.08);
+}
+
+@media (max-width: 640px) {
+    .footer-inner {
+        flex-direction: column;
+        align-items: flex-start;
+    }
+
+    .footer-right {
+        text-align: left;
+    }
+}
+
+/* ─── MOTION START STATES ───────────────────────────────────── */
+/* Only under html.js.motion-ok (set before first paint, removed if
+   assets/motion.js never starts). Without the class every figure shows its
+   finished state. motion.js animates from these values. */
+html.js.motion-ok .draw-axis {
+    stroke-dasharray: 1 1;
+    stroke-dashoffset: 1;
+}
+
+html.js.motion-ok [data-motion="align"] {
+    opacity: 0;
+    transform: translateX(-12px);
+}
+
+[data-motion="fanout"] > * {
+    transform-box: fill-box;
+    transform-origin: left center;
+}
+
+html.js.motion-ok [data-motion="fanout"] > * {
+    opacity: 0;
+}
+
+/* Overrides of the nav and footer rules above for the new tokens. */
+body {
+    font-family: var(--font);
+    font-size: var(--t-m);
+    line-height: 1.55;
+}
+
+.container {
+    max-width: var(--page);
+    margin: 0 auto;
+    padding: 0 var(--s-5);
+}
+
+header {
+    background: rgba(246, 243, 238, 0.94);
+}
+
+.nav-cta {
+    border-radius: var(--radius) !important;
+}
+
+.nav-toggle {
+    border-color: var(--rule);
+    border-radius: var(--radius);
+}
+
+.label {
+    font-family: var(--mono);
+    font-size: var(--t-xs);
+    color: var(--ink-3);
+}
+
+/* Home page (commit 0.6). Values and components: docs/design-tokens.md. */
+
+.wrap {
+    max-width: var(--page);
+    margin: 0 auto;
+    padding: 0 var(--s-5);
+}
+
+h2 {
+    font-size: var(--t-xl);
+    line-height: 1.2;
+    letter-spacing: -0.01em;
+}
+
+h3 {
+    font-size: var(--t-l);
+    line-height: 1.25;
+}
+
+.btn {
+    display: inline-block;
+    padding: 14px 26px;
+    font-weight: 700;
+    color: var(--ground);
+    background: var(--ink);
+    border-radius: var(--radius);
+    text-decoration: none;
+}
+
+.text-link {
+    color: var(--ink);
+    text-decoration: underline;
+    text-decoration-color: var(--rule);
+    text-decoration-thickness: 1px;
+    text-underline-offset: 4px;
+}
+
+.text-link:hover {
+    text-decoration-color: var(--ink);
+}
+
+.section {
+    padding: var(--s-8) 0 var(--s-7);
+    border-top: 1px solid var(--hair);
+}
+
+.section-lead {
+    margin-top: var(--s-4);
+    max-width: var(--measure);
+    color: var(--ink-2);
+}
+
+/* ─── HERO ──────────────────────────────────────────────────── */
+.hero {
+    padding: var(--s-7) 0;
+}
+
+.hero h1 {
+    max-width: 14ch;
+    font-size: var(--t-hero);
+    line-height: 1.08;
+    font-weight: 700;
+    letter-spacing: -0.02em;
+}
+
+.hero .who {
+    margin-top: var(--s-5);
+    max-width: var(--measure);
+    font-size: 1.1875rem;
+    line-height: 1.5;
+    color: var(--ink-2);
+}
+
+.actions {
+    margin-top: var(--s-6);
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: var(--s-4) var(--s-5);
+}
+
+/* Hero figure (commit 1.3). Phones: the narrow figure below the text.
+   From 960 px: the wide figure behind the text; the art box has the
+   viewBox's aspect ratio and the text is held to the text zone's share of
+   its width (760 / 1440), so the clear zone and the text scale together. */
+.hero-figure {
+    margin-top: var(--s-6);
+}
+
+.hero-art svg {
+    display: block;
+    width: 100%;
+    height: auto;
+}
+
+.hero-art .fig-hero--wide {
+    display: none;
+}
+
+@media (min-width: 960px) {
+    .hero-grid {
+        display: grid;
+        grid-template-columns: minmax(0, 1fr);
+    }
+
+    .hero-figure {
+        display: contents;
+    }
+
+    .hero-art {
+        grid-area: 1 / 1;
+        position: relative;
+        aspect-ratio: 1440 / 640;
+    }
+
+    .hero-art svg {
+        position: absolute;
+        inset: 0;
+        height: 100%;
+    }
+
+    .hero-art .fig-hero--wide {
+        display: block;
+    }
+
+    .hero-art .fig-hero--narrow {
+        display: none;
+    }
+
+    /* behind the text: strands in a light navy tint, labels at full ink */
+    .fig-hero--wide .strand {
+        fill: #9ba4ac;
+    }
+
+    .hero-text {
+        grid-area: 1 / 1;
+        z-index: 1;
+        align-self: center;
+        width: 52.8%;
+    }
+
+    .hero h1 {
+        font-size: clamp(2.5rem, 3.6vw, 3.5rem);
+    }
+
+    .hero-figure figcaption {
+        grid-area: 2 / 1;
+    }
+}
+
+/* ─── PROOF LINE ────────────────────────────────────────────── */
+.proof {
+    padding: var(--s-5) 0;
+    border-top: 1px solid var(--ink);
+    border-bottom: 1px solid var(--hair);
+}
+
+.proof p {
+    max-width: 44rem;
+    font-size: 1.1875rem;
+    line-height: 1.45;
+}
+
+@media (min-width: 640px) {
+    .proof p {
+        font-size: var(--t-l);
+        line-height: 1.4;
+    }
+}
+
+/* ─── WHAT YOU CAN HIRE US FOR ──────────────────────────────── */
+.section.hire {
+    border-top: none;
+}
+
+.items {
+    margin-top: var(--s-6);
+    list-style: none;
+    border-top: 1px solid var(--hair);
+}
+
+.items > li {
+    padding: var(--s-5) 0;
+    border-bottom: 1px solid var(--hair);
+}
+
+.facts {
+    margin-top: var(--s-3);
+    display: grid;
+    grid-template-columns: 6.5rem minmax(0, 1fr);
+    gap: var(--s-2) var(--s-4);
+    font-size: var(--t-s);
+    color: var(--ink-2);
+}
+
+.facts dt {
+    padding-top: 2px;
+    font-family: var(--mono);
+    font-size: var(--t-xs);
+    color: var(--ink-3);
+}
+
+@media (min-width: 960px) {
+    .items {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        column-gap: var(--s-7);
+    }
+}
+
+.formats {
+    margin-top: var(--s-5);
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--s-2) var(--s-5);
+    font-size: var(--t-s);
+    color: var(--ink-2);
+}
+
+/* ─── SELECTED WORK ─────────────────────────────────────────── */
+.cases {
+    margin-top: var(--s-6);
+    display: grid;
+    grid-template-columns: minmax(0, 1fr);
+    gap: var(--s-6);
+}
+
+@media (min-width: 960px) {
+    .cases {
+        grid-template-columns: repeat(3, minmax(0, 1fr));
+    }
+}
+
+.case {
+    padding-top: var(--s-4);
+    border-top: 1px solid var(--ink);
+}
+
+.case h3 {
+    margin-top: var(--s-2);
+}
+
+.case p {
+    margin-top: var(--s-3);
+    font-size: var(--t-s);
+    line-height: 1.55;
+    color: var(--ink-2);
+}
+
+.case p strong {
+    color: var(--ink);
+}
+
+.case .text-link {
+    display: inline-block;
+    margin-top: var(--s-3);
+    font-size: var(--t-s);
+}
+
+.credentials {
+    margin-top: var(--s-7);
+    max-width: 44rem;
+    color: var(--ink-2);
+}
+
+.clients {
+    margin-top: var(--s-6);
+    display: grid;
+    grid-template-columns: minmax(0, 1fr);
+    gap: var(--s-5) var(--s-6);
+}
+
+@media (min-width: 960px) {
+    .clients {
+        grid-template-columns: repeat(3, minmax(0, 1fr));
+    }
+}
+
+.clients h3 {
+    margin-bottom: var(--s-2);
+}
+
+.clients ul {
+    list-style: none;
+    font-size: var(--t-s);
+    line-height: 1.7;
+    color: var(--ink-2);
+}
+
+/* ─── PRODUCTS ──────────────────────────────────────────────── */
+.product {
+    margin-top: var(--s-7);
+    padding-top: var(--s-6);
+    border-top: 1px solid var(--hair);
+    display: grid;
+    gap: var(--s-6);
+}
+
+@media (min-width: 960px) {
+    .product {
+        grid-template-columns: 1fr 1.1fr;
+        align-items: center;
+    }
+}
+
+.product .lead {
+    margin-top: var(--s-4);
+    max-width: var(--measure);
+    color: var(--ink-2);
+}
+
+.product .lead strong {
+    color: var(--ink);
+}
+
+.product .evidence {
+    margin-top: var(--s-4);
+    max-width: var(--measure);
+    font-size: var(--t-s);
+    color: var(--ink-2);
+}
+
+.product .text-link {
+    display: inline-block;
+    margin-top: var(--s-5);
+}
+
+.product-logo {
+    display: block;
+    height: 32px;
+    width: auto;
+    margin-bottom: var(--s-4);
+}
+
+figure {
+    margin: 0;
+}
+
+figcaption {
+    margin-top: var(--s-4);
+    max-width: var(--measure);
+    font-size: var(--t-s);
+    color: var(--ink-2);
+}
+
+/* Static mapping excerpt (until commit 1.5): mono; pairs stacked on
+   phones, side by side from 640 px. Lines break only at <wbr>. */
+.excerpt {
+    font-family: var(--mono);
+    font-size: var(--t-xs);
+}
+
+.excerpt-head,
+.excerpt li {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr);
+    gap: var(--s-1) var(--s-4);
+}
+
+.excerpt-head {
+    padding-bottom: var(--s-2);
+    color: var(--ink-3);
+    border-bottom: 1px solid var(--ink);
+}
+
+.excerpt ol {
+    list-style: none;
+}
+
+.excerpt li {
+    padding: var(--s-3) 0;
+    border-bottom: 1px solid var(--hair);
+}
+
+.excerpt .ehr {
+    color: var(--ink-2);
+}
+
+@media (min-width: 640px) {
+    .excerpt-head,
+    .excerpt li {
+        grid-template-columns: 1fr 1fr;
+    }
+}
+
+.shot {
+    padding: var(--s-2);
+    background: var(--panel);
+    border: 1px solid var(--rule);
+    border-radius: var(--radius);
+}
+
+.shot picture,
+.shot img {
+    display: block;
+    width: 100%;
+    height: auto;
+}
+
+/* ─── RECENT WRITING ────────────────────────────────────────── */
+.writing-list {
+    margin-top: var(--s-6);
+    display: grid;
+    grid-template-columns: minmax(0, 1fr);
+    gap: var(--s-6);
+}
+
+@media (min-width: 640px) {
+    .writing-list {
+        grid-template-columns: repeat(3, minmax(0, 1fr));
+    }
+}
+
+.writing-item {
+    display: block;
+    color: inherit;
+    text-decoration: none;
+}
+
+.writing-item img {
+    display: block;
+    width: 100%;
+    height: auto;
+    aspect-ratio: 16 / 9;
+    object-fit: cover;
+    border: 1px solid var(--hair);
+    border-radius: var(--radius);
+}
+
+.writing-item h3 {
+    margin-top: var(--s-3);
+    font-size: 1.1875rem;
+}
+
+.writing-item:hover h3 {
+    text-decoration: underline;
+    text-decoration-color: var(--rule);
+    text-underline-offset: 4px;
+}
+
+.writing-item p {
+    margin-top: var(--s-2);
+    font-size: var(--t-s);
+    color: var(--ink-2);
+}
+
+.writing-item .label {
+    margin-top: var(--s-2);
+}
+
+.all-posts {
+    display: inline-block;
+    margin-top: var(--s-6);
+}
+
+/* ─── CONTACT ───────────────────────────────────────────────── */
+.contact-grid {
+    display: grid;
+    gap: var(--s-6);
+}
+
+@media (min-width: 960px) {
+    .contact-grid {
+        grid-template-columns: 1fr 1fr;
+        align-items: start;
+    }
+}
+
+.contact-details {
+    display: grid;
+    grid-template-columns: 6.5rem minmax(0, 1fr);
+    gap: var(--s-3) var(--s-4);
+    padding-top: var(--s-4);
+    border-top: 1px solid var(--ink);
+}
+
+.contact-details dt {
+    padding-top: 3px;
+    font-family: var(--mono);
+    font-size: var(--t-xs);
+    color: var(--ink-3);
+}
+
+.contact-details dd a {
+    color: var(--ink);
+    text-decoration: underline;
+    text-decoration-color: var(--rule);
+    text-underline-offset: 4px;
+}
+    </style>
+    <!-- /@css -->
+    <style>
+        .hero-art video { display: block; width: 100%; height: auto; }
+        .hero-pause { margin-top: 12px; min-width: 24px; min-height: 36px; padding: 6px 12px; font: inherit; font-size: 0.9375rem; color: #122e49; background: transparent; border: 1px solid #bdc2c5; border-radius: 4px; cursor: pointer; }
+        .hero-pause[aria-pressed="true"] { background: #ece9e3; }
+        @media (min-width: 960px) {
+            .hero-art video { position: absolute; inset: 0; height: 100%; object-fit: contain; }
+            .hero-pause { grid-area: 3 / 1; justify-self: start; }
+        }
+    </style>
+</head>
+<body>
+
+<!-- @nav -->
+    <header>
+        <nav class="container" aria-label="Main">
+            <a href="/" class="logo">
+                <img src="assets/brand/syntaric.svg" width="31" height="36" alt="">
+                <span class="logo-name">Syntaric</span>
+            </a>
+            <div class="nav-right">
+                <ul class="nav-links nav-main" id="site-nav">
+                    <li><a href="#services">Services</a></li>
+                    <li><a href="#expertise">Selected work</a></li>
+                    <li><a href="#products">Products</a></li>
+                    <li><a href="#writing">Writing</a></li>
+                </ul>
+                <ul class="nav-links nav-keep">
+                    <li><a href="blog/">Blog</a></li>
+                    <li><a href="#contact" class="nav-cta">Contact</a></li>
+                </ul>
+                <button class="nav-toggle" type="button" aria-expanded="false" aria-controls="site-nav">Menu</button>
+            </div>
+        </nav>
+    </header>
+    <script>
+        (function () {
+            var button = document.querySelector('.nav-toggle');
+            if (!button) return;
+            function setOpen(open) {
+                document.body.classList.toggle('nav-open', open);
+                button.setAttribute('aria-expanded', open ? 'true' : 'false');
+            }
+            button.addEventListener('click', function () {
+                setOpen(!document.body.classList.contains('nav-open'));
+            });
+            document.querySelectorAll('#site-nav a').forEach(function (link) {
+                link.addEventListener('click', function () { setOpen(false); });
+            });
+        })();
+    </script>
+<!-- /@nav -->
+
+    <main>
+        <!-- ─── HERO ─── -->
+        <section class="hero">
+            <div class="wrap hero-grid">
+                <div class="hero-text">
+                <h1>Boutique healthcare interoperability consultancy</h1>
+                <p class="who">A small team that designs, reviews and builds data integration for hospitals, national health programmes and health IT vendors. We also make two products, openFHIR and Unio.</p>
+                <div class="actions">
+                    <a class="btn" href="#contact" data-goatcounter-click="hero-contact">Contact</a>
+                    <a class="text-link" href="#products">openFHIR and Unio</a>
+                </div>
+                </div>
+                <figure class="hero-figure" data-nosnippet>
+                    <div class="hero-art"><!-- @hero-figure -->
+                    <video class="hero-video fig-hero--wide" muted playsinline loop preload="none" width="1440" height="640" poster="/assets/video/hero-wide-poster.png" data-src="/assets/video/hero-wide.mp4" aria-hidden="true"></video>
+                    <video class="hero-video fig-hero--narrow" muted playsinline loop preload="none" width="780" height="540" poster="/assets/video/hero-narrow-poster.png" data-src="/assets/video/hero-narrow.mp4" aria-hidden="true"></video>
+                    <!-- /@hero-figure --></div>
+                    <figcaption>The same allergy record, as sent over FHIR and as stored in openEHR.</figcaption>
+                    <button class="hero-pause" type="button" aria-pressed="false">Pause animation</button>
+                </figure>
+            </div>
+        </section>
+
+        <!-- ─── PROOF LINE ─── -->
+        <section class="proof" aria-label="Proof">
+            <div class="wrap">
+                <p>Member of the openEHR Specifications Editorial Committee Experts Panel since 2026. We drafted the openEHR Federation specification with RSO Zuid-Limburg. The openEHR SEC approved version 1.0.0 in October 2026, and our gateway Unio implements it.</p>
+            </div>
+        </section>
+
+        <!-- ─── WHAT YOU CAN HIRE US FOR ─── -->
+        <section id="services" class="section hire">
+            <div class="wrap">
+                <h2>What you can hire us for</h2>
+                <ul class="items">
+                    <li>
+                        <h3>Architecture review</h3>
+                        <dl class="facts">
+                            <dt>For</dt><dd>Teams with an integration architecture in place or on paper.</dd>
+                            <dt>Format</dt><dd>Fixed scope</dd>
+                            <dt>Length</dt><dd>1–2 weeks</dd>
+                            <dt>You receive</dt><dd>A written report of findings, gaps and prioritised recommendations, a check against FHIR, IHE and openEHR, and one follow-up question session.</dd>
+                        </dl>
+                    </li>
+                    <li>
+                        <h3>Project consulting</h3>
+                        <dl class="facts">
+                            <dt>For</dt><dd>A team running a FHIR, openEHR or IHE integration project, including integrations with Epic, Cerner Millennium and ChipSoft HiX.</dd>
+                            <dt>Format</dt><dd>Time and materials; we work inside your team.</dd>
+                            <dt>Length</dt><dd>Weeks to months</dd>
+                            <dt>You receive</dt><dd>Design and implementation support, architecture documentation and regular check-ins with your team.</dd>
+                        </dl>
+                    </li>
+                    <li>
+                        <h3>Strategic advisory</h3>
+                        <dl class="facts">
+                            <dt>For</dt><dd>Organisations that want an interoperability expert on call.</dd>
+                            <dt>Format</dt><dd>Retainer. Think of it as a fractional Chief Interoperability Officer.</dd>
+                            <dt>Length</dt><dd>Ongoing</dd>
+                            <dt>You receive</dt><dd>An async support channel, a monthly strategy and roadmap session, priority answers to urgent questions and a quarterly architecture review.</dd>
+                        </dl>
+                    </li>
+                    <li>
+                        <h3>Training and workshops</h3>
+                        <dl class="facts">
+                            <dt>For</dt><dd>Health IT teams, new to the standards or experienced.</dd>
+                            <dt>Format</dt><dd>Fixed scope, remote or on site.</dd>
+                            <dt>Length</dt><dd>Half a day to 2 days</dd>
+                            <dt>You receive</dt><dd>FHIR fundamentals or advanced implementation, openEHR archetypes and templates, IHE profiles in practice, or a curriculum built for your team.</dd>
+                        </dl>
+                    </li>
+                    <li>
+                        <h3>Software development</h3>
+                        <dl class="facts">
+                            <dt>For</dt><dd>When you need it built, not only designed.</dd>
+                            <dt>Format</dt><dd>Time and materials or fixed scope.</dd>
+                            <dt>Length</dt><dd>Ongoing or fixed</dd>
+                            <dt>You receive</dt><dd>FHIR layers and APIs, openEHR–FHIR transformation, IHE profile implementations (XDS, XDW, ATNA, QEDm, PIX, PDQ, PIXm and PDQm) and connectors to Epic, Cerner and HiX. Built in Java (Jakarta EE, Spring), .NET or Go.</dd>
+                        </dl>
+                    </li>
+                </ul>
+                <p class="formats" id="engagements"><span class="label">Engagement formats</span><span>Fixed scope</span><span>Time and materials</span><span>Retainer</span></p>
+            </div>
+        </section>
+
+        <!-- ─── SELECTED WORK ─── -->
+        <section id="expertise" class="section">
+            <div class="wrap">
+                <h2>Selected work</h2>
+                <div class="cases">
+                    <article class="case">
+                        <p class="label">RSO Zuid-Limburg · 2026</p>
+                        <h3>One query across a region's openEHR repositories</h3>
+                        <p>In Zuid-Limburg each care provider keeps patient data in its own openEHR repository, on purpose. An application that needed a patient's full record had to know every repository and query each one itself.</p>
+                        <p>With RSO Zuid-Limburg and the openEHR SEC we drafted a specification for federating openEHR repositories, wrote an open reference implementation and built Unio on it. <strong>The SEC approved version 1.0.0 in October 2026.</strong></p>
+                        <a class="text-link" href="/blog/openehr-federation-spec-approved-unio/">Read about the approval</a>
+                    </article>
+                    <article class="case">
+                        <p class="label">HL7 Converge &amp; Collaborate, Dublin · 2026</p>
+                        <h3>A FHIR facade on an openEHR repository, built live</h3>
+                        <p>We ran the hands-on "Let's Build" session. Participants assembled an openEHR repository, Firely Server and openFHIR into one setup that returns stored data as a FHIR International Patient Summary and stores incoming FHIR data in openEHR.</p>
+                        <a class="text-link" href="/blog/converge-and-collaborate-dublin/">Read the session write-up</a>
+                    </article>
+                    <article class="case">
+                        <p class="label">Proof of concept · 2026</p>
+                        <h3>The Dutch care-transfer standard on openEHR and FHIR</h3>
+                        <p>eOverdracht is the Dutch national standard for handing over nursing and care information between providers. We built a working proof of concept of eOverdracht in a hybrid openEHR and FHIR architecture, with the routing and care-services building blocks of the Dutch Generic Functions programme.</p>
+                        <a class="text-link" href="/blog/eoverdracht-hybrid-architecture-openehr-fhir/">Read the proof of concept</a>
+                    </article>
+                </div>
+
+                <p class="credentials">IHE certified professional. Member of the openEHR Specifications Editorial Committee Experts Panel since 2026. Work in the Netherlands, the United Kingdom, Iceland, Slovenia and the United States.</p>
+
+                <div class="clients" id="collaborators">
+                    <div>
+                        <h3>Hospitals</h3>
+                        <ul>
+                            <li>Maastricht UMC+</li>
+                            <li>UMC Utrecht</li>
+                            <li>Landspítali, Iceland</li>
+                            <li>Maastro Clinic</li>
+                            <li>Oncology Institute</li>
+                            <li>EPUT (NHS)</li>
+                            <li>West Suffolk Hospital (NHS)</li>
+                            <li>LPRES</li>
+                        </ul>
+                    </div>
+                    <div>
+                        <h3>National and regional programmes</h3>
+                        <ul>
+                            <li>VWS, the Dutch Ministry of Health</li>
+                            <li>VECOZO</li>
+                            <li>NJII, New Jersey Innovation Institute</li>
+                            <li>RSO Zuid-Limburg, regional care network</li>
+                            <li>Stichting NUTS</li>
+                        </ul>
+                    </div>
+                    <div>
+                        <h3>Vendors and partners</h3>
+                        <ul>
+                            <li>Firely</li>
+                            <li>Open Line</li>
+                            <li>Open Line Vitaly</li>
+                            <li>Tactuum</li>
+                            <li>Medblocks</li>
+                            <li>HTEC</li>
+                            <li>freshehr</li>
+                            <li>SRC Infonet</li>
+                            <li>CumuluZ</li>
+                            <li>Enovation, InterSystems, Tiani, Philips (integrations)</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- ─── PRODUCTS ─── -->
+        <section id="products" class="section">
+            <div class="wrap">
+                <h2>Two products from our consulting work</h2>
+                <p class="section-lead">Syntaric is a consultancy. We also build two products: openFHIR, which is open source under the Apache 2.0 licence and has a commercial Enterprise version, and Unio, which is commercial.</p>
+
+                <div class="product" id="openfhir">
+                    <div>
+                        <h3>openFHIR</h3>
+                        <p class="lead">openFHIR maps data between openEHR and FHIR in both directions, so an openEHR repository can exchange data with FHIR systems. It implements <strong>FHIR Connect</strong>, an open specification for describing openEHR–FHIR mappings, which we co-created.</p>
+                        <p class="evidence">It was the bridge between openEHR and FHIR in the "Let's Build" session at HL7 Converge &amp; Collaborate, Dublin 2026, and in our International Patient Summary webinar.</p>
+                        <a class="text-link" href="https://open-fhir.com" target="_blank" rel="noopener" data-goatcounter-click="out-openfhir">open-fhir.com</a>
+                    </div>
+                    <figure data-nosnippet>
+                        <div class="excerpt">
+                            <p class="excerpt-head"><span>FHIR R4 · AllergyIntolerance</span><span>openEHR · openEHR-EHR-<wbr>EVALUATION.<wbr>adverse_reaction_risk.v2</span></p>
+                            <ol>
+                            <li><span class="fhir">AllergyIntolerance.<wbr>code</span><span class="ehr">/data[at0001]/<wbr>items[at0002]</span></li>
+                            <li><span class="fhir">AllergyIntolerance.<wbr>clinicalStatus</span><span class="ehr">/data[at0001]/<wbr>items[at0130]</span></li>
+                            <li><span class="fhir">AllergyIntolerance.<wbr>verificationStatus</span><span class="ehr">/data[at0001]/<wbr>items[at0063]</span></li>
+                            <li><span class="fhir">AllergyIntolerance.<wbr>criticality</span><span class="ehr">/data[at0001]/<wbr>items[at0101]</span></li>
+                            </ol>
+                        </div>
+                        <figcaption>The same allergy record, as sent over FHIR and as stored in openEHR. Paths from an openFHIR mapping file.</figcaption>
+                    </figure>
+                </div>
+
+                <div class="product" id="unio">
+                    <div>
+                        <h3>Unio</h3>
+                        <p class="lead">Unio makes several openEHR repositories answer as one. An application queries one openEHR endpoint and gets a patient's records from every member repository, while each record stays where it was created.</p>
+                        <p class="evidence">It implements the openEHR Federation Tier with AQL specification, version 1.0.0, approved by the openEHR SEC in October 2026.</p>
+                        <a class="text-link" href="https://unio.syntaric.com" target="_blank" rel="noopener" data-goatcounter-click="out-unio">unio.syntaric.com</a>
+                    </div>
+                    <figure class="shot">
+                        <picture>
+                            <source type="image/avif" srcset="/assets/img/unio-topology.avif 800w, /assets/img/unio-topology@2x.avif 1600w" sizes="(min-width: 960px) 36rem, 100vw">
+                            <source type="image/webp" srcset="/assets/img/unio-topology.webp 800w, /assets/img/unio-topology@2x.webp 1600w" sizes="(min-width: 960px) 36rem, 100vw">
+                            <img src="/assets/img/unio-topology.webp" width="1600" height="1122" alt="Unio operator console topology view: the gateway, the organisations it federates and the openEHR repository behind each, coloured by reachability" loading="lazy" decoding="async">
+                        </picture>
+                    </figure>
+                </div>
+            </div>
+        </section>
+
+        <!-- ─── RECENT WRITING AND TALKS ─── -->
+        <section id="writing" class="section">
+            <div class="wrap">
+                <h2>Recent writing and talks</h2>
+                <!-- @latest-posts -->
+                <div class="writing-list">
+                    <a class="writing-item" href="blog/openehr-federation-spec-approved-unio/">
+                        <img src="/blog/openehr-federation-spec-approved-unio/cover.png" width="2376" height="1652" alt="" loading="lazy" decoding="async">
+                        <h3>openEHR Federation Spec 1.0 is Approved, and Unio is Out</h3>
+                        <p>The openEHR SEC approved version 1.0.0 of the Federation Tier with AQL specification. We're also releasing Unio, our federation gateway built on it.</p>
+                        <p class="label">October 19, 2026</p>
+                    </a>
+                    <a class="writing-item" href="blog/openehr-federation-spec/">
+                        <img src="/blog/openehr-federation-spec/cover.png" width="1835" height="1224" alt="" loading="lazy" decoding="async">
+                        <h3>Federating openEHR CDRs — A Spec Open for Comment</h3>
+                        <p>Together with RSO Zuid-Limburg and the openEHR SEC we've been drafting a specification for federating openEHR CDRs. It is in its final two weeks of public comment.</p>
+                        <p class="label">September 28, 2026</p>
+                    </a>
+                    <a class="writing-item" href="blog/openehr-sec-experts-panel/">
+                        <img src="/blog/openehr-sec-experts-panel/cover.jpeg" width="300" height="300" alt="" loading="lazy" decoding="async">
+                        <h3>Joining the openEHR SEC Experts Panel</h3>
+                        <p>Syntaric joins the openEHR Specifications Editorial Committee Experts Panel — a reflection on our journey with openEHR, what the SEC is, and what this means.</p>
+                        <p class="label">May 13, 2026</p>
+                    </a>
+                </div>
+                <!-- /@latest-posts -->
+                <a class="text-link all-posts" href="blog/">All posts</a>
+            </div>
+        </section>
+
+        <!-- ─── CONTACT ─── -->
+        <section id="contact" class="section">
+            <div class="wrap contact-grid">
+                <div>
+                    <h2>Talk to us about your project</h2>
+                    <p class="section-lead">Write to us about an integration project, an architecture you want reviewed, or openFHIR and Unio. We reply within two working days.</p>
+                </div>
+                <dl class="contact-details">
+                    <dt>Email</dt><dd><a href="mailto:info@syntaric.com" data-goatcounter-click="contact-email">info@syntaric.com</a></dd>
+                    <dt>Phone</dt><dd><a href="tel:+38641551431" data-goatcounter-click="contact-phone">+386 41 551 431</a></dd>
+                    <dt>LinkedIn</dt><dd><a href="https://www.linkedin.com/in/andrejcgasper/" target="_blank" rel="noopener" data-goatcounter-click="contact-linkedin">Gasper Andrejc, lead architect</a></dd>
+                    <dt>Location</dt><dd>Parižlje 117, 3314 Braslovče, Slovenia</dd>
+                </dl>
+            </div>
+        </section>
+    </main>
+
+<!-- @footer -->
+    <footer>
+        <div class="container">
+            <div class="footer-inner">
+                <div class="footer-left">
+                    <span class="footer-logo-name">Syntaric</span>
+                </div>
+                <nav class="footer-nav" aria-label="Footer">
+                    <ul>
+                        <li><a href="#services">Services</a></li>
+                        <li><a href="#expertise">Selected work</a></li>
+                        <li><a href="#products">Products</a></li>
+                        <li><a href="#writing">Writing</a></li>
+                        <li><a href="blog/">Blog</a></li>
+                        <li><a href="#contact">Contact</a></li>
+                    </ul>
+                </nav>
+                <div class="footer-contact">
+                    <a href="mailto:info@syntaric.com">info@syntaric.com</a>
+                    <a href="tel:+38641551431">+386 41 551 431</a>
+                </div>
+                <div class="footer-right">
+                    <p>&copy; 2026 Syntaric d.o.o. · Healthcare Interoperability Consulting</p>
+                    <p>VAT SI24333611 · Reg. 9746927000</p>
+                </div>
+            </div>
+        </div>
+    </footer>
+<!-- /@footer -->
+
+    <script>
+        (function () {
+            var videos = [].slice.call(document.querySelectorAll('.hero-video'));
+            var button = document.querySelector('.hero-pause');
+            var reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+            var saveData = navigator.connection && navigator.connection.saveData;
+            if (reduce || saveData) { button.hidden = true; return; }   // the poster stays
+            window.addEventListener('load', function () {
+                var wide = window.matchMedia('(min-width: 960px)').matches;
+                var video = videos.filter(function (v) { return v.classList.contains(wide ? 'fig-hero--wide' : 'fig-hero--narrow'); })[0];
+                video.src = video.dataset.src;
+                video.play();
+                button.addEventListener('click', function () {
+                    var paused = button.getAttribute('aria-pressed') === 'true';
+                    if (paused) video.play(); else video.pause();
+                    button.setAttribute('aria-pressed', paused ? 'false' : 'true');
+                });
+            });
+        })();
+    </script>
+</body>
+</html>

@@ -446,6 +446,29 @@ footer {
     }
 }
 
+/* ─── MOTION START STATES ───────────────────────────────────── */
+/* Only under html.js.motion-ok (set before first paint, removed if
+   assets/motion.js never starts). Without the class every figure shows its
+   finished state. motion.js animates from these values. */
+html.js.motion-ok .draw-axis {
+    stroke-dasharray: 1 1;
+    stroke-dashoffset: 1;
+}
+
+html.js.motion-ok [data-motion="align"] {
+    opacity: 0;
+    transform: translateX(-12px);
+}
+
+[data-motion="fanout"] > * {
+    transform-box: fill-box;
+    transform-origin: left center;
+}
+
+html.js.motion-ok [data-motion="fanout"] > * {
+    opacity: 0;
+}
+
 /* Overrides of the nav and footer rules above for the new tokens. */
 body {
     font-family: var(--font);

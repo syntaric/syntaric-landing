@@ -21,6 +21,8 @@ const path = require('path');
 const { marked } = require('marked');
 const { replaceRegions } = require('../tools/markers');
 const { imageSize } = require('../tools/image-size');
+const { cleanSnapshot, textSize } = require('../tools/data-rules');
+const strands = require('../tools/strands');
 
 // ─── Paths ────────────────────────────────────────────────────────────────────
 
@@ -502,6 +504,24 @@ function latestPostsHtml(posts) {
                 `;
 }
 
+// ─── Home page: strand figures ────────────────────────────────────────────────
+
+const FIGURE_TEXT_LIMIT = 8 * 1024;
+
+/** The cleaned data snapshot; every removal is printed (redesign item 44). */
+function loadSnapshot(log) {
+  const raw = JSON.parse(fs.readFileSync(path.join(ROOT, 'data', 'snapshot.json'), 'utf8'));
+  const { snapshot, removed } = cleanSnapshot(raw);
+  for (const r of removed) log(`  - snapshot: removed ${r.path} (${r.reason})`);
+  return snapshot;
+}
+
+function checkFigure(name, svg) {
+  const size = textSize(svg);
+  if (size > FIGURE_TEXT_LIMIT) throw new Error(`Figure "${name}" has ${size} bytes of text (limit ${FIGURE_TEXT_LIMIT})`);
+  return svg;
+}
+
 // ─── Main ─────────────────────────────────────────────────────────────────────
 
 /** Newest of front matter `updated` / `date`; a published post needs one. */
@@ -595,6 +615,13 @@ function main() {
   outputs.set(path.join(ROOT, 'sitemap.xml'), sitemap);
   log(`  ✓ sitemap.xml  (${publishedPosts.length + 2} URLs)`);
 
+  // Strand figures, from the cleaned snapshot.
+  const snapshot = loadSnapshot(log);
+  const heroWide = checkFigure('hero-wide', strands.hero(snapshot, { layout: 'wide' }));
+  const heroNarrow = checkFigure('hero-narrow', strands.hero(snapshot, { layout: 'narrow' }));
+  outputs.set(path.join(ROOT, 'partials', 'figures', 'hero-wide.svg'), heroWide + '\n');
+  outputs.set(path.join(ROOT, 'partials', 'figures', 'hero-narrow.svg'), heroNarrow + '\n');
+
   // index.html: rewrite marker regions only.
   const indexPath = path.join(ROOT, 'index.html');
   const homeHtml = replaceRegions(fs.readFileSync(indexPath, 'utf8'), {
@@ -602,9 +629,10 @@ function main() {
     nav:    `\n${fill(NAV, { root: '', blogCurrent: '' })}\n`,
     footer: `\n${fill(FOOTER, { root: '' })}\n`,
     'latest-posts': latestPostsHtml(publishedPosts),
+    'hero-figure': `\n                    ${heroWide}\n                    ${heroNarrow}\n                    `,
   });
   outputs.set(indexPath, homeHtml);
-  log('  ✓ index.html  (marker regions: css, nav, footer, latest-posts)');
+  log('  ✓ index.html  (marker regions: css, nav, footer, latest-posts, hero-figure)');
 
   // TODO-OWNER rule: no published file may carry the marker.
   const todo = [];
