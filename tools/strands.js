@@ -22,6 +22,17 @@ const BLADE = { width: 0.331, bow: 0.07 };
 const GAP = 0.178;
 /** Notch: a smooth pocket in the outer edge at the measured position, sized relative to the maximum width. */
 const NOTCH = { mouth: 0.604, depth: 0.442, at: 0.52 };
+/**
+ * Hook: the feather's notch as it is drawn, a wedge cut into the outer edge
+ * that leaves a pointed tip overhanging it, pointing back toward the start.
+ * Measured on the upper blade (docs/strand-rules.md): the tip sits on the
+ * edge at 0.46 of the chord; the crescent-shaped wedge opens 0.45 of the
+ * maximum width before it (where the blade's concave edge begins) and runs
+ * under it to its deepest point 0.18 of the width after
+ * it, 0.29 of the width inside the edge. Sizes scale with the width, not the
+ * length, so a long strand gets the feather's hook, not a stretched one.
+ */
+const HOOK = { tip: 0.46, back: 0.45, ahead: 0.18, depth: 0.29 };
 
 const INK = '#122e49';
 const FIRE = ['#c32a30', '#df5c34', '#fe933a'];
@@ -81,7 +92,7 @@ function smooth(points) {
  * text-zone test). `t` (0-1) draws only the first part of the strand: the
  * frame at motion progress t. The taper is always that of the full strand.
  */
-function outline(from, to, { width, profile = PROFILE, notch = false, bow = BLADE.bow, t = 1, steps = 24 }) {
+function outline(from, to, { width, profile = PROFILE, notch = false, hook = null, bow = BLADE.bow, t = 1, steps = 24 }) {
   const c = centreLine(from, to, bow);
   const L = len(sub(to, from));
   const end = Math.max(0, Math.min(1, t));
@@ -101,8 +112,36 @@ function outline(from, to, { width, profile = PROFILE, notch = false, bow = BLAD
     }
     left.push(add(p, mul(n, hl))); right.push(add(p, mul(n, -hr)));
   }
-  const ring = left.concat(right.slice().reverse());
-  const d = `M${fmt(left[0])}${smooth(left)}L${fmt(right[right.length - 1])}${smooth(right.slice().reverse())}Z`;
+  // hook ('left' or 'right' edge): replace the edge between the mouth and the
+  // tip by the wedge, with sharp corners at its deepest point and at the tip
+  let leftD = smooth(left), rightRevD = smooth(right.slice().reverse());
+  let ring = left.concat(right.slice().reverse());
+  if (hook && end >= 0.6) {
+    const side = hook === 'left' ? 1 : -1;
+    const at = s => { const p = bezier2(c, s); const n = perp(norm(bezier2d(c, s))); return { p, n, h: (width / 2) * bezier1(profile, s) }; };
+    const L = len(sub(to, from));
+    const sm = HOOK.tip - (HOOK.back * width) / L, sd = HOOK.tip + (HOOK.ahead * width) / L;
+    const mouth = at(sm), tip = at(HOOK.tip), deep = at(sd);
+    const M = add(mouth.p, mul(mouth.n, side * mouth.h));
+    const T = add(tip.p, mul(tip.n, side * tip.h));
+    const D = add(deep.p, mul(deep.n, side * (deep.h - HOOK.depth * width)));
+    // crescent: the lower lip sags into the blade, the hook's underside
+    // curves back to its tip
+    const lip = add(mul(add(M, D), 0.5), mul(mouth.n, side * -0.10 * width));
+    const under = add(mul(add(D, T), 0.5), add(mul(deep.n, side * 0.04 * width), mul(norm(sub(M, D)), 0.10 * width)));
+    const edge = side === 1 ? left : right;
+    const before = edge.filter((_, i) => grid[i] <= sm).concat([M]);
+    const after = [T].concat(edge.filter((_, i) => grid[i] > HOOK.tip));
+    if (side === 1) {
+      leftD = smooth(before) + `Q${fmt(lip)} ${fmt(D)}Q${fmt(under)} ${fmt(T)}` + smooth(after);
+      ring = before.concat([lip, D, under], after).concat(right.slice().reverse());
+    } else {
+      rightRevD = smooth(after.slice().reverse()) + `Q${fmt(under)} ${fmt(D)}Q${fmt(lip)} ${fmt(M)}` + smooth(before.slice().reverse());
+      ring = left.concat(after.slice().reverse(), [under, D, lip], before.slice().reverse());
+    }
+  }
+  const first = left[0];
+  const d = `M${fmt(first)}${leftD}L${fmt(right[right.length - 1])}${rightRevD}Z`;
   const axis = `M${fmt(c[0])}C${fmt(c[1])} ${fmt(c[2])} ${fmt(c[3])}`;
   return { d, polygon: ring, axis };
 }
@@ -192,7 +231,7 @@ function mappingPairs(snapshot) {
  * column's share of the viewport at 1280-1920 px). layout 'narrow': a
  * 780 x 584 band below the text on phones, no text zone.
  */
-function heroField(snapshot, { layout = 'wide', phase = 0, textZone } = {}) {
+function heroField(snapshot, { layout = 'wide', phase = 0, textZone, hooks = true } = {}) {
   const pair = mappingPairs(snapshot)[0];
   const TAU = Math.PI * 2;
   const wave = (amp, offset) => amp * Math.sin(TAU * phase + offset);
@@ -220,9 +259,9 @@ function heroField(snapshot, { layout = 'wide', phase = 0, textZone } = {}) {
   const mid = bundleOf(L.mid, 2.1);
   const off = L.data.width * (1 + GAP) / 2;
   const da = outline(sway(L.data.a[0], L.data.amp, 4.2), sway(add(L.data.a[1], [0, -off]), L.data.amp, 5.5),
-    { width: L.data.width, bow: BLADE.bow + 0.02 * Math.sin(TAU * phase + 4.9) });
+    { width: L.data.width, bow: BLADE.bow + 0.02 * Math.sin(TAU * phase + 4.9), hook: hooks ? 'right' : null });
   const db = outline(sway(L.data.b[0], L.data.amp, 4.6), sway(add(L.data.b[1], [0, off]), L.data.amp, 5.5),
-    { width: L.data.width, bow: BLADE.bow + 0.02 * Math.sin(TAU * phase + 5.3) });
+    { width: L.data.width, bow: BLADE.bow + 0.02 * Math.sin(TAU * phase + 5.3), hook: hooks ? 'left' : null });
   const labels = [
     { x: L.la[0], y: L.la[1], text: pair.fhir, size: L.size },
     { x: L.lb[0], y: L.lb[1], text: pair.openehr, size: L.size },
@@ -244,7 +283,7 @@ function heroField(snapshot, { layout = 'wide', phase = 0, textZone } = {}) {
 }
 
 /** openFHIR: the mapping pairs, each FHIR path joined to its openEHR path by a fire strand. */
-function openfhirFigure(snapshot, { t = 1 } = {}) {
+function openfhirFigure(snapshot, { t = 1, hooks = true } = {}) {
   const pairs = mappingPairs(snapshot);
   const W = 360, top = 44, row = 66, H = top + row * pairs.length + 6;
   const defs = `<linearGradient id="fire" x1="0" y1="0" x2="1" y2="0"><stop offset="0" stop-color="${FIRE[0]}"/><stop offset=".55" stop-color="${FIRE[1]}"/><stop offset="1" stop-color="${FIRE[2]}"/></linearGradient>`;
@@ -253,7 +292,7 @@ function openfhirFigure(snapshot, { t = 1 } = {}) {
   body += '<g class="fig-strands" data-motion="draw" data-motion-start="view">';
   pairs.forEach((p, i) => {
     const y = top + i * row;
-    body += `<path class="strand" fill="url(#fire)" d="${outline([10, y + 17], [W - 10, y + 43], { width: 13, t }).d}"/>`;
+    body += `<path class="strand" fill="url(#fire)" d="${outline([10, y + 17], [W - 10, y + 43], { width: 13, t, hook: hooks ? 'right' : null }).d}"/>`;
   });
   body += '</g><g class="fig-labels">';
   pairs.forEach((p, i) => {
@@ -301,7 +340,7 @@ function cardArt() {
 }
 
 module.exports = {
-  PROFILE, BLADE, GAP, NOTCH,
+  PROFILE, BLADE, GAP, NOTCH, HOOK,
   strand, bundle, outline, heroField, openfhirFigure, unioFigure, divider, cardArt,
   polygonHitsRect, labelBox,
 };

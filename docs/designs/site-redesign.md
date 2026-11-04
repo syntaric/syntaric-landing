@@ -1850,6 +1850,11 @@ Step 6).
     written; the Unio figure replaces the screenshot (files deleted); the
     three dividers stay; the notch is to be drawn as the feather's hook,
     shown to the owner before it is used.
+*   **Hook (2026-11-04)**: drawn as a crescent-shaped cut with a tip
+    pointing back toward the strand's start, measured on the feather
+    (`HOOK` in `tools/strands.js`, `docs/strand-rules.md`). Approved by the
+    owner and used on the hero field's data strands and the openFHIR
+    strands; the hero videos are re-rendered with it.
 
 #### Commit 1.6: scroll moments
 

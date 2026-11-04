@@ -27,7 +27,8 @@ dependency).
 | **Profile:** width along a strand, as a 1-D cubic Bezier of control values, peak 1 | `PROFILE` | `[0, 0.926, 1.687, 0]`: zero at both tips, widest at 0.57 (fit to the 25 measured widths, RMS error 0.09 of the maximum) |
 | **Blade:** maximum width and S-bend, relative to the chord | `BLADE` | `width: 0.331`, `bow: 0.07` |
 | **Gap:** channel between strands of a bundle, relative to the maximum width | `GAP` | `0.178` |
-| **Notch:** a smooth pocket in the outer edge, used only where a strand meets a data endpoint | `NOTCH` | `mouth: 0.604`, `depth: 0.442`, `at: 0.52`; never thinner than 15 % of the half width |
+| **Notch** (superseded by the hook): a smooth pocket in the outer edge | `NOTCH` | `mouth: 0.604`, `depth: 0.442`, `at: 0.52`; never thinner than 15 % of the half width |
+| **Hook:** the notch as drawn (1.5 review, 2026-11-04), a crescent-shaped wedge cut into a strand's outer edge, leaving a slender tip that points back toward the start | `HOOK` | tip on the edge at 0.46 of the chord; the wedge opens 0.45 of the maximum width before the tip and reaches 0.29 of the width inside the edge, 0.18 of the width after it. Sizes scale with the width. Used on data strands only: the hero field's two (outer edges) and the openFHIR strands (the edge facing the FHIR label) |
 | **Count** | | 2 strands: Syntaric. 2 in fire colours: openFHIR. 3 fanning out: Unio. |
 
 A strand's centre line is an S-shaped cubic from its start to its end,
@@ -80,12 +81,6 @@ where a figure sits behind text (brief 4.2: light navy tints behind the
 text, labels at full ink).
 
 ## Known limits
-
-*   **The notch is not drawn yet (commit 1.3).** The feather's notch is a
-    hook: a small separate tip with a wedge cut behind it. The `NOTCH`
-    rule as a smooth pocket in a strand's edge reads as a pinch, not a
-    hook, so the figures render without it. The hook drawing is an open
-    item for the 1.4 gate; the measured values stay above.
 
 *   The profile is one symmetric-ended curve; the real blade's width rises
     in a step where the notch's hook adds material (around 0.5 of the
