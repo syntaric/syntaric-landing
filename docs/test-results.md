@@ -114,3 +114,19 @@ Still to run (need the deployed site, phones or people): `check-deploy.sh`,
 LinkedIn Post Inspector for the cards, VoiceOver and TalkBack, WebPageTest
 and the 6x CPU trace, the devices in the LinkedIn app, the GoatCounter
 click events, and the success tests of run 2.
+
+## Plain-language pass, after the push (2026-11-04)
+
+Pushed `aed78b4..25bfd58` (15 commits: Stage 1 from 1.3, the verification
+fixes, and the plain-language pass 2.0-2.6). Pages deploy run
+`41909174972` succeeded.
+
+| Check | Result |
+|---|---|
+| `tools/check-deploy.sh` | Pass on the second run. The first run, right after the deploy, got one 503 (`/blog/openehr-federation-spec/`); the re-run a minute later returned every expected status |
+| axe on `/`, `/blog/` and one post, 390 and 1280 px (local, before the push) | Pass (0 violations) |
+| Lighthouse mobile, `/` (local, before the push) | Performance 99, Accessibility 100, Best practices 100, SEO 100; LCP 2.0 s, CLS 0.017, TBT 0 ms, 309 KiB |
+| LinkedIn Post Inspector for `/`, `/blog/` and changed posts | To do (owner, needs a LinkedIn login) |
+| 5-second test, run 3 (people with no health IT background) | To do |
+| Peer test, run 3 | To do |
+
