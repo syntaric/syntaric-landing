@@ -289,10 +289,17 @@ function openfhirFigure(snapshot, { t = 1, hooks = true } = {}) {
   const defs = `<linearGradient id="fire" x1="0" y1="0" x2="1" y2="0"><stop offset="0" stop-color="${FIRE[0]}"/><stop offset=".55" stop-color="${FIRE[1]}"/><stop offset="1" stop-color="${FIRE[2]}"/></linearGradient>`;
   let body = label(0, 12, 'FHIR R4 · ' + pairs[0].fhir.split('.')[0], 10, { fill: '#56697a', cls: 'fig-head' }) +
     label(W, 28, pairs[0].archetype, 10, { anchor: 'end', fill: '#56697a', cls: 'fig-head' });
+  // Draw motion (commit 1.6): each strand is masked by a stroked copy of its
+  // centre line (pathLength 1). Without motion the stroke is solid, so the
+  // mask shows the whole strand; motion.js animates stroke-dashoffset 1 -> 0.
+  let masks = '';
   body += '<g class="fig-strands" data-motion="draw" data-motion-start="view">';
   pairs.forEach((p, i) => {
     const y = top + i * row;
-    body += `<path class="strand" fill="url(#fire)" d="${outline([10, y + 17], [W - 10, y + 43], { width: 13, t, hook: hooks ? 'right' : null }).d}"/>`;
+    const o = outline([10, y + 17], [W - 10, y + 43], { width: 13, t, hook: hooks ? 'right' : null });
+    masks += `<mask id="ofhir-draw-${i}" maskUnits="userSpaceOnUse" x="0" y="0" width="${W}" height="${H}">` +
+      `<path class="draw-axis" d="${o.axis}" fill="none" stroke="#fff" stroke-width="20" pathLength="1"/></mask>`;
+    body += `<path class="strand" fill="url(#fire)" mask="url(#ofhir-draw-${i})" d="${o.d}"/>`;
   });
   body += '</g><g class="fig-labels">';
   pairs.forEach((p, i) => {
@@ -300,7 +307,7 @@ function openfhirFigure(snapshot, { t = 1, hooks = true } = {}) {
     body += label(0, y + 12, p.fhir, 11) + label(W, y + 56, p.openehr, 11, { anchor: 'end' });
   });
   body += '</g>';
-  return svgRoot('fig fig-openfhir', W, H, body, defs);
+  return svgRoot('fig fig-openfhir', W, H, body, defs + masks);
 }
 
 /** Unio: one query fanning out to three repositories, one unreachable, the result partial. */

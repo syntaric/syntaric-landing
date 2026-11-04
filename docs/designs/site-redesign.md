@@ -1869,6 +1869,16 @@ Step 6).
     transitions or keyframes. `data-motion-start="view"` on the openFHIR
     and Unio figures only.
 
+*   **As built (1.6)**: the openFHIR strands draw in one after another
+    (900 ms each, 200 ms apart) and the Unio strands fan out from the
+    query point, each when its figure is 40 % in view. The `<head>`
+    script sets `motion-ok` before first paint (decision E8) and removes
+    it after 3 s unless `motion.js` has started. Checked in real time with
+    Playwright driving the installed Chrome: both moments play and finish;
+    under reduced motion there is no `motion-ok`, no animation and no hero
+    video. (Headless Chrome's virtual clock gave inconsistent frames for
+    these animations and was not used to judge them.)
+
 #### Commit 1.7: share cards and preview metadata
 
 ##### 51. `tools/share-card.js` (Create)
