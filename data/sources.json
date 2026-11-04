@@ -13,11 +13,11 @@
       "id": "hero-labels",
       "origin": "written",
       "licence": "Syntaric",
-      "use": "hero field labels (plain-language pass, decision P2). Copy approved by the owner on 2026-11-04 (docs/content-inventory.md, §4.2).",
+      "use": "hero field labels (plain-language pass, decision P2). Copy approved by the owner on 2026-11-04 from three screenshot options, kept abstract about standards (docs/content-inventory.md, §4.2).",
       "values": {
-        "upper": "Penicillin allergy, recorded at the hospital",
-        "lower": "The same allergy, in the GP's record",
-        "note": "Shared between their systems, nothing retyped"
+        "upper": "Recorded in one standard",
+        "lower": "Read in another",
+        "note": "Same meaning, nothing retyped"
       }
     },
     {

@@ -73,7 +73,7 @@ Draft lines (the full copy, approved by the owner on 2026-11-04 as written, with
 |---|---|---|
 | Who-for line | "A small team that designs, reviews and builds data integration for hospitals, national health programmes and health IT vendors. …" | "We help hospitals, regions and national health programmes share patient information between their systems, using open standards. We also make two products, openFHIR and Unio." |
 | Proof line | "Member of the openEHR Specifications Editorial Committee Experts Panel since 2026. We drafted the openEHR Federation specification … version 1.0.0 …" | "We sit on the international expert panel that reviews openEHR standards. With RSO Zuid-Limburg we wrote the standard for joining up a region's patient records, approved in October 2026; our product Unio is built on it." |
-| Hero caption | "The same allergy record, as sent over FHIR and as stored in openEHR." | "One allergy record, kept the same as it moves from the hospital to the GP." |
+| Hero caption | "The same allergy record, as sent over FHIR and as stored in openEHR." | "One record, understood the same way by systems that speak different standards." (revised, see 2.1) |
 | Case 1 title | "One query across a region's openEHR repositories" | "One view of a patient across a region's care providers" |
 | Case 2 title | "A FHIR facade on an openEHR repository, built live" | "Two health data standards working together, built live on stage" |
 | Case 3 title | "The Dutch care-transfer standard on openEHR and FHIR" | "Nursing handover between care organisations, on open standards" |
@@ -85,9 +85,8 @@ Draft lines (the full copy, approved by the owner on 2026-11-04 as written, with
 Labels are set in the text face (P3), never mono.
 
 *   **Hero** (both layouts, the still and the video): the upper data strand
-    reads "Penicillin allergy, recorded at the hospital"; the lower one
-    "The same allergy, in the GP's record", with a smaller line
-    "Shared between their systems, nothing retyped". Geometry, timing and
+    reads "Recorded in one standard"; the lower one "Read in another", with
+    a smaller line "Same meaning, nothing retyped" (revised, see 2.1). Geometry, timing and
     the text-zone rule are unchanged; label boxes are re-measured with the
     text face's advance.
 *   **Dividers:** hairline strand only; the path notes are removed.
@@ -178,6 +177,13 @@ site (LinkedIn previews, external testers).
         Text-zone contrast unchanged: 0 pixels over 1.2:1 with the video
         playing. The divider notes are gone; the three dividers are now
         the same hairline.
+    *   **2.1 revision (owner, 2026-11-04)**: the penicillin, hospital and
+        GP wording was too specific; the labels stay abstract about
+        standards. Wording is now agreed on screenshots of the still frame
+        before any video is rendered. Picked from three options: "Recorded
+        in one standard", "Read in another", "Same meaning, nothing
+        retyped"; caption "One record, understood the same way by systems
+        that speak different standards."
 *   **2.2** Mono out of the page and the share cards; mono files deleted if
     unused.
 *   **2.3** Face gate: preview page with Control, A and B; owner picks.

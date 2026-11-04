@@ -35,9 +35,9 @@
       "origin": "written",
       "licence": "Syntaric",
       "values": {
-        "upper": "Penicillin allergy, recorded at the hospital",
-        "lower": "The same allergy, in the GP's record",
-        "note": "Shared between their systems, nothing retyped"
+        "upper": "Recorded in one standard",
+        "lower": "Read in another",
+        "note": "Same meaning, nothing retyped"
       }
     },
     "unio-federation": {
