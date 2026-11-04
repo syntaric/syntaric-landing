@@ -4,27 +4,28 @@
     <script>document.documentElement.classList.add('js')</script>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Syntaric | Healthcare Interoperability Consulting</title>
-    <meta name="description" content="Syntaric helps hospitals, national health programs, and health IT vendors implement FHIR, openEHR, and IHE-based architectures that scale — from regional networks to national infrastructure.">
+    <title>Syntaric | Healthcare interoperability consultancy</title>
+    <meta name="description" content="Syntaric designs, reviews and builds data integration for hospitals, national health programmes and health IT vendors, using FHIR, openEHR and IHE.">
     <meta name="robots" content="index, follow">
     <link rel="canonical" href="https://syntaric.com/">
 
     <!-- Open Graph -->
     <meta property="og:type" content="website">
     <meta property="og:url" content="https://syntaric.com/">
-    <meta property="og:title" content="Syntaric | Healthcare Interoperability Consulting">
-    <meta property="og:description" content="Syntaric helps hospitals, national health programs, and health IT vendors implement FHIR, openEHR, and IHE-based architectures that scale — from regional networks to national infrastructure.">
+    <meta property="og:title" content="Syntaric | Healthcare interoperability consultancy">
+    <meta property="og:description" content="Syntaric designs, reviews and builds data integration for hospitals, national health programmes and health IT vendors, using FHIR, openEHR and IHE.">
     <meta property="og:image" content="https://syntaric.com/etc/syntaric_logo_2.png">
     <meta property="og:site_name" content="Syntaric">
     <meta property="og:locale" content="en_US">
 
     <!-- Twitter Card -->
     <meta name="twitter:card" content="summary">
-    <meta name="twitter:title" content="Syntaric | Healthcare Interoperability Consulting">
-    <meta name="twitter:description" content="Syntaric helps hospitals, national health programs, and health IT vendors implement FHIR, openEHR, and IHE-based architectures that scale.">
+    <meta name="twitter:title" content="Syntaric | Healthcare interoperability consultancy">
+    <meta name="twitter:description" content="Syntaric designs, reviews and builds data integration for hospitals, national health programmes and health IT vendors, using FHIR, openEHR and IHE.">
     <meta name="twitter:image" content="https://syntaric.com/etc/syntaric_logo_2.png">
 
-    <!-- JSON-LD: Organization + WebSite -->
+    <!-- JSON-LD: Organization, WebSite, products. The personal LinkedIn
+         profile belongs to the founder, not the company (decision #2). -->
     <script type="application/ld+json">
     {
       "@context": "https://schema.org",
@@ -35,8 +36,13 @@
           "name": "Syntaric",
           "url": "https://syntaric.com/",
           "logo": "https://syntaric.com/etc/syntaric_logo_2.png",
-          "description": "Healthcare interoperability consulting specialising in FHIR, openEHR, and IHE standards.",
-          "founder": { "@type": "Person", "name": "Gasper Andrejc" },
+          "description": "Healthcare interoperability consultancy: FHIR, openEHR and IHE.",
+          "founder": {
+            "@type": "Person",
+            "name": "Gasper Andrejc",
+            "jobTitle": "Lead architect",
+            "sameAs": ["https://www.linkedin.com/in/andrejcgasper/"]
+          },
           "address": {
             "@type": "PostalAddress",
             "streetAddress": "Parižlje 117",
@@ -45,8 +51,7 @@
             "addressCountry": "SI"
           },
           "email": "info@syntaric.com",
-          "telephone": "+38641551431",
-          "sameAs": ["https://www.linkedin.com/in/andrejcgasper/"]
+          "telephone": "+38641551431"
         },
         {
           "@type": "WebSite",
@@ -54,6 +59,23 @@
           "url": "https://syntaric.com/",
           "name": "Syntaric",
           "publisher": { "@id": "https://syntaric.com/#organization" }
+        },
+        {
+          "@type": "SoftwareApplication",
+          "name": "openFHIR",
+          "url": "https://open-fhir.com",
+          "applicationCategory": "DeveloperApplication",
+          "description": "Maps data between openEHR and FHIR in both directions; implements the FHIR Connect specification.",
+          "license": "https://www.apache.org/licenses/LICENSE-2.0",
+          "creator": { "@id": "https://syntaric.com/#organization" }
+        },
+        {
+          "@type": "SoftwareApplication",
+          "name": "Unio",
+          "url": "https://unio.syntaric.com",
+          "applicationCategory": "BusinessApplication",
+          "description": "openEHR federation gateway: several openEHR repositories answer as one endpoint.",
+          "creator": { "@id": "https://syntaric.com/#organization" }
         }
       ]
     }
@@ -121,24 +143,53 @@
 }
 
 :root {
-    --ink: #0d1117;
-    --ink-light: #4a5568;
-    --ink-muted: #718096;
-    --surface: #ffffff;
-    --surface-2: #f7f8fc;
-    --surface-3: #eef0f6;
-    --border: #e2e8f0;
-    --accent: #0052cc;
-    --accent-light: #e8f0fe;
-    --accent-glow: rgba(0, 82, 204, 0.12);
-    --green: #0f7b55;
-    --green-light: #e6f4f0;
-    --radius: 12px;
-    --radius-lg: 20px;
-    --shadow-sm: 0 1px 3px rgba(0,0,0,0.06), 0 1px 2px rgba(0,0,0,0.04);
-    --shadow: 0 4px 16px rgba(0,0,0,0.07), 0 1px 4px rgba(0,0,0,0.04);
-    --shadow-lg: 0 16px 48px rgba(0,0,0,0.1), 0 4px 12px rgba(0,0,0,0.06);
-    --nav-h: 68px;
+    --ground: #f6f3ee;
+    --ink: #122e49;
+    --ink-2: #40556a;
+    --ink-3: #56697a;
+    --rule: #bdc2c5;
+    --hair: #dbdbda;
+    --panel: #ece9e3;
+
+    --font: 'Atkinson Hyperlegible Next', 'Atkinson Next Fallback', sans-serif;
+    --mono: 'Atkinson Hyperlegible Mono', 'Atkinson Mono Fallback', monospace;
+    --t-xs: 0.8125rem;
+    --t-s: 0.9375rem;
+    --t-m: 1.0625rem;
+    --t-l: 1.375rem;
+    --t-xl: 1.75rem;
+    --t-post: clamp(1.875rem, 2.6vw + 1.1rem, 2.75rem);
+    --t-hero: clamp(2.125rem, 5.2vw + 0.9rem, 3.5rem);
+
+    --s-1: 4px; --s-2: 8px; --s-3: 12px; --s-4: 16px; --s-5: 24px;
+    --s-6: 32px; --s-7: 48px; --s-8: 64px; --s-9: 96px;
+
+    --ease: cubic-bezier(0.2, 0, 0, 1);
+    --dur-short: 200ms;
+    --dur-long: 900ms;
+
+    --measure: 36rem;
+    --page: 72rem;
+    --radius: 4px;
+
+    /* Old names used by the shared nav and footer. */
+    --ink-light: var(--ink-2);
+    --ink-muted: var(--ink-3);
+    --surface: var(--ground);
+    --surface-2: var(--panel);
+    --surface-3: var(--panel);
+    --border: var(--hair);
+    --accent: var(--ink);
+    --accent-light: var(--panel);
+    --shadow: 0 8px 24px rgba(18, 46, 73, 0.10);
+    --nav-h: 64px;
+}
+
+@media (prefers-reduced-motion: reduce) {
+    :root {
+        --dur-short: 0ms;
+        --dur-long: 0ms;
+    }
 }
 
 html {
@@ -146,17 +197,9 @@ html {
 }
 
 body {
-    font-family: 'Atkinson Hyperlegible Next', 'Atkinson Next Fallback', sans-serif;
     color: var(--ink);
-    background: var(--surface);
-    line-height: 1.6;
+    background: var(--ground);
     -webkit-font-smoothing: antialiased;
-}
-
-.container {
-    max-width: 1160px;
-    margin: 0 auto;
-    padding: 0 24px;
 }
 
 /* ─── NAV ─────────────────────────────────────────────────── */
@@ -365,7 +408,7 @@ footer {
 
 .footer-right {
     font-size: 0.78rem;
-    color: rgba(255,255,255,0.35);
+    color: rgba(255,255,255,0.7);
     text-align: right;
 }
 
@@ -383,7 +426,7 @@ footer {
 .footer-nav a,
 .footer-contact a {
     font-size: 0.82rem;
-    color: rgba(255,255,255,0.6);
+    color: rgba(255,255,255,0.8);
     text-decoration: none;
     transition: color 0.2s;
 }
@@ -423,1033 +466,462 @@ footer {
     }
 }
 
-/* ─── HERO ────────────────────────────────────────────────── */
+/* Overrides of the nav and footer rules above for the new tokens. */
+body {
+    font-family: var(--font);
+    font-size: var(--t-m);
+    line-height: 1.55;
+}
+
+.container {
+    max-width: var(--page);
+    margin: 0 auto;
+    padding: 0 var(--s-5);
+}
+
+header {
+    background: rgba(246, 243, 238, 0.94);
+}
+
+.nav-cta {
+    border-radius: var(--radius) !important;
+}
+
+.nav-toggle {
+    border-color: var(--rule);
+    border-radius: var(--radius);
+}
+
+.label {
+    font-family: var(--mono);
+    font-size: var(--t-xs);
+    color: var(--ink-3);
+}
+
+/* Home page (commit 0.6). Values and components: docs/design-tokens.md. */
+
+.wrap {
+    max-width: var(--page);
+    margin: 0 auto;
+    padding: 0 var(--s-5);
+}
+
+h2 {
+    font-size: var(--t-xl);
+    line-height: 1.2;
+    letter-spacing: -0.01em;
+}
+
+h3 {
+    font-size: var(--t-l);
+    line-height: 1.25;
+}
+
+.btn {
+    display: inline-block;
+    padding: 14px 26px;
+    font-weight: 700;
+    color: var(--ground);
+    background: var(--ink);
+    border-radius: var(--radius);
+    text-decoration: none;
+}
+
+.text-link {
+    color: var(--ink);
+    text-decoration: underline;
+    text-decoration-color: var(--rule);
+    text-decoration-thickness: 1px;
+    text-underline-offset: 4px;
+}
+
+.text-link:hover {
+    text-decoration-color: var(--ink);
+}
+
+.section {
+    padding: var(--s-8) 0 var(--s-7);
+    border-top: 1px solid var(--hair);
+}
+
+.section-lead {
+    margin-top: var(--s-4);
+    max-width: var(--measure);
+    color: var(--ink-2);
+}
+
+/* ─── HERO ──────────────────────────────────────────────────── */
 .hero {
-    padding: 96px 0 80px;
-    background:
-        linear-gradient(to bottom, rgba(255,255,255,0.92) 0%, rgba(255,255,255,0.82) 50%, rgba(255,255,255,0.97) 100%),
-        url('https://open-fhir.com/images/openFHIR-hero-background-image.jpg') center/cover no-repeat;
-    position: relative;
-    overflow: hidden;
-}
-
-.hero::before {
-    content: '';
-    position: absolute;
-    top: -160px;
-    right: -200px;
-    width: 700px;
-    height: 700px;
-    background: radial-gradient(circle, rgba(0,82,204,0.07) 0%, transparent 70%);
-    pointer-events: none;
-}
-
-.hero-label {
-    display: inline-flex;
-    align-items: center;
-    gap: 8px;
-    font-size: 0.8rem;
-    font-weight: 600;
-    letter-spacing: 0.08em;
-    text-transform: uppercase;
-    color: var(--accent);
-    background: var(--accent-light);
-    padding: 6px 14px;
-    border-radius: 100px;
-    margin-bottom: 1.5rem;
-}
-
-.hero-label-dot {
-    width: 6px;
-    height: 6px;
-    border-radius: 50%;
-    background: var(--accent);
+    padding: var(--s-7) 0;
 }
 
 .hero h1 {
-    font-size: clamp(2.4rem, 5vw, 3.8rem);
+    max-width: 14ch;
+    font-size: var(--t-hero);
+    line-height: 1.08;
     font-weight: 700;
-    line-height: 1.1;
-    letter-spacing: -0.03em;
-    color: var(--ink);
-    max-width: 720px;
-    margin-bottom: 1.5rem;
+    letter-spacing: -0.02em;
 }
 
-.hero h1 em {
-    font-style: normal;
-    color: var(--accent);
-}
-
-.hero-desc {
-    font-size: 1.125rem;
-    color: var(--ink-light);
-    max-width: 560px;
-    line-height: 1.7;
-    margin-bottom: 2.5rem;
-}
-
-.hero-actions {
-    display: flex;
-    align-items: center;
-    gap: 1rem;
-    flex-wrap: wrap;
-}
-
-.btn-primary {
-    display: inline-flex;
-    align-items: center;
-    gap: 8px;
-    background: var(--accent);
-    color: #fff;
-    padding: 0.85rem 1.8rem;
-    border-radius: 10px;
-    font-size: 0.95rem;
-    font-weight: 600;
-    text-decoration: none;
-    transition: box-shadow 0.2s, transform 0.2s, background 0.2s;
-}
-
-.btn-primary:hover {
-    background: #003fa3;
-    box-shadow: 0 8px 24px rgba(0,82,204,0.3);
-    transform: translateY(-1px);
-}
-
-.btn-ghost {
-    display: inline-flex;
-    align-items: center;
-    gap: 8px;
-    color: var(--ink-light);
-    padding: 0.85rem 1.4rem;
-    border-radius: 10px;
-    font-size: 0.95rem;
-    font-weight: 500;
-    text-decoration: none;
-    border: 1px solid var(--border);
-    transition: border-color 0.2s, color 0.2s;
-}
-
-.btn-ghost:hover {
-    border-color: var(--ink-muted);
-    color: var(--ink);
-}
-
-.hero-trust {
-    margin-top: 4rem;
-    padding-top: 2rem;
-    border-top: 1px solid var(--border);
-}
-
-.hero-trust-label {
-    font-size: 0.78rem;
-    font-weight: 600;
-    letter-spacing: 0.06em;
-    text-transform: uppercase;
-    color: var(--ink-muted);
-    margin-bottom: 1.25rem;
-}
-
-.trust-logos {
-    overflow: hidden;
-    mask-image: linear-gradient(to right, transparent 0%, black 10%, black 90%, transparent 100%);
-    -webkit-mask-image: linear-gradient(to right, transparent 0%, black 10%, black 90%, transparent 100%);
-}
-
-.trust-logos-track {
-    display: flex;
-    align-items: center;
-    gap: 3rem;
-    width: max-content;
-    animation: marquee 28s linear infinite;
-}
-
-.trust-logos-track:hover {
-    animation-play-state: paused;
-}
-
-@keyframes marquee {
-    from { transform: translateX(0); }
-    to   { transform: translateX(-50%); }
-}
-
-.trust-logo {
-    font-size: 0.82rem;
-    font-weight: 600;
-    color: var(--ink-muted);
-    letter-spacing: 0.02em;
-    opacity: 0.7;
-    white-space: nowrap;
-}
-
-.trust-logo-sep {
-    width: 4px;
-    height: 4px;
-    border-radius: 50%;
-    background: var(--border);
-    flex-shrink: 0;
-}
-
-/* ─── STATS STRIP ─────────────────────────────────────────── */
-.stats-strip {
-    background: var(--ink);
-    padding: 48px 0;
-}
-
-.stats-grid {
-    display: grid;
-    grid-template-columns: repeat(5, 1fr);
-    gap: 2rem;
-    text-align: center;
-}
-
-.stat-item {
-    padding: 1rem;
-}
-
-.stat-num {
-    font-size: 2.4rem;
-    font-weight: 700;
-    color: #fff;
-    letter-spacing: -0.03em;
-    line-height: 1;
-    margin-bottom: 0.4rem;
-}
-
-.stat-num span {
-    color: #6da3ff;
-}
-
-.stat-desc {
-    font-size: 0.85rem;
-    color: rgba(255,255,255,0.5);
-    font-weight: 400;
-}
-
-/* ─── SECTION SHARED ──────────────────────────────────────── */
-section {
-    padding: 96px 0;
-}
-
-.section-tag {
-    font-size: 0.78rem;
-    font-weight: 600;
-    letter-spacing: 0.08em;
-    text-transform: uppercase;
-    color: var(--accent);
-    margin-bottom: 0.75rem;
-}
-
-.section-heading {
-    font-size: clamp(1.8rem, 3.5vw, 2.6rem);
-    font-weight: 700;
-    letter-spacing: -0.025em;
-    line-height: 1.15;
-    color: var(--ink);
-    margin-bottom: 1rem;
-}
-
-.section-sub {
-    font-size: 1.05rem;
-    color: var(--ink-light);
-    max-width: 540px;
-    line-height: 1.7;
-}
-
-/* ─── SERVICES ────────────────────────────────────────────── */
-.services {
-    background: var(--surface-2);
-}
-
-.services-header {
-    margin-bottom: 3rem;
-}
-
-.services-grid {
-    display: grid;
-    grid-template-columns: repeat(3, 1fr);
-    gap: 1.5px;
-    background: var(--border);
-    border-radius: var(--radius-lg);
-    overflow: hidden;
-}
-
-.service-card {
-    background: var(--surface);
-    padding: 2rem 2rem 2.25rem;
-    transition: background 0.2s;
-    position: relative;
-}
-
-.service-card:hover {
-    background: var(--accent-light);
-}
-
-.service-card:hover .service-icon-wrap {
-    background: var(--accent);
-}
-
-.service-card:hover .service-icon-wrap svg {
-    stroke: #fff;
-}
-
-.service-icon-wrap {
-    width: 44px;
-    height: 44px;
-    border-radius: 10px;
-    background: var(--surface-3);
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    margin-bottom: 1.25rem;
-    transition: background 0.2s;
-}
-
-.service-icon-wrap svg {
-    width: 20px;
-    height: 20px;
-    stroke: var(--accent);
-    fill: none;
-    stroke-width: 1.75;
-    stroke-linecap: round;
-    stroke-linejoin: round;
-    transition: stroke 0.2s;
-}
-
-.service-card h3 {
-    font-size: 1.05rem;
-    font-weight: 600;
-    color: var(--ink);
-    margin-bottom: 0.6rem;
-    letter-spacing: -0.01em;
-}
-
-.service-card p {
-    font-size: 0.875rem;
-    color: var(--ink-light);
-    line-height: 1.65;
-}
-
-/* ─── EXPERTISE ───────────────────────────────────────────── */
-.expertise {
-    background: var(--surface);
-}
-
-.expertise-layout {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 5rem;
-    align-items: start;
-}
-
-.expertise-list {
-    list-style: none;
-    display: flex;
-    flex-direction: column;
-    gap: 0;
-}
-
-.expertise-list li {
-    display: flex;
-    align-items: flex-start;
-    gap: 12px;
-    padding: 0.9rem 0;
-    border-bottom: 1px solid var(--border);
-    font-size: 0.9rem;
-    color: var(--ink-light);
+.hero .who {
+    margin-top: var(--s-5);
+    max-width: var(--measure);
+    font-size: 1.1875rem;
     line-height: 1.5;
+    color: var(--ink-2);
 }
 
-.expertise-list li:last-child {
-    border-bottom: none;
-}
-
-.check-icon {
-    flex-shrink: 0;
-    width: 18px;
-    height: 18px;
-    border-radius: 50%;
-    background: var(--green-light);
+.actions {
+    margin-top: var(--s-6);
     display: flex;
-    align-items: center;
-    justify-content: center;
-    margin-top: 1px;
-}
-
-.check-icon svg {
-    width: 10px;
-    height: 10px;
-    stroke: var(--green);
-    stroke-width: 2.5;
-    fill: none;
-}
-
-.expertise-right {
-    display: flex;
-    flex-direction: column;
-    gap: 1.5rem;
-}
-
-.arch-diagram {
-    border-radius: var(--radius);
-    overflow: hidden;
-    border: 1px solid var(--border);
-    background: var(--surface-2);
-    padding: 2rem;
-    text-align: center;
-}
-
-.arch-diagram img {
-    max-width: 100%;
-    height: auto;
-}
-
-/* ─── OPENFHIR ────────────────────────────────────────────── */
-.openfhir {
-    background: var(--ink);
-    position: relative;
-    overflow: hidden;
-}
-
-.openfhir::before {
-    content: '';
-    position: absolute;
-    inset: 0;
-    background: radial-gradient(ellipse at 80% 50%, rgba(0,82,204,0.18) 0%, transparent 60%);
-    pointer-events: none;
-}
-
-.openfhir-layout {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 5rem;
-    align-items: center;
-    position: relative;
-}
-
-.openfhir-tag {
-    font-size: 0.78rem;
-    font-weight: 600;
-    letter-spacing: 0.08em;
-    text-transform: uppercase;
-    color: #6da3ff;
-    margin-bottom: 0.75rem;
-}
-
-.openfhir h2 {
-    font-size: clamp(1.8rem, 3vw, 2.4rem);
-    font-weight: 700;
-    letter-spacing: -0.025em;
-    line-height: 1.15;
-    color: #fff;
-    margin-bottom: 1.25rem;
-}
-
-.openfhir-desc {
-    font-size: 1rem;
-    color: rgba(255,255,255,0.6);
-    line-height: 1.75;
-    margin-bottom: 2rem;
-}
-
-.openfhir-features {
-    list-style: none;
-    display: flex;
-    flex-direction: column;
-    gap: 0.6rem;
-    margin-bottom: 2.5rem;
-}
-
-.openfhir-features li {
-    display: flex;
-    align-items: center;
-    gap: 10px;
-    font-size: 0.88rem;
-    color: rgba(255,255,255,0.75);
-}
-
-.openfhir-features li::before {
-    content: '';
-    width: 5px;
-    height: 5px;
-    border-radius: 50%;
-    background: #6da3ff;
-    flex-shrink: 0;
-}
-
-.btn-openfhir {
-    display: inline-flex;
-    align-items: center;
-    gap: 8px;
-    background: #fff;
-    color: var(--ink);
-    padding: 0.85rem 1.8rem;
-    border-radius: 10px;
-    font-size: 0.9rem;
-    font-weight: 600;
-    text-decoration: none;
-    transition: box-shadow 0.2s, transform 0.2s;
-}
-
-.btn-openfhir:hover {
-    box-shadow: 0 8px 32px rgba(255,255,255,0.15);
-    transform: translateY(-1px);
-}
-
-.openfhir-visual {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-}
-
-.openfhir-img {
-    width: 100%;
-    height: auto;
-    display: block;
-    border-radius: var(--radius-lg);
-    box-shadow: 0 24px 64px rgba(0,0,0,0.3);
-    filter: brightness(1) invert(1);
-}
-
-/* ─── UNIO ────────────────────────────────────────────────── */
-.unio {
-    background: var(--surface);
-    position: relative;
-    overflow: hidden;
-}
-
-.unio::before {
-    content: '';
-    position: absolute;
-    inset: 0;
-    background: radial-gradient(ellipse at 20% 50%, rgba(18,138,138,0.10) 0%, transparent 60%);
-    pointer-events: none;
-}
-
-.unio-layout {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 5rem;
-    align-items: center;
-    position: relative;
-}
-
-.unio-tag {
-    font-size: 0.78rem;
-    font-weight: 600;
-    letter-spacing: 0.08em;
-    text-transform: uppercase;
-    color: #128a8a;
-    margin-bottom: 0.75rem;
-}
-
-.unio h2 {
-    font-size: clamp(1.8rem, 3vw, 2.4rem);
-    font-weight: 700;
-    letter-spacing: -0.025em;
-    line-height: 1.15;
-    color: var(--ink);
-    margin-bottom: 1.25rem;
-}
-
-.unio-desc {
-    font-size: 1rem;
-    color: var(--ink-light);
-    line-height: 1.75;
-    margin-bottom: 2rem;
-}
-
-.unio-features {
-    list-style: none;
-    display: flex;
-    flex-direction: column;
-    gap: 0.6rem;
-    margin-bottom: 2.5rem;
-}
-
-.unio-features li {
-    display: flex;
-    align-items: center;
-    gap: 10px;
-    font-size: 0.88rem;
-    color: var(--ink-light);
-}
-
-.unio-features li::before {
-    content: '';
-    width: 5px;
-    height: 5px;
-    border-radius: 50%;
-    background: #128a8a;
-    flex-shrink: 0;
-}
-
-.btn-unio {
-    display: inline-flex;
-    align-items: center;
-    gap: 8px;
-    background: #0c2842;
-    color: #fff;
-    padding: 0.85rem 1.8rem;
-    border-radius: 10px;
-    font-size: 0.9rem;
-    font-weight: 600;
-    text-decoration: none;
-    transition: box-shadow 0.2s, transform 0.2s;
-}
-
-.btn-unio:hover {
-    box-shadow: 0 8px 32px rgba(12,40,66,0.25);
-    transform: translateY(-1px);
-}
-
-.unio-visual {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-}
-
-.unio-img {
-    width: 100%;
-    height: auto;
-    display: block;
-    border-radius: var(--radius-lg);
-    box-shadow: 0 24px 64px rgba(12,40,66,0.25);
-}
-
-/* ─── COLLABORATORS ───────────────────────────────────────── */
-.collaborators {
-    background: var(--surface-2);
-}
-
-.collab-header {
-    text-align: center;
-    max-width: 560px;
-    margin: 0 auto 3.5rem;
-}
-
-.collab-header .section-sub {
-    margin: 0 auto;
-}
-
-.collab-grid {
-    display: grid;
-    grid-template-columns: repeat(3, 1fr);
-    gap: 1rem;
-}
-
-.collab-card {
-    background: var(--surface);
-    border: 1px solid var(--border);
-    border-radius: var(--radius);
-    padding: 1.5rem;
-    transition: box-shadow 0.2s, border-color 0.2s;
-    display: flex;
-    flex-direction: column;
-    gap: 0.75rem;
-}
-
-.collab-card:hover {
-    box-shadow: var(--shadow);
-    border-color: #c5d5f0;
-}
-
-.collab-logo-wrap {
-    height: 32px;
-    display: flex;
-    align-items: center;
-}
-
-.collab-logo-wrap img {
-    max-height: 28px;
-    width: auto;
-    max-width: 120px;
-    object-fit: contain;
-    object-position: left;
-}
-
-.collab-logo-wrap img.on-dark {
-    background: var(--ink);
-    padding: 4px 8px;
-    border-radius: 4px;
-    max-height: 36px;
-}
-
-.collab-card h4 {
-    font-size: 0.9rem;
-    font-weight: 600;
-    color: var(--ink);
-}
-
-.collab-card p {
-    font-size: 0.8rem;
-    color: var(--ink-muted);
-    line-height: 1.6;
-    flex: 1;
-}
-
-.collab-link {
-    font-size: 0.78rem;
-    font-weight: 600;
-    color: var(--accent);
-    text-decoration: none;
-    display: inline-flex;
-    align-items: center;
-    gap: 4px;
-    margin-top: 0.25rem;
-}
-
-.collab-link:hover {
-    text-decoration: underline;
-}
-
-/* ─── CONTACT ─────────────────────────────────────────────── */
-.contact {
-    background: var(--surface);
-}
-
-.contact-layout {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 5rem;
-    align-items: start;
-}
-
-.contact-card {
-    background: var(--surface-2);
-    border: 1px solid var(--border);
-    border-radius: var(--radius-lg);
-    padding: 2.5rem;
-}
-
-.contact-card h3 {
-    font-size: 1.1rem;
-    font-weight: 600;
-    color: var(--ink);
-    margin-bottom: 2rem;
-}
-
-.contact-rows {
-    display: flex;
-    flex-direction: column;
-    gap: 1.25rem;
-}
-
-.contact-row {
-    display: flex;
-    align-items: flex-start;
-    gap: 1rem;
-}
-
-.contact-icon {
-    width: 40px;
-    height: 40px;
-    border-radius: 10px;
-    background: var(--surface-3);
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    flex-shrink: 0;
-}
-
-.contact-icon svg {
-    width: 18px;
-    height: 18px;
-    stroke: var(--accent);
-    fill: none;
-    stroke-width: 1.75;
-    stroke-linecap: round;
-    stroke-linejoin: round;
-}
-
-.contact-row-label {
-    font-size: 0.75rem;
-    font-weight: 600;
-    letter-spacing: 0.04em;
-    text-transform: uppercase;
-    color: var(--ink-muted);
-    margin-bottom: 2px;
-}
-
-.contact-row a,
-.contact-row span {
-    font-size: 0.9rem;
-    color: var(--ink);
-    text-decoration: none;
-    font-weight: 500;
-}
-
-.contact-row a:hover {
-    color: var(--accent);
-}
-
-.contact-cta-block {
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    gap: 1.5rem;
-}
-
-.contact-cta-block .section-heading {
-    margin-bottom: 0.5rem;
-}
-
-/* ─── ENGAGEMENTS ─────────────────────────────────────────── */
-.engagements {
-    background: var(--surface-2);
-}
-
-.engagements-header {
-    margin-bottom: 3rem;
-}
-
-.engagements-grid {
-    display: grid;
-    grid-template-columns: repeat(2, 1fr);
-    gap: 1.25rem;
-}
-
-.engagement-card {
-    background: var(--surface);
-    border: 1px solid var(--border);
-    border-radius: var(--radius-lg);
-    padding: 2rem 2rem 2rem;
-    display: flex;
-    flex-direction: column;
-    gap: 1rem;
-    position: relative;
-    transition: box-shadow 0.2s, border-color 0.2s;
-}
-
-.engagement-card:hover {
-    box-shadow: var(--shadow);
-    border-color: #c5d5f0;
-}
-
-.engagement-card--featured {
-    background: var(--ink);
-    border-color: var(--ink);
-}
-
-.engagement-card--featured:hover {
-    border-color: #2a3a52;
-    box-shadow: var(--shadow-lg);
-}
-
-.engagement-featured-badge {
-    position: absolute;
-    top: -1px;
-    right: 1.5rem;
-    background: var(--accent);
-    color: #fff;
-    font-size: 0.7rem;
-    font-weight: 700;
-    letter-spacing: 0.06em;
-    text-transform: uppercase;
-    padding: 4px 12px;
-    border-radius: 0 0 8px 8px;
-}
-
-.engagement-num {
-    font-size: 0.72rem;
-    font-weight: 700;
-    letter-spacing: 0.1em;
-    color: var(--ink-muted);
-    font-variant-numeric: tabular-nums;
-}
-
-.engagement-card--featured .engagement-num {
-    color: rgba(255,255,255,0.35);
-}
-
-.engagement-card h3 {
-    font-size: 1.15rem;
-    font-weight: 600;
-    color: var(--ink);
-    letter-spacing: -0.01em;
-    margin-top: -0.25rem;
-}
-
-.engagement-card--featured h3 {
-    color: #fff;
-}
-
-.engagement-card > p {
-    font-size: 0.875rem;
-    color: var(--ink-light);
-    line-height: 1.7;
-}
-
-.engagement-card--featured > p {
-    color: rgba(255,255,255,0.6);
-}
-
-.engagement-meta {
-    display: flex;
-    gap: 0.5rem;
     flex-wrap: wrap;
-}
-
-.engagement-tag {
-    font-size: 0.72rem;
-    font-weight: 600;
-    letter-spacing: 0.04em;
-    background: var(--surface-3);
-    color: var(--ink-muted);
-    padding: 3px 10px;
-    border-radius: 100px;
-}
-
-.engagement-tag--light {
-    background: rgba(255,255,255,0.12);
-    color: rgba(255,255,255,0.6);
-}
-
-.engagement-list {
-    list-style: none;
-    display: flex;
-    flex-direction: column;
-    gap: 0.55rem;
-    margin-top: 0.25rem;
-    padding-top: 1rem;
-    border-top: 1px solid var(--border);
-}
-
-.engagement-card--featured .engagement-list {
-    border-top-color: rgba(255,255,255,0.1);
-}
-
-.engagement-list li {
-    font-size: 0.84rem;
-    color: var(--ink-light);
-    display: flex;
     align-items: center;
-    gap: 8px;
+    gap: var(--s-4) var(--s-5);
 }
 
-.engagement-card--featured .engagement-list li {
-    color: rgba(255,255,255,0.65);
+/* ─── PROOF LINE ────────────────────────────────────────────── */
+.proof {
+    padding: var(--s-5) 0;
+    border-top: 1px solid var(--ink);
+    border-bottom: 1px solid var(--hair);
 }
 
-.engagement-list li::before {
-    content: '';
-    width: 5px;
-    height: 5px;
-    border-radius: 50%;
-    background: var(--accent);
-    flex-shrink: 0;
+.proof p {
+    max-width: 44rem;
+    font-size: 1.1875rem;
+    line-height: 1.45;
 }
 
-.engagement-card--featured .engagement-list li::before {
-    background: #6da3ff;
+@media (min-width: 640px) {
+    .proof p {
+        font-size: var(--t-l);
+        line-height: 1.4;
+    }
 }
 
-.engagement-card--wide {
-    grid-column: 1 / -1;
-    margin-top: 0.25rem;
+/* ─── WHAT YOU CAN HIRE US FOR ──────────────────────────────── */
+.section.hire {
+    border-top: none;
 }
 
-.engagement-wide-inner {
+.items {
+    margin-top: var(--s-6);
+    list-style: none;
+    border-top: 1px solid var(--hair);
+}
+
+.items > li {
+    padding: var(--s-5) 0;
+    border-bottom: 1px solid var(--hair);
+}
+
+.facts {
+    margin-top: var(--s-3);
     display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 2rem;
+    grid-template-columns: 6.5rem minmax(0, 1fr);
+    gap: var(--s-2) var(--s-4);
+    font-size: var(--t-s);
+    color: var(--ink-2);
 }
 
-@media (max-width: 640px) {
-    .engagement-wide-inner {
-        grid-template-columns: 1fr;
+.facts dt {
+    padding-top: 2px;
+    font-family: var(--mono);
+    font-size: var(--t-xs);
+    color: var(--ink-3);
+}
+
+@media (min-width: 960px) {
+    .items {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        column-gap: var(--s-7);
     }
 }
 
-.engagements-note {
-    margin-top: 2rem;
-    font-size: 0.82rem;
-    color: var(--ink-muted);
-    text-align: center;
+.formats {
+    margin-top: var(--s-5);
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--s-2) var(--s-5);
+    font-size: var(--t-s);
+    color: var(--ink-2);
 }
 
-.engagements-note a {
-    color: var(--accent);
+/* ─── SELECTED WORK ─────────────────────────────────────────── */
+.cases {
+    margin-top: var(--s-6);
+    display: grid;
+    grid-template-columns: minmax(0, 1fr);
+    gap: var(--s-6);
+}
+
+@media (min-width: 960px) {
+    .cases {
+        grid-template-columns: repeat(3, minmax(0, 1fr));
+    }
+}
+
+.case {
+    padding-top: var(--s-4);
+    border-top: 1px solid var(--ink);
+}
+
+.case h3 {
+    margin-top: var(--s-2);
+}
+
+.case p {
+    margin-top: var(--s-3);
+    font-size: var(--t-s);
+    line-height: 1.55;
+    color: var(--ink-2);
+}
+
+.case p strong {
+    color: var(--ink);
+}
+
+.case .text-link {
+    display: inline-block;
+    margin-top: var(--s-3);
+    font-size: var(--t-s);
+}
+
+.credentials {
+    margin-top: var(--s-7);
+    max-width: 44rem;
+    color: var(--ink-2);
+}
+
+.clients {
+    margin-top: var(--s-6);
+    display: grid;
+    grid-template-columns: minmax(0, 1fr);
+    gap: var(--s-5) var(--s-6);
+}
+
+@media (min-width: 960px) {
+    .clients {
+        grid-template-columns: repeat(3, minmax(0, 1fr));
+    }
+}
+
+.clients h3 {
+    margin-bottom: var(--s-2);
+}
+
+.clients ul {
+    list-style: none;
+    font-size: var(--t-s);
+    line-height: 1.7;
+    color: var(--ink-2);
+}
+
+/* ─── PRODUCTS ──────────────────────────────────────────────── */
+.product {
+    margin-top: var(--s-7);
+    padding-top: var(--s-6);
+    border-top: 1px solid var(--hair);
+    display: grid;
+    gap: var(--s-6);
+}
+
+@media (min-width: 960px) {
+    .product {
+        grid-template-columns: 1fr 1.1fr;
+        align-items: center;
+    }
+}
+
+.product .lead {
+    margin-top: var(--s-4);
+    max-width: var(--measure);
+    color: var(--ink-2);
+}
+
+.product .lead strong {
+    color: var(--ink);
+}
+
+.product .evidence {
+    margin-top: var(--s-4);
+    max-width: var(--measure);
+    font-size: var(--t-s);
+    color: var(--ink-2);
+}
+
+.product .text-link {
+    display: inline-block;
+    margin-top: var(--s-5);
+}
+
+.product-logo {
+    display: block;
+    height: 32px;
+    width: auto;
+    margin-bottom: var(--s-4);
+}
+
+figure {
+    margin: 0;
+}
+
+figcaption {
+    margin-top: var(--s-4);
+    max-width: var(--measure);
+    font-size: var(--t-s);
+    color: var(--ink-2);
+}
+
+/* Static mapping excerpt (until commit 1.5): mono; pairs stacked on
+   phones, side by side from 640 px. Lines break only at <wbr>. */
+.excerpt {
+    font-family: var(--mono);
+    font-size: var(--t-xs);
+}
+
+.excerpt-head,
+.excerpt li {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr);
+    gap: var(--s-1) var(--s-4);
+}
+
+.excerpt-head {
+    padding-bottom: var(--s-2);
+    color: var(--ink-3);
+    border-bottom: 1px solid var(--ink);
+}
+
+.excerpt ol {
+    list-style: none;
+}
+
+.excerpt li {
+    padding: var(--s-3) 0;
+    border-bottom: 1px solid var(--hair);
+}
+
+.excerpt .ehr {
+    color: var(--ink-2);
+}
+
+@media (min-width: 640px) {
+    .excerpt-head,
+    .excerpt li {
+        grid-template-columns: 1fr 1fr;
+    }
+}
+
+.shot {
+    padding: var(--s-2);
+    background: var(--panel);
+    border: 1px solid var(--rule);
+    border-radius: var(--radius);
+}
+
+.shot img {
+    display: block;
+    width: 100%;
+    height: auto;
+}
+
+/* ─── RECENT WRITING ────────────────────────────────────────── */
+.writing-list {
+    margin-top: var(--s-6);
+    display: grid;
+    grid-template-columns: minmax(0, 1fr);
+    gap: var(--s-6);
+}
+
+@media (min-width: 640px) {
+    .writing-list {
+        grid-template-columns: repeat(3, minmax(0, 1fr));
+    }
+}
+
+.writing-item {
+    display: block;
+    color: inherit;
     text-decoration: none;
-    font-weight: 500;
 }
 
-.engagements-note a:hover {
+.writing-item img {
+    display: block;
+    width: 100%;
+    height: auto;
+    aspect-ratio: 16 / 9;
+    object-fit: cover;
+    border: 1px solid var(--hair);
+    border-radius: var(--radius);
+}
+
+.writing-item h3 {
+    margin-top: var(--s-3);
+    font-size: 1.1875rem;
+}
+
+.writing-item:hover h3 {
     text-decoration: underline;
+    text-decoration-color: var(--rule);
+    text-underline-offset: 4px;
 }
 
-/* ─── RESPONSIVE ──────────────────────────────────────────── */
-@media (max-width: 900px) {
-    .services-grid,
-    .engagements-grid {
-        grid-template-columns: repeat(2, 1fr);
-    }
-
-    .expertise-layout,
-    .openfhir-layout,
-    .unio-layout,
-    .contact-layout {
-        grid-template-columns: 1fr;
-        gap: 2.5rem;
-    }
-
-    .stats-grid {
-        grid-template-columns: repeat(2, 1fr);
-    }
-
-    .collab-grid {
-        grid-template-columns: repeat(2, 1fr);
-    }
-
-    .openfhir-visual {
-        order: -1;
-    }
+.writing-item p {
+    margin-top: var(--s-2);
+    font-size: var(--t-s);
+    color: var(--ink-2);
 }
 
-@media (max-width: 640px) {
-    section {
-        padding: 64px 0;
-    }
+.writing-item .label {
+    margin-top: var(--s-2);
+}
 
-    .hero {
-        padding: 64px 0 56px;
-    }
+.all-posts {
+    display: inline-block;
+    margin-top: var(--s-6);
+}
 
-    .services-grid,
-    .engagements-grid,
-    .collab-grid {
-        grid-template-columns: 1fr;
-    }
+/* ─── CONTACT ───────────────────────────────────────────────── */
+.contact-grid {
+    display: grid;
+    gap: var(--s-6);
+}
 
-    .stats-grid {
-        grid-template-columns: repeat(2, 1fr);
-    }
-
-    .hero-actions {
-        flex-direction: column;
-        align-items: flex-start;
+@media (min-width: 960px) {
+    .contact-grid {
+        grid-template-columns: 1fr 1fr;
+        align-items: start;
     }
 }
 
-/* ─── ANIMATIONS ──────────────────────────────────────────── */
-@keyframes fade-up {
-    from { opacity: 0; transform: translateY(20px); }
-    to   { opacity: 1; transform: translateY(0); }
+.contact-details {
+    display: grid;
+    grid-template-columns: 6.5rem minmax(0, 1fr);
+    gap: var(--s-3) var(--s-4);
+    padding-top: var(--s-4);
+    border-top: 1px solid var(--ink);
 }
 
-.animate {
-    animation: fade-up 0.55s ease both;
+.contact-details dt {
+    padding-top: 3px;
+    font-family: var(--mono);
+    font-size: var(--t-xs);
+    color: var(--ink-3);
 }
 
-.delay-1 { animation-delay: 0.1s; }
-.delay-2 { animation-delay: 0.2s; }
-.delay-3 { animation-delay: 0.3s; }
+.contact-details dd a {
+    color: var(--ink);
+    text-decoration: underline;
+    text-decoration-color: var(--rule);
+    text-underline-offset: 4px;
+}
     </style>
     <!-- /@css -->
 </head>
 <body>
 
-    <!-- ─── HEADER ─── -->
 <!-- @nav -->
     <header>
         <nav class="container" aria-label="Main">
@@ -1460,10 +932,9 @@ section {
             <div class="nav-right">
                 <ul class="nav-links nav-main" id="site-nav">
                     <li><a href="#services">Services</a></li>
-                    <li><a href="#engagements">Engagements</a></li>
-                    <li><a href="#products">Our products</a></li>
-                    <li><a href="#expertise">Expertise</a></li>
-                    <li><a href="#collaborators">Collaborators</a></li>
+                    <li><a href="#expertise">Selected work</a></li>
+                    <li><a href="#products">Products</a></li>
+                    <li><a href="#writing">Writing</a></li>
                 </ul>
                 <ul class="nav-links nav-keep">
                     <li><a href="blog/">Blog</a></li>
@@ -1491,545 +962,240 @@ section {
     </script>
 <!-- /@nav -->
 
-    <!-- ─── HERO ─── -->
-    <section class="hero">
-        <div class="container">
-            <div class="hero-label animate">
-                <span class="hero-label-dot"></span>
-                Healthcare Interoperability Consulting
-            </div>
-            <h1 class="animate delay-1">
-                Connecting healthcare systems through <em>open standards</em>
-            </h1>
-            <p class="hero-desc animate delay-2">
-                We help hospitals, national health programs, and health IT vendors implement FHIR, openEHR, and IHE-based architectures that scale — from regional networks to national infrastructure.
-            </p>
-            <div class="hero-actions animate delay-3">
-                <a href="#engagements" class="btn-primary">
-                    Collaborate
-                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
-                </a>
-                <a href="#products" class="btn-ghost">Explore our products</a>
-            </div>
-            <div class="hero-trust">
-                <p class="hero-trust-label">Trusted by teams at</p>
-                <div class="trust-logos">
-                    <div class="trust-logos-track" aria-hidden="false">
-                        <span class="trust-logo">Maastricht UMC+</span>
-                        <span class="trust-logo-sep"></span>
-                        <span class="trust-logo">UMC Utrecht</span>
-                        <span class="trust-logo-sep"></span>
-                        <span class="trust-logo">Landspítali</span>
-                        <span class="trust-logo-sep"></span>
-                        <span class="trust-logo">VECOZO</span>
-                        <span class="trust-logo-sep"></span>
-                        <span class="trust-logo">RSO Zuid-Limburg</span>
-                        <span class="trust-logo-sep"></span>
-                        <span class="trust-logo">freshehr</span>
-                        <span class="trust-logo-sep"></span>
-                        <span class="trust-logo">Firely</span>
-                        <span class="trust-logo-sep"></span>
-                        <span class="trust-logo">Open Line</span>
-                        <span class="trust-logo-sep"></span>
-                        <span class="trust-logo">Tactuum</span>
-                        <span class="trust-logo-sep"></span>
-                        <span class="trust-logo">Stichting NUTS</span>
-                        <span class="trust-logo-sep"></span>
-                        <span class="trust-logo">Medblocks</span>
-                        <span class="trust-logo-sep"></span>
-                        <span class="trust-logo">HTEC</span>
-                        <span class="trust-logo-sep"></span>
-                        <span class="trust-logo">Dutch Ministry of Health</span>
-                        <span class="trust-logo-sep"></span>
-                        <span class="trust-logo">NJII</span>
-                        <span class="trust-logo-sep"></span>
-                        <span class="trust-logo">SRC Infonet</span>
-                        <span class="trust-logo-sep"></span>
-                        <span class="trust-logo">CumuluZ</span>
-                        <span class="trust-logo-sep"></span>
-                        <!-- duplicate for seamless loop -->
-                        <span class="trust-logo">Maastricht UMC+</span>
-                        <span class="trust-logo-sep"></span>
-                        <span class="trust-logo">UMC Utrecht</span>
-                        <span class="trust-logo-sep"></span>
-                        <span class="trust-logo">Landspítali</span>
-                        <span class="trust-logo-sep"></span>
-                        <span class="trust-logo">VECOZO</span>
-                        <span class="trust-logo-sep"></span>
-                        <span class="trust-logo">RSO Zuid-Limburg</span>
-                        <span class="trust-logo-sep"></span>
-                        <span class="trust-logo">freshehr</span>
-                        <span class="trust-logo-sep"></span>
-                        <span class="trust-logo">Firely</span>
-                        <span class="trust-logo-sep"></span>
-                        <span class="trust-logo">Open Line</span>
-                        <span class="trust-logo-sep"></span>
-                        <span class="trust-logo">Tactuum</span>
-                        <span class="trust-logo-sep"></span>
-                        <span class="trust-logo">Stichting NUTS</span>
-                        <span class="trust-logo-sep"></span>
-                        <span class="trust-logo">Medblocks</span>
-                        <span class="trust-logo-sep"></span>
-                        <span class="trust-logo">HTEC</span>
-                        <span class="trust-logo-sep"></span>
-                        <span class="trust-logo">Dutch Ministry of Health</span>
-                        <span class="trust-logo-sep"></span>
-                        <span class="trust-logo">NJII</span>
-                        <span class="trust-logo-sep"></span>
-                        <span class="trust-logo">SRC Infonet</span>
-                        <span class="trust-logo-sep"></span>
-                        <span class="trust-logo">CumuluZ</span>
-                        <span class="trust-logo-sep"></span>
-                    </div>
+    <main>
+        <!-- ─── HERO ─── -->
+        <section class="hero">
+            <div class="wrap">
+                <h1>Boutique healthcare interoperability consultancy</h1>
+                <p class="who">A small team that designs, reviews and builds data integration for hospitals, national health programmes and health IT vendors. We also make two products, openFHIR and Unio.</p>
+                <div class="actions">
+                    <a class="btn" href="#contact" data-goatcounter-click="hero-contact">Contact</a>
+                    <a class="text-link" href="#products">openFHIR and Unio</a>
                 </div>
             </div>
-        </div>
-    </section>
+        </section>
 
-    <!-- ─── STATS ─── -->
-    <div class="stats-strip">
-        <div class="container">
-            <div class="stats-grid">
-                <div class="stat-item">
-                    <div class="stat-num">10<span>+</span></div>
-                    <div class="stat-desc">Years of experience</div>
+        <!-- ─── PROOF LINE ─── -->
+        <section class="proof" aria-label="Proof">
+            <div class="wrap">
+                <p>Member of the openEHR Specifications Editorial Committee Experts Panel since 2026. We drafted the openEHR Federation specification with RSO Zuid-Limburg. The openEHR SEC approved version 1.0.0 in October 2026, and our gateway Unio implements it.</p>
+            </div>
+        </section>
+
+        <!-- ─── WHAT YOU CAN HIRE US FOR ─── -->
+        <section id="services" class="section hire">
+            <div class="wrap">
+                <h2>What you can hire us for</h2>
+                <ul class="items">
+                    <li>
+                        <h3>Architecture review</h3>
+                        <dl class="facts">
+                            <dt>For</dt><dd>Teams with an integration architecture in place or on paper.</dd>
+                            <dt>Format</dt><dd>Fixed scope</dd>
+                            <dt>Length</dt><dd>1–2 weeks</dd>
+                            <dt>You receive</dt><dd>A written report of findings, gaps and prioritised recommendations, a check against FHIR, IHE and openEHR, and one follow-up question session.</dd>
+                        </dl>
+                    </li>
+                    <li>
+                        <h3>Project consulting</h3>
+                        <dl class="facts">
+                            <dt>For</dt><dd>A team running a FHIR, openEHR or IHE integration project, including integrations with Epic, Cerner Millennium and ChipSoft HiX.</dd>
+                            <dt>Format</dt><dd>Time and materials; we work inside your team.</dd>
+                            <dt>Length</dt><dd>Weeks to months</dd>
+                            <dt>You receive</dt><dd>Design and implementation support, architecture documentation and regular check-ins with your team.</dd>
+                        </dl>
+                    </li>
+                    <li>
+                        <h3>Strategic advisory</h3>
+                        <dl class="facts">
+                            <dt>For</dt><dd>Organisations that want an interoperability expert on call.</dd>
+                            <dt>Format</dt><dd>Retainer. Think of it as a fractional Chief Interoperability Officer.</dd>
+                            <dt>Length</dt><dd>Ongoing</dd>
+                            <dt>You receive</dt><dd>An async support channel, a monthly strategy and roadmap session, priority answers to urgent questions and a quarterly architecture review.</dd>
+                        </dl>
+                    </li>
+                    <li>
+                        <h3>Training and workshops</h3>
+                        <dl class="facts">
+                            <dt>For</dt><dd>Health IT teams, new to the standards or experienced.</dd>
+                            <dt>Format</dt><dd>Fixed scope, remote or on site.</dd>
+                            <dt>Length</dt><dd>Half a day to 2 days</dd>
+                            <dt>You receive</dt><dd>FHIR fundamentals or advanced implementation, openEHR archetypes and templates, IHE profiles in practice, or a curriculum built for your team.</dd>
+                        </dl>
+                    </li>
+                    <li>
+                        <h3>Software development</h3>
+                        <dl class="facts">
+                            <dt>For</dt><dd>When you need it built, not only designed.</dd>
+                            <dt>Format</dt><dd>Time and materials or fixed scope.</dd>
+                            <dt>Length</dt><dd>Ongoing or fixed</dd>
+                            <dt>You receive</dt><dd>FHIR layers and APIs, openEHR–FHIR transformation, IHE profile implementations (XDS, XDW, ATNA, QEDm, PIX, PDQ, PIXm and PDQm) and connectors to Epic, Cerner and HiX. Built in Java (Jakarta EE, Spring), .NET or Go.</dd>
+                        </dl>
+                    </li>
+                </ul>
+                <p class="formats" id="engagements"><span class="label">Engagement formats</span><span>Fixed scope</span><span>Time and materials</span><span>Retainer</span></p>
+            </div>
+        </section>
+
+        <!-- ─── SELECTED WORK ─── -->
+        <section id="expertise" class="section">
+            <div class="wrap">
+                <h2>Selected work</h2>
+                <div class="cases">
+                    <article class="case">
+                        <p class="label">RSO Zuid-Limburg · 2026</p>
+                        <h3>One query across a region's openEHR repositories</h3>
+                        <p>In Zuid-Limburg each care provider keeps patient data in its own openEHR repository, on purpose. An application that needed a patient's full record had to know every repository and query each one itself.</p>
+                        <p>With RSO Zuid-Limburg and the openEHR SEC we drafted a specification for federating openEHR repositories, wrote an open reference implementation and built Unio on it. <strong>The SEC approved version 1.0.0 in October 2026.</strong></p>
+                        <a class="text-link" href="/blog/openehr-federation-spec-approved-unio/">Read about the approval</a>
+                    </article>
+                    <article class="case">
+                        <p class="label">HL7 Converge &amp; Collaborate, Dublin · 2026</p>
+                        <h3>A FHIR facade on an openEHR repository, built live</h3>
+                        <p>We ran the hands-on "Let's Build" session. Participants assembled an openEHR repository, Firely Server and openFHIR into one setup that returns stored data as a FHIR International Patient Summary and stores incoming FHIR data in openEHR.</p>
+                        <a class="text-link" href="/blog/converge-and-collaborate-dublin/">Read the session write-up</a>
+                    </article>
+                    <article class="case">
+                        <p class="label">Proof of concept · 2026</p>
+                        <h3>The Dutch care-transfer standard on openEHR and FHIR</h3>
+                        <p>eOverdracht is the Dutch national standard for handing over nursing and care information between providers. We built a working proof of concept of eOverdracht in a hybrid openEHR and FHIR architecture, with the routing and care-services building blocks of the Dutch Generic Functions programme.</p>
+                        <a class="text-link" href="/blog/eoverdracht-hybrid-architecture-openehr-fhir/">Read the proof of concept</a>
+                    </article>
                 </div>
-                <div class="stat-item">
-                    <div class="stat-num">20<span>+</span></div>
-                    <div class="stat-desc">Major projects delivered</div>
-                </div>
-                <div class="stat-item">
-                    <div class="stat-num">openEHR</div>
-                    <div class="stat-desc">SEC Expert Member</div>
-                </div>
-                <div class="stat-item">
-                    <div class="stat-num">IHE</div>
-                    <div class="stat-desc">Certified Professional</div>
-                </div>
-                <div class="stat-item">
-                    <div class="stat-num">EU <span>&</span> US</div>
-                    <div class="stat-desc">International reach</div>
+
+                <p class="credentials">IHE certified professional. Member of the openEHR Specifications Editorial Committee Experts Panel since 2026. Work in the Netherlands, the United Kingdom, Iceland, Slovenia and the United States.</p>
+
+                <div class="clients" id="collaborators">
+                    <div>
+                        <h3>Hospitals</h3>
+                        <ul>
+                            <li>Maastricht UMC+</li>
+                            <li>UMC Utrecht</li>
+                            <li>Landspítali, Iceland</li>
+                            <li>Maastro Clinic</li>
+                            <li>Oncology Institute</li>
+                            <li>EPUT (NHS)</li>
+                            <li>West Suffolk Hospital (NHS)</li>
+                            <li>LPRES</li>
+                        </ul>
+                    </div>
+                    <div>
+                        <h3>National and regional programmes</h3>
+                        <ul>
+                            <li>VWS, the Dutch Ministry of Health</li>
+                            <li>VECOZO</li>
+                            <li>NJII, New Jersey Innovation Institute</li>
+                            <li>RSO Zuid-Limburg, regional care network</li>
+                            <li>Stichting NUTS</li>
+                        </ul>
+                    </div>
+                    <div>
+                        <h3>Vendors and partners</h3>
+                        <ul>
+                            <li>Firely</li>
+                            <li>Open Line</li>
+                            <li>Open Line Vitaly</li>
+                            <li>Tactuum</li>
+                            <li>Medblocks</li>
+                            <li>HTEC</li>
+                            <li>freshehr</li>
+                            <li>SRC Infonet</li>
+                            <li>CumuluZ</li>
+                            <li>Enovation, InterSystems, Tiani, Philips (integrations)</li>
+                        </ul>
+                    </div>
                 </div>
             </div>
-        </div>
-    </div>
+        </section>
 
-    <!-- ─── SERVICES ─── -->
-    <section id="services" class="services">
-        <div class="container">
-            <div class="services-header">
-                <p class="section-tag">What we do</p>
-                <h2 class="section-heading">End-to-end interoperability services</h2>
-                <p class="section-sub">From architecture design to implementation and training — we cover the full lifecycle of healthcare integration projects.</p>
-            </div>
-            <div class="services-grid">
-                <div class="service-card">
-                    <div class="service-icon-wrap">
-                        <svg viewBox="0 0 24 24"><path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"/></svg>
-                    </div>
-                    <h3>FHIR Consulting</h3>
-                    <p>Expert guidance on implementing FHIR R4/R5 architectures and APIs. We help you leverage the full power of the standard for modern health data exchange.</p>
-                </div>
-                <div class="service-card">
-                    <div class="service-icon-wrap">
-                        <svg viewBox="0 0 24 24"><rect x="2" y="3" width="20" height="14" rx="2"/><path d="M8 21h8M12 17v4"/></svg>
-                    </div>
-                    <h3>openEHR Integration</h3>
-                    <p>Specialized consulting in openEHR implementations and the co-existence of openEHR and FHIR through our FHIR Connect specification.</p>
-                </div>
-                <div class="service-card">
-                    <div class="service-icon-wrap">
-                        <svg viewBox="0 0 24 24"><path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"/></svg>
-                    </div>
-                    <h3>Enterprise Architecture</h3>
-                    <p>Design of scalable, interoperable healthcare IT architectures for hospitals, clinics, and national health programs — built for the long term.</p>
-                </div>
-                <div class="service-card">
-                    <div class="service-icon-wrap">
-                        <svg viewBox="0 0 24 24"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87M16 3.13a4 4 0 0 1 0 7.75"/></svg>
-                    </div>
-                    <h3>System Integration</h3>
-                    <p>Complex integrations with Epic, Cerner Millennium, ChipSoft HiX, and other major EMR/EHR platforms using IHE profiles and messaging standards.</p>
-                </div>
-                <div class="service-card">
-                    <div class="service-icon-wrap">
-                        <svg viewBox="0 0 24 24"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>
-                    </div>
-                    <h3>IHE Compliance</h3>
-                    <p>Implementation of IHE profiles including XDS, MPI, XDW, ATNA, QEDm, and SMART on FHIR to ensure standards-based, auditable interoperability.</p>
-                </div>
-                <div class="service-card">
-                    <div class="service-icon-wrap">
-                        <svg viewBox="0 0 24 24"><path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"/><path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"/></svg>
-                    </div>
-                    <h3>Training & Education</h3>
-                    <p>Comprehensive training on healthcare interoperability standards, FHIR implementation, and best practices — tailored for health IT teams at all levels.</p>
-                </div>
-            </div>
-        </div>
-    </section>
+        <!-- ─── PRODUCTS ─── -->
+        <section id="products" class="section">
+            <div class="wrap">
+                <h2>Two products from our consulting work</h2>
+                <p class="section-lead">Syntaric is a consultancy. We also build two products: openFHIR, which is open source under the Apache 2.0 licence and has a commercial Enterprise version, and Unio, which is commercial.</p>
 
-    <!-- ─── WAYS TO WORK ─── -->
-    <section id="engagements" class="engagements">
-        <div class="container">
-            <div class="engagements-header">
-                <p class="section-tag">Engagements</p>
-                <h2 class="section-heading">Ways to work with us</h2>
-                <p class="section-sub">Choose the engagement model that fits your stage — from a focused review to a long-term partnership.</p>
-            </div>
-            <div class="engagements-grid">
-
-                <div class="engagement-card">
-                    <div class="engagement-num">01</div>
-                    <h3>Architecture Review</h3>
-                    <p>A deep-dive assessment of your existing or planned healthcare integration architecture. You get a written report with findings, gaps, and a prioritised set of recommendations.</p>
-                    <div class="engagement-meta">
-                        <span class="engagement-tag">Fixed scope</span>
-                        <span class="engagement-tag">1–2 weeks</span>
+                <div class="product" id="openfhir">
+                    <div>
+                        <h3>openFHIR</h3>
+                        <p class="lead">openFHIR maps data between openEHR and FHIR in both directions, so an openEHR repository can exchange data with FHIR systems. It implements <strong>FHIR Connect</strong>, an open specification for describing openEHR–FHIR mappings, which we co-created.</p>
+                        <p class="evidence">It was the bridge between openEHR and FHIR in the "Let's Build" session at HL7 Converge &amp; Collaborate, Dublin 2026, and in our International Patient Summary webinar.</p>
+                        <a class="text-link" href="https://open-fhir.com" target="_blank" rel="noopener" data-goatcounter-click="out-openfhir">open-fhir.com</a>
                     </div>
-                    <ul class="engagement-list">
-                        <li>Review of current integration landscape</li>
-                        <li>Standards alignment check (FHIR, IHE, openEHR)</li>
-                        <li>Written findings &amp; recommendations report</li>
-                        <li>1 follow-up Q&amp;A session</li>
-                    </ul>
-                </div>
-
-                <div class="engagement-card">
-                    <div class="engagement-num">02</div>
-                    <h3>Project Consulting</h3>
-                    <p>Embedded expert support for a specific integration or interoperability project — from design through delivery. We work alongside your team to keep things on track and standards-compliant.</p>
-                    <div class="engagement-meta">
-                        <span class="engagement-tag">Time &amp; materials</span>
-                        <span class="engagement-tag">Weeks to months</span>
-                    </div>
-                    <ul class="engagement-list">
-                        <li>FHIR / openEHR / IHE design &amp; implementation support</li>
-                        <li>Integration guidance</li>
-                        <li>Architecture documentation</li>
-                        <li>Regular syncs with your team</li>
-                    </ul>
-                </div>
-
-                <div class="engagement-card engagement-card--featured">
-                    <div class="engagement-featured-badge">Most popular</div>
-                    <div class="engagement-num">03</div>
-                    <h3>Strategic Advisory</h3>
-                    <p>An ongoing retainer for organisations that need a trusted expert on-call. Think of us as your fractional Chief Interoperability Officer — available when you need strategic input, a second opinion, or a quick answer.</p>
-                    <div class="engagement-meta">
-                        <span class="engagement-tag engagement-tag--light">Retainer</span>
-                        <span class="engagement-tag engagement-tag--light">Ongoing</span>
-                    </div>
-                    <ul class="engagement-list">
-                        <li>Dedicated async support channel</li>
-                        <li>Monthly strategy &amp; roadmap sessions</li>
-                        <li>Priority access for urgent questions</li>
-                        <li>Quarterly architecture reviews</li>
-                    </ul>
-                </div>
-
-                <div class="engagement-card">
-                    <div class="engagement-num">04</div>
-                    <h3>Training &amp; Workshops</h3>
-                    <p>Hands-on training sessions for health IT teams — from introductory FHIR workshops to advanced openEHR and IHE deep-dives. Delivered remotely or on-site, tailored to your team's level.</p>
-                    <div class="engagement-meta">
-                        <span class="engagement-tag">Fixed scope</span>
-                        <span class="engagement-tag">Half-day to 2 days</span>
-                    </div>
-                    <ul class="engagement-list">
-                        <li>FHIR fundamentals &amp; advanced implementation</li>
-                        <li>openEHR archetypes &amp; templates</li>
-                        <li>IHE profiles in practice</li>
-                        <li>Custom curriculum on request</li>
-                    </ul>
-                </div>
-
-
-                <div class="engagement-card engagement-card--wide">
-                    <div class="engagement-num">05</div>
-                    <div class="engagement-wide-inner">
-                        <div>
-                            <h3>Software Development</h3>
-                            <p>Need something built, not just designed? We develop interoperability software directly: FHIR layers, integration components, clinical data pipelines, and custom connectors between healthcare systems.</p>
-                            <div class="engagement-meta" style="margin-top: 1rem;">
-                                <span class="engagement-tag">Time &amp; materials</span>
-                                <span class="engagement-tag">Ongoing or fixed scope</span>
-                            </div>
+                    <figure data-nosnippet>
+                        <div class="excerpt">
+                            <p class="excerpt-head"><span>FHIR R4 · AllergyIntolerance</span><span>openEHR · openEHR-EHR-<wbr>EVALUATION.<wbr>adverse_reaction_risk.v2</span></p>
+                            <ol>
+                            <li><span class="fhir">AllergyIntolerance.<wbr>code</span><span class="ehr">/data[at0001]/<wbr>items[at0002]</span></li>
+                            <li><span class="fhir">AllergyIntolerance.<wbr>clinicalStatus</span><span class="ehr">/data[at0001]/<wbr>items[at0130]</span></li>
+                            <li><span class="fhir">AllergyIntolerance.<wbr>verificationStatus</span><span class="ehr">/data[at0001]/<wbr>items[at0063]</span></li>
+                            <li><span class="fhir">AllergyIntolerance.<wbr>criticality</span><span class="ehr">/data[at0001]/<wbr>items[at0101]</span></li>
+                            </ol>
                         </div>
-                        <div>
-                            <ul class="engagement-list" style="border-top: none; padding-top: 0;">
-                                <li>FHIR layers &amp; API development</li>
-                                <li>openEHR / FHIR transformation engines</li>
-                                <li>IHE profile implementations (XDS, MPI, XDW…)</li>
-                                <li>EMR integration connectors (Epic, Cerner, HiX…)</li>
-                                <li>Java / Jakarta EE / Spring · .NET · Go</li>
-                            </ul>
-                        </div>
+                        <figcaption>The same allergy record, as sent over FHIR and as stored in openEHR. Paths from an openFHIR mapping file.</figcaption>
+                    </figure>
+                </div>
+
+                <div class="product" id="unio">
+                    <div>
+                        <h3>Unio</h3>
+                        <p class="lead">Unio makes several openEHR repositories answer as one. An application queries one openEHR endpoint and gets a patient's records from every member repository, while each record stays where it was created.</p>
+                        <p class="evidence">It implements the openEHR Federation Tier with AQL specification, version 1.0.0, approved by the openEHR SEC in October 2026.</p>
+                        <a class="text-link" href="https://unio.syntaric.com" target="_blank" rel="noopener" data-goatcounter-click="out-unio">unio.syntaric.com</a>
                     </div>
+                    <figure class="shot">
+                        <img src="/images/unio-img.png" width="1600" height="1122" alt="Unio operator console topology view: the gateway, the organisations it federates and the openEHR repository behind each, coloured by reachability" loading="lazy" decoding="async">
+                    </figure>
                 </div>
             </div>
-            <p class="engagements-note"><a href="mailto:info@syntaric.com">Get in touch</a> to discuss what fits best.</p>
-        </div>
-    </section>
+        </section>
 
-    <!-- ─── EXPERTISE ─── -->
-    <section id="expertise" class="expertise">
-        <div class="container">
-            <div class="expertise-layout">
-                <div>
-                    <p class="section-tag">Track record</p>
-                    <h2 class="section-heading">Experience across leading healthcare organizations</h2>
-                    <p class="section-sub" style="margin-bottom: 2rem;">Over a decade of delivering mission-critical interoperability projects across Europe and the US.</p>
-                    <ul class="expertise-list">
-                        <li>
-                            <span class="check-icon"><svg viewBox="0 0 12 12"><polyline points="2 6 5 9 10 3"/></svg></span>
-                            University Hospitals — Maastricht UMC+, UMC Utrecht, Landspítali
-                        </li>
-                        <li>
-                            <span class="check-icon"><svg viewBox="0 0 12 12"><polyline points="2 6 5 9 10 3"/></svg></span>
-                            National Health Programs — VECOZO, Dutch Ministry of Health, NJII
-                        </li>
-                        <li>
-                            <span class="check-icon"><svg viewBox="0 0 12 12"><polyline points="2 6 5 9 10 3"/></svg></span>
-                            NHS Trusts — EPUT, West Suffolk Hospital, LPRES
-                        </li>
-                        <li>
-                            <span class="check-icon"><svg viewBox="0 0 12 12"><polyline points="2 6 5 9 10 3"/></svg></span>
-                            Regional Health Networks — RSO Zuid-Limburg
-                        </li>
-                        <li>
-                            <span class="check-icon"><svg viewBox="0 0 12 12"><polyline points="2 6 5 9 10 3"/></svg></span>
-                            Specialized Clinics — Maastro Clinic, Oncology Institute
-                        </li>
-                        <li>
-                            <span class="check-icon"><svg viewBox="0 0 12 12"><polyline points="2 6 5 9 10 3"/></svg></span>
-                            Vendor integrations — Epic, Enovation, InterSystems, Firely, Tiani, Philips, and more
-                        </li>
-                    </ul>
-                </div>
-                <div class="expertise-right">
-                    <div class="arch-diagram">
-                        <p style="font-size: 0.75rem; font-weight: 600; letter-spacing: 0.06em; text-transform: uppercase; color: var(--ink-muted); margin-bottom: 1.5rem;">Standards-Based Architecture</p>
-                        <img src="images/architecture.svg" alt="Healthcare Systems Architecture Diagram">
-                    </div>
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <!-- ─── OUR PRODUCTS ─── -->
-    <div id="products">
-
-    <!-- ─── OPENFHIR ─── -->
-    <section id="openfhir" class="openfhir">
-        <div class="container">
-            <div class="openfhir-layout">
-                <div>
-                    <p class="openfhir-tag">Our Product</p>
-                    <h2>openFHIR: Bridging openEHR and FHIR</h2>
-                    <p class="openfhir-desc">As co-creators of the FHIR Connect specification and founders of openFHIR, we built an engine for seamless bidirectional interoperability between openEHR and HL7 FHIR — giving you the clinical richness of openEHR with the connectivity of FHIR.</p>
-                    <ul class="openfhir-features">
-                        <li>Bidirectional mapping between FHIR Resources and openEHR Compositions</li>
-                        <li>RESTful API and message queue support for flexible integration</li>
-                        <li>Docker-ready deployment for rapid rollout</li>
-                        <li>Atlas interface for mapping management and data analysis</li>
-                        <li>Built on the open-source FHIR Connect specification</li>
-                    </ul>
-                    <a href="https://open-fhir.com" target="_blank" class="btn-openfhir">
-                        Explore openFHIR
-                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+        <!-- ─── RECENT WRITING AND TALKS ─── -->
+        <section id="writing" class="section">
+            <div class="wrap">
+                <h2>Recent writing and talks</h2>
+                <!-- @latest-posts -->
+                <div class="writing-list">
+                    <a class="writing-item" href="blog/openehr-federation-spec-approved-unio/">
+                        <img src="/blog/openehr-federation-spec-approved-unio/cover.png" width="2376" height="1652" alt="" loading="lazy" decoding="async">
+                        <h3>openEHR Federation Spec 1.0 is Approved, and Unio is Out</h3>
+                        <p>The openEHR SEC approved version 1.0.0 of the Federation Tier with AQL specification. We're also releasing Unio, our federation gateway built on it.</p>
+                        <p class="label">October 19, 2026</p>
+                    </a>
+                    <a class="writing-item" href="blog/openehr-federation-spec/">
+                        <img src="/blog/openehr-federation-spec/cover.png" width="1835" height="1224" alt="" loading="lazy" decoding="async">
+                        <h3>Federating openEHR CDRs — A Spec Open for Comment</h3>
+                        <p>Together with RSO Zuid-Limburg and the openEHR SEC we've been drafting a specification for federating openEHR CDRs. It is in its final two weeks of public comment.</p>
+                        <p class="label">September 28, 2026</p>
+                    </a>
+                    <a class="writing-item" href="blog/openehr-sec-experts-panel/">
+                        <img src="/blog/openehr-sec-experts-panel/cover.jpeg" width="300" height="300" alt="" loading="lazy" decoding="async">
+                        <h3>Joining the openEHR SEC Experts Panel</h3>
+                        <p>Syntaric joins the openEHR Specifications Editorial Committee Experts Panel — a reflection on our journey with openEHR, what the SEC is, and what this means.</p>
+                        <p class="label">May 13, 2026</p>
                     </a>
                 </div>
-                <div class="openfhir-visual">
-                    <img src="/images/openfhir-img.png" alt="openFHIR" class="openfhir-img">
-                </div>
+                <!-- /@latest-posts -->
+                <a class="text-link all-posts" href="blog/">All posts</a>
             </div>
-        </div>
-    </section>
+        </section>
 
-    <!-- ─── UNIO ─── -->
-    <section id="unio" class="unio">
-        <div class="container">
-            <div class="unio-layout">
-                <div class="unio-visual">
-                    <img src="/images/unio-img.png" alt="Unio operator console topology view: the gateway, the organisations it federates and the openEHR repository behind each, coloured by reachability" class="unio-img" loading="lazy">
-                </div>
+        <!-- ─── CONTACT ─── -->
+        <section id="contact" class="section">
+            <div class="wrap contact-grid">
                 <div>
-                    <p class="unio-tag">Our Product</p>
-                    <h2>Unio: One patient record across all your openEHR repositories</h2>
-                    <p class="unio-desc">Unio is our openEHR federation gateway. It sits in front of the repositories a region, network or hospital already runs and exposes them as a single openEHR endpoint — resolving the patient centrally, querying members in parallel and merging the results with provenance, while every record stays where it was created.</p>
-                    <ul class="unio-features">
-                        <li>One standard openEHR endpoint for the whole federation — existing applications need no changes</li>
-                        <li>Works with any repository that exposes the openEHR REST API; nothing to install on the member's side</li>
-                        <li>Unreachable members never block the others; partial responses are clearly marked</li>
-                        <li>Full operational audit without clinical data or patient identifiers</li>
-                        <li>Reachable over FHIR by placing openFHIR in front of the federation</li>
-                    </ul>
-                    <a href="https://unio.syntaric.com" target="_blank" class="btn-unio">
-                        Explore Unio
-                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
-                    </a>
+                    <h2>Talk to us about your project</h2>
+                    <p class="section-lead">Write to us about an integration project, an architecture you want reviewed, or openFHIR and Unio. We reply within two working days.</p>
                 </div>
+                <dl class="contact-details">
+                    <dt>Email</dt><dd><a href="mailto:info@syntaric.com" data-goatcounter-click="contact-email">info@syntaric.com</a></dd>
+                    <dt>Phone</dt><dd><a href="tel:+38641551431" data-goatcounter-click="contact-phone">+386 41 551 431</a></dd>
+                    <dt>LinkedIn</dt><dd><a href="https://www.linkedin.com/in/andrejcgasper/" target="_blank" rel="noopener" data-goatcounter-click="contact-linkedin">Gasper Andrejc, lead architect</a></dd>
+                    <dt>Location</dt><dd>Parižlje 117, 3314 Braslovče, Slovenia</dd>
+                </dl>
             </div>
-        </div>
-    </section>
+        </section>
+    </main>
 
-    </div>
-
-    <!-- ─── COLLABORATORS ─── -->
-    <section id="collaborators" class="collaborators">
-        <div class="container">
-            <div class="collab-header">
-                <p class="section-tag">Collaborations</p>
-                <h2 class="section-heading">Companies we've worked with</h2>
-                <p class="section-sub">A selection of partners and clients on healthcare interoperability projects across Europe and beyond.</p>
-            </div>
-            <div class="collab-grid">
-
-                <div class="collab-card">
-                    <div class="collab-logo-wrap">
-                        <img src="https://fire.ly/wp-content/uploads/2021/04/Firely-logo_white-background_yellow.jpg" alt="Firely" onerror="this.style.display='none'">
-                    </div>
-                    <h4>Firely</h4>
-                    <p>FHIR software solutions provider — Firely Server, tooling, consulting, and training to help organizations implement FHIR for interoperability.</p>
-                    <a href="https://fire.ly/" target="_blank" class="collab-link">fire.ly ↗</a>
-                </div>
-
-                <div class="collab-card">
-                    <div class="collab-logo-wrap">
-                        <img src="http://openline.nl/img/svg/logo_openline.svg" alt="Open Line" onerror="this.style.display='none'">
-                    </div>
-                    <h4>Open Line</h4>
-                    <p>Managed cloud services with expertise in healthcare, government, and logistics — flexible, secure ICT infrastructure management.</p>
-                    <a href="http://openline.nl/" target="_blank" class="collab-link">openline.nl ↗</a>
-                </div>
-
-                <div class="collab-card">
-                    <div class="collab-logo-wrap">
-                        <img src="https://openline-vitaly.com/wp-content/themes/parsek/images/svg-icons/raw/openline-vitaly-logo.svg" alt="Open Line Vitaly" onerror="this.style.display='none'">
-                    </div>
-                    <h4>Open Line Vitaly</h4>
-                    <p>Platforms for multidisciplinary team meetings, referral management, and coordinated care across healthcare settings. Previously Parsek.</p>
-                    <a href="https://openline-vitaly.com/" target="_blank" class="collab-link">openline-vitaly.com ↗</a>
-                </div>
-
-                <div class="collab-card">
-                    <div class="collab-logo-wrap">
-                        <img src="https://www.tactuum.com/Tactuum.THEME/dist/img/tactuum-logo--small.png" alt="Tactuum" onerror="this.style.display='none'">
-                    </div>
-                    <h4>Tactuum</h4>
-                    <p>Digital healthcare solutions including Tactuum Clinical Companion — real-time clinical resources for healthcare professionals at the point of care.</p>
-                    <a href="https://www.tactuum.com/" target="_blank" class="collab-link">tactuum.com ↗</a>
-                </div>
-
-                <div class="collab-card">
-                    <div class="collab-logo-wrap" style="align-items: center;">
-                        <svg width="70" height="30" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M52.3 0H32.4v6.2h7.4V30h6.2V6.2h2.3c.4-1.9 1.3-3.5 2.7-4.8C51.3.82 51.9.38 52.3 0Z" fill="#ff6b35"/><path d="M66.2 15.3c-1.2-1.26-3.5-2.63-7-4.13-2.52-1.07-3.77-2.14-3.77-3.23 0-.62.22-1.13.64-1.52a2.18 2.18 0 0 1 1.54-.6c1.26 0 2.32.87 3.17 2.62l5.4-2.87C64.47 1.87 61.77 0 58.15 0c-1.84 0-3.47.45-4.9 1.35a9.16 9.16 0 0 0-1.37 1.06c-1.11 1.06-1.85 2.32-2.23 3.76a9.24 9.24 0 0 0-.3 2.34c0 1.86.5 3.38 1.48 4.56.77.93 2.11 1.86 4.01 2.79.68.33 1.34.65 2 .96.66.31 1.31.63 1.97.96 1.71 1.01 2.56 2.09 2.56 3.25 0 2.02-1.1 3.02-3.31 3.02-1.1 0-2.05-.37-2.85-1.1-.4-.37-1-.23-1.77-2.59L48.5 22.7C50.5 27.58 53.87 30 58.68 30c2.77 0 5.13-.87 7.09-2.61 2.01-1.84 3.02-4.12 3.02-6.86 0-2.14-.6-3.83-1.8-5.09ZM32.14 7.68V18.2c0 4.26-1.69 6.4-5.05 6.4-3.27 0-4.95-2.01-5.04-6.03V11.6c0-2.36-.25-4.14-.74-5.34-.51-1.34-1.38-2.55-2.62-3.62C16.64.87 14.1 0 11.02 0 7.9 0 5.35.87 3.33 2.62 2.12 3.69 1.26 4.9.77 6.24.26 7.73 0 9.51 0 11.58v18.3c.16-.17.31-.35.49-.51a10.18 10.18 0 0 1 5.46-2.66V11.71c0-4.27 1.69-6.4 5.05-6.4 3.27 0 4.95 2.01 5.05 6.03v6.97c0 2.36.25 4.14.74 5.34.51 1.34 1.39 2.55 2.62 3.62C20.98 29.07 23.52 30 26.6 30c3.11 0 5.66-.87 7.68-2.62 1.22-1.07 2.07-2.28 2.57-3.62.51-1.5.77-3.28.77-5.34V7.68h-5.48Z" fill="#ff6b35"/></svg>
-                    </div>
-                    <h4>Stichting NUTS</h4>
-                    <p>Decentralized healthcare communication network enabling organizations to securely share medical data through collaborative infrastructure.</p>
-                    <a href="https://nuts.nl/en/" target="_blank" class="collab-link">nuts.nl ↗</a>
-                </div>
-
-                <div class="collab-card">
-                    <div class="collab-logo-wrap">
-                        <img src="https://www.wvs.nl/wp-content/uploads/2022/03/logo-wvs.svg" alt="VWS" onerror="this.style.display='none'">
-                    </div>
-                    <h4>VWS — Dutch Ministry of Health</h4>
-                    <p>Ministerie van Volksgezondheid, Welzijn en Sport — responsible for national healthcare policy and infrastructure in the Netherlands.</p>
-                    <a href="https://www.wvs.nl/" target="_blank" class="collab-link">wvs.nl ↗</a>
-                </div>
-
-                <div class="collab-card">
-                    <div class="collab-logo-wrap">
-                        <img src="https://www.petrolpay.si/wp-content/uploads/2025/07/Petrol_pay_no_icon_logo_horizontal_red_gradient_RGB_1_2024.png" alt="Petrol Pay" onerror="this.style.display='none'">
-                    </div>
-                    <h4>Petrol Pay</h4>
-                    <p>Payment and loyalty solutions provider offering digital wallet services and payment acceptance with worldwide purchase capabilities.</p>
-                    <a href="https://www.petrolpay.si/petrol-pay-loyalty/" target="_blank" class="collab-link">petrolpay.si ↗</a>
-                </div>
-
-                <div class="collab-card">
-                    <div class="collab-logo-wrap">
-                        <img src="https://medblocks.com/logo.svg" alt="Medblocks" onerror="this.style.display='none'">
-                    </div>
-                    <h4>Medblocks</h4>
-                    <p>Healthcare data platform for secure, patient-centric health information exchange and interoperable clinical data ownership.</p>
-                    <a href="https://medblocks.com/" target="_blank" class="collab-link">medblocks.com ↗</a>
-                </div>
-
-                <div class="collab-card">
-                    <div class="collab-logo-wrap">
-                        <img src="https://htec.com/uploads/2024/07/logo.svg" alt="HTEC" class="on-dark" onerror="this.style.display='none'">
-                    </div>
-                    <h4>HTEC</h4>
-                    <p>Digital engineering and AI services firm specializing in technical architecture and product engineering across healthcare and other industries.</p>
-                    <a href="https://htec.com/" target="_blank" class="collab-link">htec.com ↗</a>
-                </div>
-
-            </div>
-        </div>
-    </section>
-
-    <!-- ─── CONTACT ─── -->
-    <section id="contact" class="contact">
-        <div class="container">
-            <div class="contact-layout">
-                <div class="contact-cta-block">
-                    <p class="section-tag">Get in touch</p>
-                    <h2 class="section-heading">Let's build better healthcare IT together</h2>
-                    <p style="font-size: 1rem; color: var(--ink-light); line-height: 1.7;">Whether you're starting a new integration project, need a second opinion on your architecture, or want to explore openFHIR — we'd love to hear from you.</p>
-                    <a href="mailto:info@syntaric.com" class="btn-primary" style="align-self: flex-start;">
-                        Send us an email
-                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg>
-                    </a>
-                </div>
-                <div class="contact-card">
-                    <h3>Contact details</h3>
-                    <div class="contact-rows">
-                        <div class="contact-row">
-                            <div class="contact-icon">
-                                <svg viewBox="0 0 24 24"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg>
-                            </div>
-                            <div>
-                                <div class="contact-row-label">Email</div>
-                                <a href="mailto:info@syntaric.com">info@syntaric.com</a>
-                            </div>
-                        </div>
-                        <div class="contact-row">
-                            <div class="contact-icon">
-                                <svg viewBox="0 0 24 24"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07A19.5 19.5 0 0 1 4.69 12a19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 3.6 1.18h3a2 2 0 0 1 2 1.72c.127.96.361 1.903.7 2.81a2 2 0 0 1-.45 2.11L7.91 8.91a16 16 0 0 0 6.08 6.08l.98-.97a2 2 0 0 1 2.11-.45c.907.339 1.85.573 2.81.7a2 2 0 0 1 1.72 2.05z"/></svg>
-                            </div>
-                            <div>
-                                <div class="contact-row-label">Phone</div>
-                                <a href="tel:+38641551431">+386 41 551 431</a>
-                            </div>
-                        </div>
-                        <div class="contact-row">
-                            <div class="contact-icon">
-                                <svg viewBox="0 0 24 24"><path d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-2-2 2 2 0 0 0-2 2v7h-4v-7a6 6 0 0 1 6-6z"/><rect x="2" y="9" width="4" height="12"/><circle cx="4" cy="4" r="2"/></svg>
-                            </div>
-                            <div>
-                                <div class="contact-row-label">LinkedIn</div>
-                                <a href="https://www.linkedin.com/in/andrejcgasper/" target="_blank">Gasper Andrejc</a>
-                            </div>
-                        </div>
-                        <div class="contact-row">
-                            <div class="contact-icon">
-                                <svg viewBox="0 0 24 24"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>
-                            </div>
-                            <div>
-                                <div class="contact-row-label">Location</div>
-                                <span>Parižlje 117, 3314 Braslovče, Slovenia</span>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <!-- ─── FOOTER ─── -->
 <!-- @footer -->
     <footer>
         <div class="container">
@@ -2040,10 +1206,9 @@ section {
                 <nav class="footer-nav" aria-label="Footer">
                     <ul>
                         <li><a href="#services">Services</a></li>
-                        <li><a href="#engagements">Engagements</a></li>
-                        <li><a href="#products">Our products</a></li>
-                        <li><a href="#expertise">Expertise</a></li>
-                        <li><a href="#collaborators">Collaborators</a></li>
+                        <li><a href="#expertise">Selected work</a></li>
+                        <li><a href="#products">Products</a></li>
+                        <li><a href="#writing">Writing</a></li>
                         <li><a href="blog/">Blog</a></li>
                         <li><a href="#contact">Contact</a></li>
                     </ul>

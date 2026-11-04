@@ -1389,12 +1389,17 @@ chosen (decision E1 below).
         `eps.adverse_reaction_risk.v2.yml:21-42`: substance, clinicalStatus,
         verificationStatus, criticality; set in the mono face, with a plain
         caption) replaces `images/architecture.svg`. The excerpt shows
-        expanded paths: `$resource` becomes the resource type named by the
-        file's `spec.fhirConfig.structureDefinition` (`AllergyIntolerance`)
-        and `$archetype` becomes `spec.openEhrConfig.archetype`
-        (`openEHR-EHR-EVALUATION.adverse_reaction_risk.v2`). The expansion
-        rule is checked against the FHIRConnect specification before this
-        commit.
+        expanded paths: `$resource` becomes the resource type of the
+        header's base StructureDefinition (`AllergyIntolerance.code`); the
+        openEHR side shows the archetype id
+        (`openEHR-EHR-EVALUATION.adverse_reaction_risk.v2`) as a column
+        label and each path relative to it (`/data[at0001]/items[at0002]`).
+        Checked against the FHIRConnect spec on 2026-11-04
+        (`basics/Variables.adoc`, "`$archetype` and `$resource`": the spec
+        resolves `$archetype` to the archetype id as a node predicate,
+        `/content[<archetype id>]/…`, where the `/content` part depends on
+        the template; joining the id and the path with `/` is not a spec
+        form). The same rule applies to `expandPaths()` (item 41a).
     *   **Products** (`id="products"` with an `<h2>`): one sentence that
         Syntaric is a consultancy that also builds two products, with their
         licences (owner input #10). `id="openfhir"` and `id="unio"` blocks,
@@ -1427,6 +1432,16 @@ chosen (decision E1 below).
         Selected work, Products, Writing, Blog, matching the section
         headings.
 *   **Why**: decisions #2, #8-#11; brief 4.x, 5.x, 2.8.
+
+*   **As built**: the copy follows `docs/content-inventory.md`; the facts
+    the owner asked the implementer to fill in, their sources and the two
+    invented lines are listed there under "Drafted for commit 0.6". The
+    mapping excerpt sits in the openFHIR block (where the tested mockup
+    had the figure and where commit 1.5 puts the openFHIR figure), not in
+    Selected work. On phones each pair is stacked. The design tokens moved
+    from the `@page blog` block into `@shared`, now that both pages use
+    them. Organization JSON-LD drops `sameAs`; the personal profile is the
+    founder's `sameAs`.
 
 ##### 26. `blog/build.js` (Modify, fifth change)
 

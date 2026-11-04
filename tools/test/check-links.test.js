@@ -7,7 +7,7 @@ const os = require('os');
 const path = require('path');
 const { checkSite } = require('../check-links');
 
-const ANCHORS = ['services', 'engagements', 'expertise', 'products', 'openfhir', 'unio', 'collaborators', 'contact'];
+const ANCHORS = ['services', 'engagements', 'expertise', 'products', 'openfhir', 'unio', 'collaborators', 'contact', 'writing'];
 
 /** A minimal site: home with the 8 anchors, one blog post, a sitemap. */
 function site(postBody) {
@@ -35,9 +35,9 @@ test('a broken internal link fails', () => {
 });
 
 test('a broken fragment fails', () => {
-  const errors = checkSite(site('<a href="/#writing">x</a>'));
+  const errors = checkSite(site('<a href="/#nowhere">x</a>'));
   assert.strictEqual(errors.length, 1);
-  assert.match(errors[0], /missing #writing/);
+  assert.match(errors[0], /missing #nowhere/);
 });
 
 test('a missing baseline URL fails', () => {

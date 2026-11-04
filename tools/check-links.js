@@ -17,7 +17,8 @@ const fs   = require('fs');
 const path = require('path');
 
 const SITE = 'https://syntaric.com';
-const HOME_ANCHORS = ['services', 'engagements', 'expertise', 'products', 'openfhir', 'unio', 'collaborators', 'contact'];
+// The 8 ids that must keep working (Goal 9), plus `writing` from commit 0.6.
+const HOME_ANCHORS = ['services', 'engagements', 'expertise', 'products', 'openfhir', 'unio', 'collaborators', 'contact', 'writing'];
 const FIGURE_TEXT_LIMIT = 8 * 1024;
 // Goal 10: no third-party loads besides analytics (GoatCounter script and beacon).
 const ALLOWED_HOSTS = new Set(['syntaric.com', 'gc.zgo.at', 'syntaric.goatcounter.com']);

@@ -124,24 +124,53 @@
 }
 
 :root {
-    --ink: #0d1117;
-    --ink-light: #4a5568;
-    --ink-muted: #718096;
-    --surface: #ffffff;
-    --surface-2: #f7f8fc;
-    --surface-3: #eef0f6;
-    --border: #e2e8f0;
-    --accent: #0052cc;
-    --accent-light: #e8f0fe;
-    --accent-glow: rgba(0, 82, 204, 0.12);
-    --green: #0f7b55;
-    --green-light: #e6f4f0;
-    --radius: 12px;
-    --radius-lg: 20px;
-    --shadow-sm: 0 1px 3px rgba(0,0,0,0.06), 0 1px 2px rgba(0,0,0,0.04);
-    --shadow: 0 4px 16px rgba(0,0,0,0.07), 0 1px 4px rgba(0,0,0,0.04);
-    --shadow-lg: 0 16px 48px rgba(0,0,0,0.1), 0 4px 12px rgba(0,0,0,0.06);
-    --nav-h: 68px;
+    --ground: #f6f3ee;
+    --ink: #122e49;
+    --ink-2: #40556a;
+    --ink-3: #56697a;
+    --rule: #bdc2c5;
+    --hair: #dbdbda;
+    --panel: #ece9e3;
+
+    --font: 'Atkinson Hyperlegible Next', 'Atkinson Next Fallback', sans-serif;
+    --mono: 'Atkinson Hyperlegible Mono', 'Atkinson Mono Fallback', monospace;
+    --t-xs: 0.8125rem;
+    --t-s: 0.9375rem;
+    --t-m: 1.0625rem;
+    --t-l: 1.375rem;
+    --t-xl: 1.75rem;
+    --t-post: clamp(1.875rem, 2.6vw + 1.1rem, 2.75rem);
+    --t-hero: clamp(2.125rem, 5.2vw + 0.9rem, 3.5rem);
+
+    --s-1: 4px; --s-2: 8px; --s-3: 12px; --s-4: 16px; --s-5: 24px;
+    --s-6: 32px; --s-7: 48px; --s-8: 64px; --s-9: 96px;
+
+    --ease: cubic-bezier(0.2, 0, 0, 1);
+    --dur-short: 200ms;
+    --dur-long: 900ms;
+
+    --measure: 36rem;
+    --page: 72rem;
+    --radius: 4px;
+
+    /* Old names used by the shared nav and footer. */
+    --ink-light: var(--ink-2);
+    --ink-muted: var(--ink-3);
+    --surface: var(--ground);
+    --surface-2: var(--panel);
+    --surface-3: var(--panel);
+    --border: var(--hair);
+    --accent: var(--ink);
+    --accent-light: var(--panel);
+    --shadow: 0 8px 24px rgba(18, 46, 73, 0.10);
+    --nav-h: 64px;
+}
+
+@media (prefers-reduced-motion: reduce) {
+    :root {
+        --dur-short: 0ms;
+        --dur-long: 0ms;
+    }
 }
 
 html {
@@ -149,17 +178,9 @@ html {
 }
 
 body {
-    font-family: 'Atkinson Hyperlegible Next', 'Atkinson Next Fallback', sans-serif;
     color: var(--ink);
-    background: var(--surface);
-    line-height: 1.6;
+    background: var(--ground);
     -webkit-font-smoothing: antialiased;
-}
-
-.container {
-    max-width: 1160px;
-    margin: 0 auto;
-    padding: 0 24px;
 }
 
 /* ─── NAV ─────────────────────────────────────────────────── */
@@ -368,7 +389,7 @@ footer {
 
 .footer-right {
     font-size: 0.78rem;
-    color: rgba(255,255,255,0.35);
+    color: rgba(255,255,255,0.7);
     text-align: right;
 }
 
@@ -386,7 +407,7 @@ footer {
 .footer-nav a,
 .footer-contact a {
     font-size: 0.82rem;
-    color: rgba(255,255,255,0.6);
+    color: rgba(255,255,255,0.8);
     text-decoration: none;
     transition: color 0.2s;
 }
@@ -426,60 +447,7 @@ footer {
     }
 }
 
-/* Blog pages in the new system (commit 0.5). Values: docs/design-tokens.md.
-   The home page keeps the old look until commit 0.6, so the new tokens are
-   defined here, and the old names used by the shared nav and footer are
-   pointed at them for blog pages only. */
-:root {
-    --ground: #f6f3ee;
-    --ink: #122e49;
-    --ink-2: #40556a;
-    --ink-3: #56697a;
-    --rule: #bdc2c5;
-    --hair: #dbdbda;
-    --panel: #ece9e3;
-
-    --font: 'Atkinson Hyperlegible Next', 'Atkinson Next Fallback', sans-serif;
-    --mono: 'Atkinson Hyperlegible Mono', 'Atkinson Mono Fallback', monospace;
-    --t-xs: 0.8125rem;
-    --t-s: 0.9375rem;
-    --t-m: 1.0625rem;
-    --t-l: 1.375rem;
-    --t-xl: 1.75rem;
-    --t-post: clamp(1.875rem, 2.6vw + 1.1rem, 2.75rem);
-    --t-hero: clamp(2.125rem, 5.2vw + 0.9rem, 3.5rem);
-
-    --s-1: 4px; --s-2: 8px; --s-3: 12px; --s-4: 16px; --s-5: 24px;
-    --s-6: 32px; --s-7: 48px; --s-8: 64px; --s-9: 96px;
-
-    --ease: cubic-bezier(0.2, 0, 0, 1);
-    --dur-short: 200ms;
-    --dur-long: 900ms;
-
-    --measure: 36rem;
-    --page: 72rem;
-    --radius: 4px;
-
-    /* Old names used by the shared nav and footer. */
-    --ink-light: var(--ink-2);
-    --ink-muted: var(--ink-3);
-    --surface: var(--ground);
-    --surface-2: var(--panel);
-    --surface-3: var(--panel);
-    --border: var(--hair);
-    --accent: var(--ink);
-    --accent-light: var(--panel);
-    --shadow: 0 8px 24px rgba(18, 46, 73, 0.10);
-    --nav-h: 64px;
-}
-
-@media (prefers-reduced-motion: reduce) {
-    :root {
-        --dur-short: 0ms;
-        --dur-long: 0ms;
-    }
-}
-
+/* Overrides of the nav and footer rules above for the new tokens. */
 body {
     font-family: var(--font);
     font-size: var(--t-m);
@@ -488,6 +456,7 @@ body {
 
 .container {
     max-width: var(--page);
+    margin: 0 auto;
     padding: 0 var(--s-5);
 }
 
@@ -509,6 +478,8 @@ header {
     font-size: var(--t-xs);
     color: var(--ink-3);
 }
+
+/* Blog pages (commit 0.5). Values: docs/design-tokens.md. */
 
 /* ─── POST: HEADER ──────────────────────────────────────────── */
 .article-hero {
@@ -1023,10 +994,9 @@ header {
             <div class="nav-right">
                 <ul class="nav-links nav-main" id="site-nav">
                     <li><a href="/#services">Services</a></li>
-                    <li><a href="/#engagements">Engagements</a></li>
-                    <li><a href="/#products">Our products</a></li>
-                    <li><a href="/#expertise">Expertise</a></li>
-                    <li><a href="/#collaborators">Collaborators</a></li>
+                    <li><a href="/#expertise">Selected work</a></li>
+                    <li><a href="/#products">Products</a></li>
+                    <li><a href="/#writing">Writing</a></li>
                 </ul>
                 <ul class="nav-links nav-keep">
                     <li><a href="/blog/" aria-current="page">Blog</a></li>
@@ -1227,10 +1197,9 @@ servers, feel free to reach out.</p>
                 <nav class="footer-nav" aria-label="Footer">
                     <ul>
                         <li><a href="/#services">Services</a></li>
-                        <li><a href="/#engagements">Engagements</a></li>
-                        <li><a href="/#products">Our products</a></li>
-                        <li><a href="/#expertise">Expertise</a></li>
-                        <li><a href="/#collaborators">Collaborators</a></li>
+                        <li><a href="/#expertise">Selected work</a></li>
+                        <li><a href="/#products">Products</a></li>
+                        <li><a href="/#writing">Writing</a></li>
                         <li><a href="/blog/">Blog</a></li>
                         <li><a href="/#contact">Contact</a></li>
                     </ul>

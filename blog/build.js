@@ -479,6 +479,29 @@ ${BLOG_FOOTER}
 </html>`;
 }
 
+// ─── Home page: latest posts ──────────────────────────────────────────────────
+
+/** The 3 newest published posts, by front matter date; ties by slug, descending. */
+function latestPostsHtml(posts) {
+  const newest = posts.slice().sort((a, b) =>
+    (b.meta.date || '').localeCompare(a.meta.date || '') || b.slug.localeCompare(a.slug)
+  ).slice(0, 3);
+  const items = newest.map(p => {
+    const cover = p.meta.image ? coverImage(p.meta.image, `https://syntaric.com/blog/${p.slug}/`) : null;
+    return `
+                    <a class="writing-item" href="blog/${p.slug}/">
+                        ${cover ? `<img src="${cover.src}" width="${cover.width}" height="${cover.height}" alt="" loading="lazy" decoding="async">` : ''}
+                        <h3>${esc(p.meta.title)}</h3>
+                        <p>${esc(p.meta.description || p.meta.excerpt || '')}</p>
+                        <p class="label">${esc(formatDate(p.meta.date || ''))}</p>
+                    </a>`;
+  }).join('');
+  return `
+                <div class="writing-list">${items}
+                </div>
+                `;
+}
+
 // ─── Main ─────────────────────────────────────────────────────────────────────
 
 /** Newest of front matter `updated` / `date`; a published post needs one. */
@@ -578,9 +601,10 @@ function main() {
     css:    `\n    <style>\n${CSS.shared}\n\n${CSS.home}\n    </style>\n    `,
     nav:    `\n${fill(NAV, { root: '', blogCurrent: '' })}\n`,
     footer: `\n${fill(FOOTER, { root: '' })}\n`,
+    'latest-posts': latestPostsHtml(publishedPosts),
   });
   outputs.set(indexPath, homeHtml);
-  log('  ✓ index.html  (marker regions: css, nav, footer)');
+  log('  ✓ index.html  (marker regions: css, nav, footer, latest-posts)');
 
   // TODO-OWNER rule: no published file may carry the marker.
   const todo = [];

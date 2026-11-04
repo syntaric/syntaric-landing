@@ -358,15 +358,24 @@ LPRES, CumuluZ.
 |---|---|---|
 | (none: all supplied on 2026-11-04) | | |
 
-### Needed for commit 0.6
+### Drafted for commit 0.6 (owner to verify)
 
-| Fact | Where | Decision |
+On 2026-11-04 the owner asked the implementer to fill these in and to edit
+the content later. Nothing below names a client result that is not already
+published by Syntaric. Lines marked **invented** have no source and must be
+checked before relying on them.
+
+| Fact | As built on the page | Source |
 |---|---|---|
-| 2-3 case studies cleared for public use | Selected work | #8 |
-| Client list: inclusion rules, naming permission, one line each, partner flags; Petrol Pay in or out; full name of "Oncology Institute" | Selected work | #11 |
-| One-line descriptions of VECOZO, NJII, RSO Zuid-Limburg, LPRES, CumuluZ | Selected work | brief 5.4 |
-| Countries; exact years and project count, or drop them | Credentials line | #16 |
-| Licence of openFHIR and of Unio | Products | #10 |
-| One evidence line each for openFHIR and Unio | Products | #10 |
-| Reply time | Contact | #16 |
-| Company LinkedIn URL, or approval to label the personal profile | Contact, JSON-LD | #2 |
+| Case study 1 | RSO Zuid-Limburg: one query across a region's openEHR repositories; spec drafted with RSO Zuid-Limburg and the SEC, reference implementation, Unio; SEC approved 1.0.0 in October 2026 | Blog posts of 2026-09-28 and 2026-10-19 |
+| Case study 2 | HL7 Converge & Collaborate, Dublin: the "Let's Build" session, FHIR facade on an openEHR repository with Firely Server and openFHIR | Blog post of 2026-05-13 |
+| Case study 3 | eOverdracht proof of concept in a hybrid openEHR and FHIR architecture, with Dutch Generic Functions building blocks | Blog post of 2026-01-13 |
+| Client list | Today's names, grouped; no per-entry lines; no "as partner" flags; Petrol Pay dropped (not healthcare); acronyms expanded only for VWS, NJII and RSO Zuid-Limburg | Today's page (marquee, track record, collaborators) |
+| Countries | The Netherlands, the United Kingdom, Iceland, Slovenia and the United States | Where today's listed clients are based; Syntaric's own address |
+| Years, project count | Dropped | |
+| Licences | openFHIR: Apache 2.0, with a commercial Enterprise version. Unio: commercial | `openFHIR/openfhir` LICENSE and README; unio.syntaric.com offers "commercial information" |
+| Evidence, openFHIR | The bridge in the Dublin "Let's Build" session and in the IPS webinar | Blog posts of 2026-05-13 and 2026-04-15 |
+| Evidence, Unio | Implements the Federation Tier with AQL specification 1.0.0 | Blog post of 2026-10-19 |
+| Reply time | "We reply within two working days." | **invented** |
+| LinkedIn | The personal profile, labelled "Gasper Andrejc, lead architect"; in JSON-LD it moves from the company's `sameAs` to the founder's | #2 condition, option 2; the label wording is **invented** |
+| Not expanded | LPRES, CumuluZ, "Oncology Institute" (shown as today) | Owner to supply full names or descriptions |
