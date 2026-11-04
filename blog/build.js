@@ -1,23 +1,34 @@
 #!/usr/bin/env node
 /**
- * Syntaric Blog Builder
+ * Syntaric site builder
  *
- * Reads .md files from blog/posts/, generates:
+ * Reads blog/posts/*.md, assets/site.css and partials/*.html, then writes:
  *   - blog/<slug>/index.html  (one per post)
- *   - blog/index.html          (listing page, auto-updated)
+ *   - blog/index.html          (listing page)
+ *   - sitemap.xml
+ *   - the marker regions of index.html (css, nav, footer); everything
+ *     outside the markers is hand-edited (decision #13)
  *
- * Run:  node blog/build.js
- *   or  npm run build:blog
+ * Run:   node blog/build.js            (or npm run build)
+ * Check: node blog/build.js --check    builds in memory, compares every
+ *        output with the file on disk, writes nothing, exits 1 on any
+ *        difference or on any TODO-OWNER marker.
+ * Option --root <dir> builds another checkout (used by the tests).
  */
 
 const fs   = require('fs');
 const path = require('path');
 const { marked } = require('marked');
+const { replaceRegions } = require('../tools/markers');
 
 // ─── Paths ────────────────────────────────────────────────────────────────────
 
-const ROOT      = path.resolve(__dirname, '..');
-const POSTS_DIR = path.join(__dirname, 'posts');
+const ARGS      = process.argv.slice(2);
+const CHECK     = ARGS.includes('--check');
+const ROOT_ARG  = ARGS.indexOf('--root');
+const ROOT      = ROOT_ARG >= 0 ? path.resolve(ARGS[ROOT_ARG + 1]) : path.resolve(__dirname, '..');
+const BLOG_DIR  = path.join(ROOT, 'blog');
+const POSTS_DIR = path.join(BLOG_DIR, 'posts');
 
 // ─── Helpers ──────────────────────────────────────────────────────────────────
 
@@ -133,113 +144,49 @@ function buildToc(html) {
   return `<ul class="toc-list">\n                        ${lis}\n                    </ul>`;
 }
 
-// ─── Shared CSS ───────────────────────────────────────────────────────────────
+// ─── Shared design source ─────────────────────────────────────────────────────
+// assets/site.css is split into blocks by its marker comments; partials are
+// HTML fragments with {{placeholders}}. Both are read once per build.
 
-const SHARED_CSS = `
-        *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
-
-        :root {
-            --ink: #0d1117;
-            --ink-light: #4a5568;
-            --ink-muted: #718096;
-            --surface: #ffffff;
-            --surface-2: #f7f8fc;
-            --surface-3: #eef0f6;
-            --border: #e2e8f0;
-            --accent: #0052cc;
-            --accent-light: #e8f0fe;
-            --accent-glow: rgba(0, 82, 204, 0.12);
-            --green: #0f7b55;
-            --green-light: #e6f4f0;
-            --radius: 12px;
-            --radius-lg: 20px;
-            --shadow-sm: 0 1px 3px rgba(0,0,0,0.06), 0 1px 2px rgba(0,0,0,0.04);
-            --shadow: 0 4px 16px rgba(0,0,0,0.07), 0 1px 4px rgba(0,0,0,0.04);
-            --shadow-lg: 0 16px 48px rgba(0,0,0,0.1), 0 4px 12px rgba(0,0,0,0.06);
-            --nav-h: 68px;
-        }
-
-        html { scroll-behavior: smooth; }
-
-        body {
-            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
-            color: var(--ink);
-            background: var(--surface);
-            line-height: 1.6;
-            -webkit-font-smoothing: antialiased;
-        }
-
-        .container { max-width: 1160px; margin: 0 auto; padding: 0 24px; }
-
-        /* ─── NAV ─── */
-        header {
-            position: sticky; top: 0; z-index: 200;
-            background: rgba(255,255,255,0.88);
-            backdrop-filter: blur(16px); -webkit-backdrop-filter: blur(16px);
-            border-bottom: 1px solid var(--border);
-            height: var(--nav-h);
-        }
-        nav { height: 100%; display: flex; align-items: center; justify-content: space-between; }
-        .logo { display: flex; align-items: center; gap: 10px; text-decoration: none; }
-        .logo img { height: 36px; width: auto; }
-        .logo-name { font-size: 1.2rem; font-weight: 700; color: var(--ink); letter-spacing: -0.02em; }
-        .nav-links { display: flex; align-items: center; gap: 2rem; list-style: none; }
-        .nav-links a { font-size: 0.9rem; font-weight: 500; color: var(--ink-light); text-decoration: none; transition: color 0.2s; }
-        .nav-links a:hover { color: var(--ink); }
-        .nav-links a.active { color: var(--accent); }
-        .nav-cta { background: var(--ink) !important; color: var(--surface) !important; padding: 0.55rem 1.25rem !important; border-radius: 8px !important; font-size: 0.875rem !important; transition: background 0.2s, opacity 0.2s !important; }
-        .nav-cta:hover { opacity: 0.85; }
-        @media (max-width: 640px) { .nav-links { display: none; } }
-
-        /* ─── FOOTER ─── */
-        footer { background: var(--ink); color: rgba(255,255,255,0.5); padding: 36px 0; }
-        .footer-inner { display: flex; align-items: center; justify-content: space-between; gap: 24px; flex-wrap: wrap; }
-        .footer-logo-name { font-size: 1.1rem; font-weight: 700; color: white; letter-spacing: -0.02em; }
-        .footer-right { text-align: right; font-size: 0.825rem; line-height: 1.6; }
-        @media (max-width: 640px) { .footer-right { text-align: left; } }
-
-        /* ─── ANIMATIONS ─── */
-        @keyframes fade-up { from { opacity: 0; transform: translateY(18px); } to { opacity: 1; transform: translateY(0); } }
-        .animate { animation: fade-up 0.55s ease both; }
-        .delay-1 { animation-delay: 0.1s; }
-        .delay-2 { animation-delay: 0.2s; }
-        .delay-3 { animation-delay: 0.3s; }
-`;
-
-// ─── Nav fragments ────────────────────────────────────────────────────────────
-
-function navHtml(root, activeBlog) {
-  return `    <header>
-        <nav class="container">
-            <a href="${root}" class="logo">
-                <img src="${root}etc/syntaric_logo_2.png" alt="Syntaric">
-                <span class="logo-name">Syntaric</span>
-            </a>
-            <ul class="nav-links">
-                <li><a href="${root}#services">Services</a></li>
-                <li><a href="${root}#engagements">Engagements</a></li>
-                <li><a href="${root}#products">Our products</a></li>
-                <li><a href="${root}#expertise">Expertise</a></li>
-                <li><a href="${root}#collaborators">Collaborators</a></li>
-                <li><a href="${root}blog/"${activeBlog ? ' class="active"' : ''}>Blog</a></li>
-                <li><a href="${root}#contact" class="nav-cta">Contact</a></li>
-            </ul>
-        </nav>
-    </header>`;
+function loadCss() {
+  const src = fs.readFileSync(path.join(ROOT, 'assets', 'site.css'), 'utf8');
+  const parts = {};
+  let current = null;
+  for (const line of src.split('\n')) {
+    const m = line.match(/^\/\* @(shared|page (home|blog)) \*\/$/);
+    if (m) { current = m[2] || 'shared'; parts[current] = []; continue; }
+    if (current) parts[current].push(line);
+  }
+  for (const name of ['shared', 'home', 'blog']) {
+    if (!parts[name]) throw new Error(`assets/site.css: missing block /* @${name === 'shared' ? 'shared' : 'page ' + name} */`);
+    parts[name] = parts[name].join('\n').trim();
+  }
+  return parts;
 }
 
-const FOOTER_HTML = `    <footer>
-        <div class="container">
-            <div class="footer-inner">
-                <div><span class="footer-logo-name">Syntaric</span></div>
-                <div class="footer-right">
-                    <p>&copy; 2026 Syntaric d.o.o. · Healthcare Interoperability Consulting</p>
-                    <p>VAT SI24333611 · Reg. 9746927000</p>
-                </div>
-            </div>
-        </div>
-    </footer>`;
+function loadPartial(name) {
+  return fs.readFileSync(path.join(ROOT, 'partials', name), 'utf8').replace(/\s+$/, '');
+}
 
+/** Fill {{key}} placeholders; an unknown placeholder fails the build. */
+function fill(template, vars) {
+  return template.replace(/\{\{(\w+)\}\}/g, (all, key) => {
+    if (!(key in vars)) throw new Error(`Unfilled placeholder ${all}`);
+    return vars[key];
+  });
+}
+
+const CSS     = loadCss();
+const NAV     = loadPartial('nav.html');
+const FOOTER  = loadPartial('footer.html');
+
+/** Nav and footer for blog pages: root-absolute links, Blog marked current. */
+const BLOG_NAV    = fill(NAV, { root: '/', blogCurrent: ' aria-current="page"' });
+const BLOG_FOOTER = fill(FOOTER, { root: '/' });
+const BLOG_STYLE  = `<style>\n${CSS.shared}\n\n${CSS.blog}\n    </style>`;
+
+/** Adds `js` to <html> before first paint; CSS uses it for the mobile menu. */
+const JS_CLASS_SCRIPT = `<script>document.documentElement.classList.add('js')</script>`;
 // ─── Post page template ───────────────────────────────────────────────────────
 
 function buildPostPage(meta, bodyHtml, toc) {
@@ -284,6 +231,7 @@ function buildPostPage(meta, bodyHtml, toc) {
   return `<!DOCTYPE html>
 <html lang="en">
 <head>
+${JS_CLASS_SCRIPT}
 <!-- Google tag (gtag.js) -->
 <script async src="https://www.googletagmanager.com/gtag/js?id=G-ZSP30ZJ4NV"></script>
 <script>
@@ -328,86 +276,11 @@ function buildPostPage(meta, bodyHtml, toc) {
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=DM+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet">
-    <style>${SHARED_CSS}
-        /* ─── ARTICLE HERO ─── */
-        .article-hero {
-            background: linear-gradient(135deg, #0a1832 0%, #0d2160 40%, #0052cc 80%, #1a6fff 100%);
-            padding: 80px 0 72px; position: relative; overflow: hidden;
-        }
-        .article-hero::before { content: ''; position: absolute; top: -100px; right: -100px; width: 600px; height: 600px; background: radial-gradient(circle, rgba(255,255,255,0.06) 0%, transparent 70%); pointer-events: none; }
-        .article-hero::after  { content: ''; position: absolute; bottom: -80px; left: -80px; width: 400px; height: 400px; background: radial-gradient(circle, rgba(26,111,255,0.2) 0%, transparent 70%); pointer-events: none; }
-        .article-hero-inner { position: relative; z-index: 1; max-width: 800px; }
-        .breadcrumb { display: flex; align-items: center; gap: 8px; margin-bottom: 2rem; }
-        .breadcrumb a { font-size: 0.85rem; font-weight: 500; color: rgba(255,255,255,0.6); text-decoration: none; transition: color 0.2s; }
-        .breadcrumb a:hover { color: rgba(255,255,255,0.9); }
-        .breadcrumb-sep { color: rgba(255,255,255,0.3); font-size: 0.85rem; }
-        .breadcrumb-current { font-size: 0.85rem; color: rgba(255,255,255,0.5); overflow: hidden; text-overflow: ellipsis; white-space: nowrap; max-width: 300px; }
-        .article-tag { display: inline-flex; align-items: center; font-size: 0.75rem; font-weight: 600; letter-spacing: 0.08em; text-transform: uppercase; color: rgba(255,255,255,0.9); background: rgba(255,255,255,0.14); border: 1px solid rgba(255,255,255,0.2); padding: 5px 12px; border-radius: 100px; margin-bottom: 1.5rem; }
-        .article-hero h1 { font-size: clamp(1.8rem, 3.5vw, 2.8rem); font-weight: 700; line-height: 1.15; letter-spacing: -0.03em; color: white; margin-bottom: 1.5rem; }
-        .article-hero-meta { display: flex; align-items: center; gap: 16px; flex-wrap: wrap; }
-        .article-meta-author { display: flex; align-items: center; gap: 10px; }
-        .article-meta-avatar { width: 36px; height: 36px; border-radius: 50%; background: rgba(255,255,255,0.15); border: 2px solid rgba(255,255,255,0.3); display: flex; align-items: center; justify-content: center; font-size: 0.75rem; font-weight: 700; color: white; }
-        .article-meta-name { font-size: 0.9rem; font-weight: 600; color: rgba(255,255,255,0.9); }
-        .article-meta-role { font-size: 0.8rem; color: rgba(255,255,255,0.55); margin-top: 1px; }
-        .article-meta-sep { width: 3px; height: 3px; border-radius: 50%; background: rgba(255,255,255,0.25); }
-        .article-meta-date, .article-meta-read { font-size: 0.85rem; color: rgba(255,255,255,0.55); }
-
-        /* ─── ARTICLE LAYOUT ─── */
-        .article-layout { display: grid; grid-template-columns: 1fr 300px; gap: 48px; padding: 64px 0 96px; align-items: start; }
-        @media (max-width: 900px) { .article-layout { grid-template-columns: 1fr; gap: 40px; } .article-sidebar { order: -1; position: static; } }
-        @media (max-width: 640px) { .article-layout { padding: 40px 0 72px; .article-sidebar { order: -1; position: static; } } }
-
-        /* ─── ARTICLE BODY ─── */
-        .article-body { min-width: 0; }
-        .article-body h2 { font-size: 1.5rem; font-weight: 700; line-height: 1.25; letter-spacing: -0.02em; color: var(--ink); margin: 2.5rem 0 1rem; padding-top: 2rem; border-top: 1px solid var(--border); }
-        .article-body h2:first-child { margin-top: 0; padding-top: 0; border-top: none; }
-        .article-body h3 { font-size: 1.15rem; font-weight: 600; color: var(--ink); margin: 1.75rem 0 0.75rem; }
-        .article-body p { font-size: 1.05rem; line-height: 1.8; color: var(--ink-light); margin-bottom: 1.25rem; }
-        .article-body strong { color: var(--ink); font-weight: 600; }
-        .article-body a { color: var(--accent); text-decoration: underline; text-decoration-color: rgba(0,82,204,0.3); text-underline-offset: 3px; transition: text-decoration-color 0.2s; }
-        .article-body a:hover { text-decoration-color: var(--accent); }
-        .article-body ul, .article-body ol { margin: 1rem 0 1.25rem 1.5rem; display: flex; flex-direction: column; gap: 0.5rem; }
-        .article-body li { font-size: 1.05rem; line-height: 1.7; color: var(--ink-light); }
-        .article-body li strong { color: var(--ink); }
-        .article-body pre { background: var(--ink); color: #e2e8f0; border-radius: var(--radius); padding: 20px 24px; overflow-x: auto; margin: 1.5rem 0; font-size: 0.9rem; line-height: 1.6; }
-        .article-body code { font-family: 'JetBrains Mono', 'Fira Code', 'Cascadia Code', monospace; }
-        .article-body p code, .article-body li code { background: var(--surface-3); color: var(--accent); padding: 2px 6px; border-radius: 4px; font-size: 0.9em; }
-        .article-body img { max-width: 100%; border-radius: var(--radius); border: 1px solid var(--border); margin: 0 0 1.5rem;}
-        .article-body hr { border: none; border-top: 1px solid var(--border); margin: 2.5rem 0; }
-        .article-body table { width: 100%; border-collapse: collapse; margin: 1.5rem 0; font-size: 0.95rem; }
-        .article-body th { background: var(--surface-2); font-weight: 600; color: var(--ink); text-align: left; padding: 10px 14px; border: 1px solid var(--border); }
-        .article-body td { padding: 10px 14px; border: 1px solid var(--border); color: var(--ink-light); }
-        .article-body tr:hover td { background: var(--surface-2); }
-
-        /* ─── COVER IMAGE ─── */
-        .article-cover { width: 100%; max-height: 480px; object-fit: cover; border-radius: var(--radius-lg); margin-bottom: 48px; border: 1px solid var(--border); display: block; }
-
-        /* ─── CALLOUT ─── */
-        .callout { background: var(--accent-light); border-left: 3px solid var(--accent); border-radius: 0 var(--radius) var(--radius) 0; padding: 20px 24px; margin: 1.75rem 0; }
-        .callout p { margin: 0; color: var(--ink); font-size: 0.975rem; }
-
-        /* ─── SIDEBAR ─── */
-        .article-sidebar { position: sticky; top: calc(var(--nav-h) + 24px); }
-        .sidebar-card { background: var(--surface-2); border: 1px solid var(--border); border-radius: var(--radius-lg); padding: 24px; margin-bottom: 20px; }
-        .sidebar-card-title { font-size: 0.75rem; font-weight: 600; letter-spacing: 0.08em; text-transform: uppercase; color: var(--ink-muted); margin-bottom: 16px; }
-        .toc-list { list-style: none; display: flex; flex-direction: column; gap: 2px; }
-        .toc-list a { display: block; font-size: 0.875rem; color: var(--ink-light); text-decoration: none; padding: 6px 10px; border-radius: 6px; transition: background 0.15s, color 0.15s; line-height: 1.4; }
-        .toc-list a:hover { background: var(--surface-3); color: var(--ink); }
-        .sidebar-tags { display: flex; flex-wrap: wrap; gap: 8px; }
-        .sidebar-tag { font-size: 0.78rem; font-weight: 500; color: var(--accent); background: var(--accent-light); padding: 4px 10px; border-radius: 100px; }
-        .sidebar-author-name { font-size: 0.95rem; font-weight: 600; color: var(--ink); margin-bottom: 4px; }
-        .sidebar-author-role { font-size: 0.83rem; color: var(--ink-muted); margin-bottom: 16px; line-height: 1.5; }
-        .sidebar-author-link { display: inline-flex; align-items: center; gap: 6px; font-size: 0.83rem; font-weight: 500; color: var(--accent); text-decoration: none; transition: opacity 0.2s; }
-        .sidebar-author-link:hover { opacity: 0.75; }
-        .sidebar-author-link svg { width: 14px; height: 14px; stroke: currentColor; fill: none; stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; }
-        .share-linkedin { display: flex; align-items: center; gap: 10px; font-size: 0.875rem; font-weight: 600; color: #fff; background: #0a66c2; padding: 10px 16px; border-radius: 8px; text-decoration: none; transition: background 0.2s; }
-        .share-linkedin:hover { background: #004182; }
-        .share-linkedin svg { width: 16px; height: 16px; fill: currentColor; flex-shrink: 0; }
-    </style>
+    ${BLOG_STYLE}
 </head>
 <body>
 
-${navHtml('../../', true)}
+${BLOG_NAV}
 
     <!-- ─── ARTICLE HERO ─── -->
     <section class="article-hero">
@@ -482,7 +355,7 @@ ${tagsHtml}
         </div>
     </div>
 
-${FOOTER_HTML}
+${BLOG_FOOTER}
 
 </body>
 </html>`;
@@ -593,6 +466,7 @@ function buildIndexPage(posts) {
   return `<!DOCTYPE html>
 <html lang="en">
 <head>
+    ${JS_CLASS_SCRIPT}
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Blog | Syntaric</title>
@@ -625,63 +499,11 @@ function buildIndexPage(posts) {
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=DM+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet">
-    <style>${SHARED_CSS}
-        /* ─── HERO ─── */
-        .blog-hero {
-            padding: 80px 0 64px;
-            background:
-                linear-gradient(to bottom, rgba(255,255,255,0.94) 0%, rgba(255,255,255,0.88) 50%, rgba(255,255,255,0.98) 100%),
-                url('https://open-fhir.com/images/openFHIR-hero-background-image.jpg') center/cover no-repeat;
-            position: relative; overflow: hidden;
-        }
-        .blog-hero::before { content: ''; position: absolute; top: -120px; right: -160px; width: 600px; height: 600px; background: radial-gradient(circle, rgba(0,82,204,0.07) 0%, transparent 70%); pointer-events: none; }
-        .blog-hero-label { display: inline-flex; align-items: center; gap: 8px; font-size: 0.8rem; font-weight: 600; letter-spacing: 0.08em; text-transform: uppercase; color: var(--accent); background: var(--accent-light); padding: 6px 14px; border-radius: 100px; margin-bottom: 1.5rem; }
-        .blog-hero-dot { width: 6px; height: 6px; border-radius: 50%; background: var(--accent); }
-        .blog-hero h1 { font-size: clamp(2rem, 4vw, 3rem); font-weight: 700; line-height: 1.1; letter-spacing: -0.03em; color: var(--ink); max-width: 600px; margin-bottom: 1rem; }
-        .blog-hero-desc { font-size: 1.1rem; color: var(--ink-light); max-width: 520px; line-height: 1.7; }
-
-        /* ─── POSTS GRID ─── */
-        .blog-posts { padding: 72px 0 96px; }
-        .posts-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 28px; }
-        @media (max-width: 900px) { .posts-grid { grid-template-columns: repeat(2, 1fr); } }
-        @media (max-width: 640px) { .posts-grid { grid-template-columns: 1fr; } }
-
-        /* Featured */
-        .post-card--featured { grid-column: 1 / -1; display: grid; grid-template-columns: 1fr 1fr; background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius-lg); overflow: hidden; box-shadow: var(--shadow); transition: box-shadow 0.2s, transform 0.2s; text-decoration: none; color: inherit; }
-        .post-card--featured:hover { box-shadow: var(--shadow-lg); transform: translateY(-2px); }
-        @media (max-width: 900px) { .post-card--featured { grid-template-columns: 1fr; } }
-        .post-card--featured .post-visual { background: linear-gradient(135deg, #0d1f4d 0%, #0052cc 50%, #1a6fff 100%); min-height: 280px; display: flex; align-items: center; justify-content: center; padding: 48px; position: relative; overflow: hidden; }
-        .post-card--featured .post-visual::before { content: ''; position: absolute; top: -60px; right: -60px; width: 300px; height: 300px; background: radial-gradient(circle, rgba(255,255,255,0.08) 0%, transparent 70%); }
-        .post-visual-icon { width: 80px; height: 80px; background: rgba(255,255,255,0.12); border-radius: 20px; display: flex; align-items: center; justify-content: center; border: 1px solid rgba(255,255,255,0.2); }
-        .post-visual-icon svg { width: 40px; height: 40px; stroke: rgba(255,255,255,0.9); fill: none; stroke-width: 1.5; stroke-linecap: round; stroke-linejoin: round; }
-        .post-card--featured .post-body { padding: 48px; display: flex; flex-direction: column; justify-content: center; }
-
-        /* Regular */
-        .post-card { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius-lg); overflow: hidden; box-shadow: var(--shadow-sm); transition: box-shadow 0.2s, transform 0.2s; text-decoration: none; color: inherit; display: flex; flex-direction: column; }
-        .post-card:hover { box-shadow: var(--shadow); transform: translateY(-2px); }
-        .post-visual-sm { background: linear-gradient(135deg, #0d1f4d 0%, #0052cc 60%, #1a6fff 100%); height: 160px; display: flex; align-items: center; justify-content: center; position: relative; overflow: hidden; }
-        .post-visual-sm::before { content: ''; position: absolute; top: -40px; right: -40px; width: 200px; height: 200px; background: radial-gradient(circle, rgba(255,255,255,0.07) 0%, transparent 70%); }
-        .post-visual-sm-icon { width: 48px; height: 48px; background: rgba(255,255,255,0.12); border-radius: 12px; display: flex; align-items: center; justify-content: center; border: 1px solid rgba(255,255,255,0.2); }
-        .post-visual-sm-icon svg { width: 24px; height: 24px; stroke: rgba(255,255,255,0.9); fill: none; stroke-width: 1.5; stroke-linecap: round; stroke-linejoin: round; }
-        .post-card .post-body { padding: 28px; flex: 1; display: flex; flex-direction: column; }
-
-        /* Shared card */
-        .post-tag { display: inline-flex; font-size: 0.75rem; font-weight: 600; letter-spacing: 0.06em; text-transform: uppercase; color: var(--accent); background: var(--accent-light); padding: 4px 10px; border-radius: 100px; margin-bottom: 1rem; width: fit-content; }
-        .post-title { font-size: 1.25rem; font-weight: 700; line-height: 1.3; letter-spacing: -0.02em; color: var(--ink); margin-bottom: 0.75rem; }
-        .post-card--featured .post-title { font-size: 1.6rem; margin-bottom: 1rem; }
-        .post-excerpt { font-size: 0.95rem; color: var(--ink-light); line-height: 1.65; flex: 1; margin-bottom: 1.5rem; }
-        .post-meta { display: flex; align-items: center; gap: 16px; font-size: 0.825rem; color: var(--ink-muted); }
-        .post-meta-author { display: flex; align-items: center; gap: 8px; font-weight: 500; color: var(--ink-light); }
-        .post-meta-avatar { width: 28px; height: 28px; border-radius: 50%; background: linear-gradient(135deg, var(--accent) 0%, #1a6fff 100%); display: flex; align-items: center; justify-content: center; font-size: 0.7rem; font-weight: 700; color: white; flex-shrink: 0; }
-        .post-meta-sep { width: 3px; height: 3px; border-radius: 50%; background: var(--border); }
-        .post-read-more { display: inline-flex; align-items: center; gap: 6px; font-size: 0.875rem; font-weight: 600; color: var(--accent); margin-top: 1.5rem; }
-        .post-read-more svg { width: 16px; height: 16px; stroke: currentColor; fill: none; stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; transition: transform 0.2s; }
-        .post-card:hover .post-read-more svg, .post-card--featured:hover .post-read-more svg { transform: translateX(3px); }
-    </style>
+    ${BLOG_STYLE}
 </head>
 <body>
 
-${navHtml('../', true)}
+${BLOG_NAV}
 
     <!-- ─── HERO ─── -->
     <section class="blog-hero">
@@ -704,7 +526,7 @@ ${cards}
         </div>
     </section>
 
-${FOOTER_HTML}
+${BLOG_FOOTER}
 
 </body>
 </html>`;
@@ -712,11 +534,31 @@ ${FOOTER_HTML}
 
 // ─── Main ─────────────────────────────────────────────────────────────────────
 
+/** Newest of front matter `updated` / `date`; a published post needs one. */
+function lastModified(meta, slug) {
+  const value = meta.updated || meta.date;
+  if (!value) throw new Error(`Post "${slug}" has neither "updated" nor "date" in its front matter`);
+  return value;
+}
+
+/** Files scanned for TODO-OWNER besides the build outputs. */
+function todoScanExtras() {
+  const files = [path.join(ROOT, 'index.html')];
+  const walk = dir => {
+    if (!fs.existsSync(dir)) return;
+    for (const e of fs.readdirSync(dir, { withFileTypes: true })) {
+      const p = path.join(dir, e.name);
+      if (e.isDirectory()) walk(p);
+      else if (e.name.endsWith('.html')) files.push(p);
+    }
+  };
+  walk(path.join(ROOT, 'preview'));
+  return files;
+}
+
 function main() {
-  if (!fs.existsSync(POSTS_DIR)) {
-    fs.mkdirSync(POSTS_DIR, { recursive: true });
-    console.log(`Created ${path.relative(ROOT, POSTS_DIR)}/`);
-  }
+  const outputs = new Map(); // absolute path -> content
+  const log = msg => { if (!CHECK) console.log(msg); };
 
   const mdFiles = fs.readdirSync(POSTS_DIR)
     .filter(f => f.endsWith('.md'))
@@ -741,29 +583,26 @@ function main() {
     const bodyHtml = marked.parse(body);
     const toc      = buildToc(bodyHtml);
 
-    // Write post page
-    const postDir = path.join(__dirname, slug);
-    fs.mkdirSync(postDir, { recursive: true });
-    const postHtml = buildPostPage(meta, bodyHtml, toc);
-    fs.writeFileSync(path.join(postDir, 'index.html'), postHtml, 'utf8');
+    outputs.set(path.join(BLOG_DIR, slug, 'index.html'), buildPostPage(meta, bodyHtml, toc));
 
     const published = meta.publish !== false;
     posts.push({ meta, body, slug, published });
-    console.log(`  ✓ blog/${slug}/index.html${published ? '' : '  (draft — not listed)'}`);
+    log(`  ✓ blog/${slug}/index.html${published ? '' : '  (draft — not listed)'}`);
   }
 
-  // Write blog index (published only)
+  // Blog index (published only)
   const publishedPosts = posts.filter(p => p.published);
-  const indexHtml = buildIndexPage(publishedPosts);
-  fs.writeFileSync(path.join(__dirname, 'index.html'), indexHtml, 'utf8');
-  console.log(`  ✓ blog/index.html  (${publishedPosts.length} post${publishedPosts.length !== 1 ? 's' : ''})`);
+  outputs.set(path.join(BLOG_DIR, 'index.html'), buildIndexPage(publishedPosts));
+  log(`  ✓ blog/index.html  (${publishedPosts.length} post${publishedPosts.length !== 1 ? 's' : ''})`);
 
-  // Write sitemap.xml (published only)
-  const today = new Date().toISOString().split('T')[0];
-  const postUrls = publishedPosts.map(p => `
+  // sitemap.xml (published only). Dates come from front matter, never the
+  // clock, so --check gives the same answer on any day. "/" has no lastmod.
+  const postDates = publishedPosts.map(p => lastModified(p.meta, p.slug));
+  const blogDate  = postDates.slice().sort().pop();
+  const postUrls = publishedPosts.map((p, i) => `
   <url>
     <loc>https://syntaric.com/blog/${p.slug}/</loc>
-    <lastmod>${p.meta.date || today}</lastmod>
+    <lastmod>${postDates[i]}</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.7</priority>
   </url>`).join('');
@@ -772,21 +611,57 @@ function main() {
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   <url>
     <loc>https://syntaric.com/</loc>
-    <lastmod>${today}</lastmod>
     <changefreq>monthly</changefreq>
     <priority>1.0</priority>
   </url>
   <url>
     <loc>https://syntaric.com/blog/</loc>
-    <lastmod>${today}</lastmod>
+    <lastmod>${blogDate}</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
   </url>${postUrls}
 </urlset>`;
+  outputs.set(path.join(ROOT, 'sitemap.xml'), sitemap);
+  log(`  ✓ sitemap.xml  (${publishedPosts.length + 2} URLs)`);
 
-  fs.writeFileSync(path.join(ROOT, 'sitemap.xml'), sitemap, 'utf8');
-  console.log(`  ✓ sitemap.xml  (${publishedPosts.length + 2} URLs)`);
+  // index.html: rewrite marker regions only.
+  const indexPath = path.join(ROOT, 'index.html');
+  const homeHtml = replaceRegions(fs.readFileSync(indexPath, 'utf8'), {
+    css:    `\n    <style>\n${CSS.shared}\n\n${CSS.home}\n    </style>\n    `,
+    nav:    `\n${fill(NAV, { root: '', blogCurrent: '' })}\n`,
+    footer: `\n${fill(FOOTER, { root: '' })}\n`,
+  });
+  outputs.set(indexPath, homeHtml);
+  log('  ✓ index.html  (marker regions: css, nav, footer)');
 
+  // TODO-OWNER rule: no published file may carry the marker.
+  const todo = [];
+  for (const [file, content] of outputs) if (content.includes('TODO-OWNER')) todo.push(file);
+  for (const file of todoScanExtras()) {
+    if (!outputs.has(file) && fs.readFileSync(file, 'utf8').includes('TODO-OWNER')) todo.push(file);
+  }
+
+  if (CHECK) {
+    const differ = [];
+    for (const [file, content] of outputs) {
+      const onDisk = fs.existsSync(file) ? fs.readFileSync(file, 'utf8') : null;
+      if (onDisk !== content) differ.push(file);
+    }
+    for (const f of differ) console.log(`differs from build: ${path.relative(ROOT, f)}`);
+    for (const f of todo)   console.log(`contains TODO-OWNER: ${path.relative(ROOT, f)}`);
+    if (differ.length || todo.length) {
+      console.log('\nbuild --check failed. Run `npm run build` (edit outside marker regions only) and resolve every TODO-OWNER.');
+      process.exit(1);
+    }
+    console.log(`build --check: ${outputs.size} outputs match`);
+    return;
+  }
+
+  for (const [file, content] of outputs) {
+    fs.mkdirSync(path.dirname(file), { recursive: true });
+    if (!fs.existsSync(file) || fs.readFileSync(file, 'utf8') !== content) fs.writeFileSync(file, content, 'utf8');
+  }
+  for (const f of todo) console.log(`  ! contains TODO-OWNER: ${path.relative(ROOT, f)}`);
   console.log('\nDone.');
 }
 

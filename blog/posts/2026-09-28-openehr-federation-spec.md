@@ -47,7 +47,7 @@ The interesting part happens before the query goes anywhere. The gateway resolve
 which providers hold data on this patient (localization), where their CDRs are (addressing), and what the patient's
 local `ehr_id` is at each of them (cross-reference). The proposed bindings are IHE XCPD, mCSD and PIXm, with the
 Dutch Generic Functions as a regional alternative. If you read our
-[post on Generic Functions](/posts/dutch-generic-functions-openehr), this is exactly where they slot in.
+[post on Generic Functions](/blog/dutch-generic-functions-openehr/), this is exactly where they slot in.
 
 Each CDR then receives plain, non-federated AQL scoped to its own local `ehr_id`. A node does not need to know it is
 part of a federation at all. The gateway combines the rows, tags each one with the endpoint it came from, and

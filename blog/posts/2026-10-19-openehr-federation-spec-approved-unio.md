@@ -20,7 +20,7 @@ publish: true
 Two things this week. The openEHR SEC approved version 1.0.0 of the _Federation Tier with AQL_ specification at its
 meeting on 12 October, and we're releasing **Unio**, the federation gateway we've been building alongside it.
 
-If you missed the [earlier post](/posts/openehr-federation-spec), the short version: the spec describes how one AQL
+If you missed the [earlier post](/blog/openehr-federation-spec/), the short version: the spec describes how one AQL
 query can run across several openEHR CDRs as if they were a single repository, while the data stays where it is. The
 patient is resolved outside of AQL, each CDR gets plain AQL scoped to its own local `ehr_id`, and the gateway merges
 what comes back.

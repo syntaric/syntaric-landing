@@ -87,7 +87,7 @@ its
 authorization flow.
 
 I demonstrated this end-to-end in
-the [eOverdracht hybrid architecture PoC](/posts/eoverdracht-hybrid-architecture-openehr-fhir):
+the [eOverdracht hybrid architecture PoC](/blog/eoverdracht-hybrid-architecture-openehr-fhir/):
 EHRBase running as the openEHR CDR on the sending side, Firely Server handling the FHIR operational layer and mCSD
 models, openFHIR doing the bidirectional mapping, and the mCSD/Routing generic functions handling discovery and
 addressing. The receiving side was pure FHIR and it had no idea the sender was openEHR-backed.

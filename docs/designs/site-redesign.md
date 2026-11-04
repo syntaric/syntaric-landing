@@ -1107,14 +1107,25 @@ named next to the number.
         with the file on disk, write nothing, print differing paths, exit 1
         on any difference. Also fails on any `TODO-OWNER` in the files
         listed under the `TODO-OWNER` rule. The build output must not
-        depend on the current date or time.
+        depend on the current date or time, so the sitemap `lastmod` rule
+        of item 20 lands here: each post from `updated`, else `date`;
+        `/blog/` the newest of those; `/` none.
+    *   `--root <dir>` option builds another checkout (used by the tests).
+    *   Blog templates also get the `js` class script first in `<head>`, so
+        the mobile menu works there too.
     *   Pin behaviour: no change to the `marked` renderer signature.
 *   **Why**: one design source; the check guards marker regions.
+*   **As built**: the first `check-links.js` run found three post links to
+    `/posts/<slug>` (404 on the live site); the sources now link to
+    `/blog/<slug>/`.
 
 ##### 13. `index.html` (Modify, first change)
 
-*   **Proposed Changes**: replace the `<style>` block with
-    `<!-- @css --><!-- /@css -->` inside `<style>`; replace the header nav
+*   **Proposed Changes**: replace the `<style>` element with
+    `<!-- @css --><!-- /@css -->`; the region holds the whole `<style>`
+    element. (An HTML comment inside `<style>` is CSS text, and `@css`
+    would parse as an unknown at-rule that swallows the next rule.)
+    Replace the header nav
     (1270-1286) with `<!-- @nav -->...<!-- /@nav -->`; replace the footer
     (1827-1839) with `<!-- @footer -->...<!-- /@footer -->`; add
     `<script>document.documentElement.classList.add('js')</script>` as the
@@ -1126,9 +1137,10 @@ named next to the number.
 
 *   **Proposed Changes**: pin `marked` to exactly `12.0.2` (the installed
     version). Scripts: `build` (`node blog/build.js`), `test`
-    (`node --test tools/test/`, Node's built-in runner, no dependency),
-    `check` (`node --test tools/test/ && node blog/build.js --check && node
-    tools/check-links.js`), keep `build:blog` and `blog` as aliases of
+    (`node --test "tools/test/*.test.js"`, Node's built-in runner, no
+    dependency), `check` (`node --test "tools/test/*.test.js" && node
+    blog/build.js --check && node tools/check-links.js`), keep
+    `build:blog` and `blog` as aliases of
     `build`. Each item that creates a module in `tools/` also creates
     `tools/test/<module>.test.js` with the cases in the Verification Plan.
 *   **Why**: a `marked` upgrade would change table-of-contents anchors
@@ -1159,7 +1171,8 @@ named next to the number.
 *   **Proposed Changes**: new structure tree (assets, partials, tools, data,
     docs); `npm run build` and `npm run check` before every commit; "Edit
     outside marker regions only" with the list of regions; how to refresh
-    the data snapshot (`node tools/snapshot.js`); after
+    the data snapshot (`node tools/snapshot.js`; added to the README in
+    commit 1.2, when the tool exists); after
     deploy, run `tools/check-deploy.sh` and LinkedIn Post Inspector for `/`,
     `/blog/` and changed posts; links posted on LinkedIn carry
     `?utm_source=linkedin&utm_medium=social&utm_campaign=<post-slug>`. The
@@ -1274,11 +1287,7 @@ chosen (decision E1 below).
         `meta.readTime` still overrides.
     *   Posts with `publish: false`: keep the existing `<meta name="robots"
         content="noindex, nofollow">` (`build.js:285`).
-    *   Sitemap `lastmod` for each post from front matter `updated`, else
-        `date`; a published post with neither fails the build. `/blog/`
-        gets the newest of those dates. `/` gets no `<lastmod>`. Nothing in
-        the build reads the clock, so `--check` gives the same result on
-        any day.
+    *   Sitemap `lastmod` from front matter: done in commit 0.3 (item 12).
     *   Article JSON-LD: add `dateModified`.
     *   Footer and nav from partials (done in 0.3).
 *   **Why**: brief 5.9, 6.4, 7.3, 2.8.

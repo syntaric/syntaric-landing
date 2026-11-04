@@ -3,10 +3,13 @@
   "version": "1.0.0",
   "private": true,
   "scripts": {
-    "build:blog": "node blog/build.js",
-    "blog": "node blog/build.js"
+    "build": "node blog/build.js",
+    "test": "node --test \"tools/test/*.test.js\"",
+    "check": "node --test \"tools/test/*.test.js\" && node blog/build.js --check && node tools/check-links.js",
+    "build:blog": "npm run build",
+    "blog": "npm run build"
   },
   "dependencies": {
-    "marked": "^12.0.0"
+    "marked": "12.0.2"
   }
 }

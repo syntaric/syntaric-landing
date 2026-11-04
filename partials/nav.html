@@ -1,0 +1,38 @@
+    <header>
+        <nav class="container" aria-label="Main">
+            <a href="/" class="logo">
+                <img src="{{root}}etc/syntaric_logo_2.png" alt="Syntaric">
+                <span class="logo-name">Syntaric</span>
+            </a>
+            <div class="nav-right">
+                <ul class="nav-links nav-main" id="site-nav">
+                    <li><a href="{{root}}#services">Services</a></li>
+                    <li><a href="{{root}}#engagements">Engagements</a></li>
+                    <li><a href="{{root}}#products">Our products</a></li>
+                    <li><a href="{{root}}#expertise">Expertise</a></li>
+                    <li><a href="{{root}}#collaborators">Collaborators</a></li>
+                </ul>
+                <ul class="nav-links nav-keep">
+                    <li><a href="{{root}}blog/"{{blogCurrent}}>Blog</a></li>
+                    <li><a href="{{root}}#contact" class="nav-cta">Contact</a></li>
+                </ul>
+                <button class="nav-toggle" type="button" aria-expanded="false" aria-controls="site-nav">Menu</button>
+            </div>
+        </nav>
+    </header>
+    <script>
+        (function () {
+            var button = document.querySelector('.nav-toggle');
+            if (!button) return;
+            function setOpen(open) {
+                document.body.classList.toggle('nav-open', open);
+                button.setAttribute('aria-expanded', open ? 'true' : 'false');
+            }
+            button.addEventListener('click', function () {
+                setOpen(!document.body.classList.contains('nav-open'));
+            });
+            document.querySelectorAll('#site-nav a').forEach(function (link) {
+                link.addEventListener('click', function () { setOpen(false); });
+            });
+        })();
+    </script>
