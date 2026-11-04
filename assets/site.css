@@ -824,8 +824,8 @@ figcaption {
     height: auto;
 }
 
-/* Dividers (commit 1.5): a hairline strand with a mono margin note; they
-   replace the hairline above the section that follows. */
+/* Dividers (commit 1.5): a hairline strand; they replace the hairline above
+   the section that follows. */
 .divider {
     padding-top: var(--s-6);
 }
@@ -840,11 +840,6 @@ figcaption {
     border-top: none;
 }
 
-@media (max-width: 639px) {
-    .divider .fig-label {
-        display: none;
-    }
-}
 
 /* ─── RECENT WRITING ────────────────────────────────────────── */
 .writing-list {

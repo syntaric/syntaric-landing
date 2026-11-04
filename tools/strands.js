@@ -39,6 +39,10 @@ const FIRE = ['#c32a30', '#df5c34', '#fe933a'];
 const UNIO = { navy: '#0c2842', teal: '#11888a', deep: '#1a6372', hair: '#dbdbda' };
 const MONO = "'Atkinson Hyperlegible Mono', 'Atkinson Mono Fallback', monospace";
 const MONO_ADVANCE = 0.632; // em, Atkinson Hyperlegible Mono (OS/2 xAvgCharWidth)
+const TEXT = "'Atkinson Hyperlegible Next', 'Atkinson Next Fallback', sans-serif";
+// em, Atkinson Hyperlegible Next 400: the hero labels measure 0.41-0.46; rounded up so
+// the text-zone test errs on the safe side
+const TEXT_ADVANCE = 0.48;
 
 // ─── Geometry helpers ─────────────────────────────────────────────────────────
 
@@ -193,14 +197,14 @@ function rectsOverlap(a, b) {
   return a.x < b.x + b.width && a.x + a.width > b.x && a.y < b.y + b.height && a.y + a.height > b.y;
 }
 
-/** Box of a mono label at (x, y) baseline; anchor 'start' or 'end'. */
-function labelBox(x, y, text, size, anchor = 'start') {
-  const w = text.length * MONO_ADVANCE * size;
+/** Box of a label at (x, y) baseline; anchor 'start' or 'end'; face 'mono' or 'text'. */
+function labelBox(x, y, text, size, anchor = 'start', face = 'mono') {
+  const w = text.length * (face === 'text' ? TEXT_ADVANCE : MONO_ADVANCE) * size;
   return { x: anchor === 'end' ? x - w : x, y: y - size, width: w, height: size * 1.25 };
 }
 
-function label(x, y, text, size, { anchor = 'start', fill = INK, cls = 'fig-label' } = {}) {
-  return `<text class="${cls}" x="${r1(x)}" y="${r1(y)}" font-family="${MONO}" font-size="${size}" fill="${fill}"${anchor === 'end' ? ' text-anchor="end"' : ''}>${esc(text)}</text>`;
+function label(x, y, text, size, { anchor = 'start', fill = INK, cls = 'fig-label', face = 'mono' } = {}) {
+  return `<text class="${cls}" x="${r1(x)}" y="${r1(y)}" font-family="${face === 'text' ? TEXT : MONO}" font-size="${size}" fill="${fill}"${anchor === 'end' ? ' text-anchor="end"' : ''}>${esc(text)}</text>`;
 }
 
 function svgRoot(cls, w, h, body, defs = '') {
@@ -224,6 +228,9 @@ function mappingPairs(snapshot) {
  * looping video. `phase` (0-1) is the position in the loop; motion is a
  * gentle sway of every strand, periodic, so frame 0 follows the last frame.
  *
+ * Labels are plain words in the text face (plain-language pass, decision P2),
+ * from the written "hero-labels" entry of the snapshot.
+ *
  * Layers, back to front: a wide two-strand bundle in an 8 % navy tint that may
  * pass behind the text (under the 1.2:1 text-zone limit); a 20 % bundle and
  * the two data strands, which stay out of the text zone in every frame.
@@ -232,7 +239,9 @@ function mappingPairs(snapshot) {
  * 780 x 584 band below the text on phones, no text zone.
  */
 function heroField(snapshot, { layout = 'wide', phase = 0, textZone, hooks = true } = {}) {
-  const pair = mappingPairs(snapshot)[0];
+  const e = snapshot.entries['hero-labels'];
+  if (!e) throw new Error('snapshot: entry "hero-labels" is missing');
+  const words = e.values;
   const TAU = Math.PI * 2;
   const wave = (amp, offset) => amp * Math.sin(TAU * phase + offset);
   const L = layout === 'wide'
@@ -245,7 +254,7 @@ function heroField(snapshot, { layout = 'wide', phase = 0, textZone, hooks = tru
         back: { from: [-80, 560], to: [860, 40], width: 110, amp: 30, fill: '#e4e3e1' },
         mid: { from: [320, 640], to: [820, 330], width: 44, amp: 20, fill: '#c9cdd0' },
         data: { a: [[24, 120], [756, 262]], b: [[24, 430], [756, 262]], width: 40, amp: 5, fill: INK },
-        la: [24, 84], lb: [24, 492], arch: [24, 526], size: 24, small: 18 };
+        la: [24, 84], lb: [24, 494], arch: [24, 530], size: 30, small: 22 };
   const sway = (p, amp, off) => [p[0], p[1] + wave(amp, off)];
   const shapes = [];
   const bundleOf = (spec, off) => {
@@ -263,22 +272,23 @@ function heroField(snapshot, { layout = 'wide', phase = 0, textZone, hooks = tru
   const db = outline(sway(L.data.b[0], L.data.amp, 4.6), sway(add(L.data.b[1], [0, off]), L.data.amp, 5.5),
     { width: L.data.width, bow: BLADE.bow + 0.02 * Math.sin(TAU * phase + 5.3), hook: hooks ? 'left' : null });
   const labels = [
-    { x: L.la[0], y: L.la[1], text: pair.fhir, size: L.size },
-    { x: L.lb[0], y: L.lb[1], text: pair.openehr, size: L.size },
-    { x: L.arch[0], y: L.arch[1], text: pair.archetype, size: L.small, fill: '#56697a' },
+    { x: L.la[0], y: L.la[1], text: words.upper, size: L.size },
+    { x: L.lb[0], y: L.lb[1], text: words.lower, size: L.size },
+    // full ink: on the wide layout the note sits on the 20 % bundle
+    { x: L.arch[0], y: L.arch[1], text: words.note, size: L.small },
   ];
   if (L.zone) {
-    for (const [name, s] of [['middle bundle', mid[0]], ['middle bundle', mid[1]], ['FHIR strand', da], ['openEHR strand', db]]) {
+    for (const [name, s] of [['middle bundle', mid[0]], ['middle bundle', mid[1]], ['upper data strand', da], ['lower data strand', db]]) {
       if (polygonHitsRect(s.polygon, L.zone)) throw new Error(`heroField: the ${name} enters the text zone (phase ${phase})`);
     }
     for (const l of labels) {
-      if (rectsOverlap(labelBox(l.x, l.y, l.text, l.size), L.zone)) throw new Error(`heroField: label "${l.text}" enters the text zone`);
+      if (rectsOverlap(labelBox(l.x, l.y, l.text, l.size, 'start', 'text'), L.zone)) throw new Error(`heroField: label "${l.text}" enters the text zone`);
     }
   }
   for (const s of back) shapes.push(`<path class="strand" fill="${L.back.fill}" d="${s.d}"/>`);
   for (const s of mid) shapes.push(`<path class="strand" fill="${L.mid.fill}" d="${s.d}"/>`);
   shapes.push(`<path class="strand" fill="${L.data.fill}" d="${da.d}"/>`, `<path class="strand" fill="${L.data.fill}" d="${db.d}"/>`);
-  const body = shapes.join('') + labels.map(l => label(l.x, l.y, l.text, l.size, { fill: l.fill })).join('');
+  const body = shapes.join('') + labels.map(l => label(l.x, l.y, l.text, l.size, { fill: l.fill, face: 'text' })).join('');
   return svgRoot(`fig fig-field fig-field--${layout}`, L.w, L.h, body);
 }
 
@@ -333,11 +343,10 @@ function unioFigure(snapshot, { t = 1 } = {}) {
   return svgRoot('fig fig-unio', W, H, body);
 }
 
-/** Divider: a hairline strand with a mono margin note. */
-function divider(note) {
+/** Divider: a hairline strand (its margin note went in the plain-language pass, P1). */
+function divider() {
   const W = 1200, H = 28;
-  const body = `<path class="strand" fill="#bdc2c5" d="${outline([0, 20], [880, 12], { width: 4, bow: 0.01 }).d}"/>` +
-    label(W, 18, note, 12, { anchor: 'end', fill: '#56697a' });
+  const body = `<path class="strand" fill="#bdc2c5" d="${outline([0, 20], [880, 12], { width: 4, bow: 0.01 }).d}"/>`;
   return svgRoot('fig fig-divider', W, H, body);
 }
 

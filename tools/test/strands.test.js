@@ -36,7 +36,7 @@ test('the hero field throws when geometry enters the text zone', () => {
 
 test('every figure is aria-hidden and has a viewBox', () => {
   for (const svg of [strands.heroField(snapshot), strands.heroField(snapshot, { layout: 'narrow' }),
-    strands.openfhirFigure(snapshot), strands.unioFigure(snapshot), strands.divider('note')]) {
+    strands.openfhirFigure(snapshot), strands.unioFigure(snapshot), strands.divider()]) {
     assert.match(svg, /^<svg [^>]*viewBox="0 0 \d+ \d+"[^>]*aria-hidden="true" focusable="false"/);
     assert.doesNotMatch(svg, /<title>/);
   }
@@ -48,4 +48,10 @@ test('the full-bleed field keeps its text zone clear in every frame of the loop'
 
 test('the field loop is seamless: phase 0 and phase 1 draw the same frame', () => {
   assert.strictEqual(strands.heroField(snapshot, { phase: 0 }), strands.heroField(snapshot, { phase: 1 }));
+});
+
+test('the hero field shows the written plain labels, in the text face', () => {
+  const svg = strands.heroField(snapshot);
+  for (const t of Object.values(snapshot.entries['hero-labels'].values)) assert.ok(svg.includes(t), t);
+  assert.doesNotMatch(svg, /Mono|\[at\d|AllergyIntolerance/);
 });

@@ -43,4 +43,9 @@ test('refuses a selected mapping that does not exist', () => {
 test('copies a synthetic entry as written', () => {
   const values = { query: 'q' };
   assert.deepStrictEqual(snapshotEntry({ id: 's', origin: 'synthetic', licence: 'Syntaric', values }), { origin: 'synthetic', licence: 'Syntaric', values });
+
+test('copies a written entry (plain copy) as written', () => {
+  const values = { upper: 'u' };
+  assert.deepStrictEqual(snapshotEntry({ id: 'w', origin: 'written', licence: 'Syntaric', values }), { origin: 'written', licence: 'Syntaric', values });
+});
 });

@@ -168,6 +168,16 @@ site (LinkedIn previews, external testers).
     face for labels, divider notes removed, hero still and both videos
     re-rendered, new caption. Screenshots at 390, 1280 and 1920 px; the
     contrast check re-run.
+    *   **As built (2.1)**: the labels are a written entry, `hero-labels`,
+        in `data/sources.json` (`tools/snapshot.js` copies `origin:
+        "written"` entries like synthetic ones). The text-zone test sizes
+        labels at 0.48 em per character (measured 0.41-0.46). Two fixes
+        found in the screenshots: on phones the labels were 12 and 9 px, now
+        15 and 11 px; the small line was `--ink-3` on the 20 % bundle
+        (about 3.5:1), now full ink. Videos: 265 KB wide, 157 KB narrow.
+        Text-zone contrast unchanged: 0 pixels over 1.2:1 with the video
+        playing. The divider notes are gone; the three dividers are now
+        the same hairline.
 *   **2.2** Mono out of the page and the share cards; mono files deleted if
     unused.
 *   **2.3** Face gate: preview page with Control, A and B; owner picks.

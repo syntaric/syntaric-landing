@@ -652,13 +652,8 @@ function main() {
 
   const openfhirFig = checkFigure('openfhir', strands.openfhirFigure(snapshot));
   const unioFig = checkFigure('unio', strands.unioFigure(snapshot));
-  // Divider notes: the other mapping pairs, as plain "FHIR path · openEHR path".
-  const { expandPaths } = require('../tools/data-rules');
-  const mapping = snapshot.entries['allergy-mapping'];
-  const dividers = mapping.values.slice(1, 4).map((v, i) => {
-    const e = expandPaths(v, mapping.header);
-    return checkFigure(`divider-${i + 1}`, strands.divider(`${e.fhir} · ${e.openehr}`));
-  });
+  // Dividers: the same hairline strand three times, without notes (P1).
+  const dividers = [1, 2, 3].map(i => checkFigure(`divider-${i}`, strands.divider()));
   outputs.set(path.join(ROOT, 'partials', 'figures', 'openfhir.svg'), openfhirFig + '\n');
   outputs.set(path.join(ROOT, 'partials', 'figures', 'unio.svg'), unioFig + '\n');
   dividers.forEach((d, i) => outputs.set(path.join(ROOT, 'partials', 'figures', `divider-${i + 1}.svg`), d + '\n'));

@@ -8,7 +8,7 @@
  * - FHIRConnect mapping files: keeps the mappings named in `select`
  *   (their with.fhir / with.openehr pairs) and the header fields needed to
  *   expand $resource and $archetype; values are copied unchanged
- * - synthetic entries are copied as written
+ * - synthetic and written entries (made-up data, plain copy) are copied as written
  * - no filtering here: the build filters on every run (tools/data-rules.js)
  */
 
@@ -27,10 +27,10 @@ function expandHome(p) {
 
 /** Turn one allow-list entry into a snapshot entry. `readFile` is injectable for tests. */
 function snapshotEntry(entry, readFile = f => fs.readFileSync(f, 'utf8')) {
-  if (entry.origin === 'synthetic') {
-    return { origin: 'synthetic', licence: entry.licence, values: entry.values };
+  if (entry.origin === 'synthetic' || entry.origin === 'written') {
+    return { origin: entry.origin, licence: entry.licence, values: entry.values };
   }
-  if (!entry.path) throw new Error(`Entry "${entry.id}" has neither a path nor origin "synthetic"`);
+  if (!entry.path) throw new Error(`Entry "${entry.id}" has neither a path nor origin "synthetic" or "written"`);
   const file = path.resolve(expandHome(entry.path));
   if (file === FORBIDDEN || file.startsWith(FORBIDDEN + path.sep)) {
     throw new Error(`Entry "${entry.id}": paths under ~/Documents/syntaric/_clients/ are never read`);
