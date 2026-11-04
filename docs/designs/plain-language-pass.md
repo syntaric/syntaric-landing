@@ -221,12 +221,14 @@ site (LinkedIn previews, external testers).
         the JSON-LD descriptions are unchanged. At the review the owner
         removed the rule above the contact details: the divider strand is
         enough.
-*   **2.6** Jargon check in `npm run check` (below).
+*   **2.6** ~~Jargon check in `npm run check`~~. **Dropped** by the owner
+    (2026-11-04) after seeing the word list; built and removed before
+    commit.
 *   **2.7** Tests on the finished pass (below), after a push.
 
 ## Verification
 
-*   **Jargon check** (new, `tools/check-plain.js`, part of `npm run
+*   ~~**Jargon check**~~ (dropped, see 2.6) (new, `tools/check-plain.js`, part of `npm run
     check`): fails if the built home page shows code-like text anywhere
     (`[at`, `/data`, `.v2`, `AQL`, `CDR`, `R4`, `rows`), or if the first
     screen (hero, proof line) or the first sentence of any block contains a
