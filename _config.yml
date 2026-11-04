@@ -1,0 +1,17 @@
+# GitHub Pages (Jekyll) configuration.
+# The site is static and built locally; Jekyll only copies files.
+# This is a deny-list: a new private file is public until it is added here.
+# tools/check-deploy.sh checks the result after each deploy.
+exclude:
+  - tools/
+  - data/
+  - partials/
+  - docs/
+  - blog/posts/
+  - blog/articles-to-copy.csv
+  - etc/syntaric_12.2025.pdf
+  - node_modules/
+  - package.json
+  - package-lock.json
+  - README.md
+  - .idea/
