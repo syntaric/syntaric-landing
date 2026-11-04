@@ -379,3 +379,194 @@ checked before relying on them.
 | Reply time | "We reply within two working days." | **invented** |
 | LinkedIn | The personal profile, labelled "Gasper Andrejc, lead architect"; in JSON-LD it moves from the company's `sameAs` to the founder's | #2 condition, option 2; the label wording is **invented** |
 | Not expanded | LPRES, CumuluZ, "Oncology Institute" (shown as today) | Owner to supply full names or descriptions |
+
+## 4. Plain-language copy (commit 2.0, approved by the owner 2026-11-04)
+
+Plan: `docs/designs/plain-language-pass.md` (decisions P1-P5). Rules: the
+first screen makes sense to someone who has never heard of FHIR or openEHR;
+each block's first sentence says who it is for or what changes for them;
+standard names, systems and profile lists follow in later sentences. No
+fact from §1-§3 is removed; rows that change place are marked "moved
+later". Applied in commits 2.1 (hero) and 2.5 (the rest).
+
+### 4.1 Head
+
+| Item | Today | Draft |
+|---|---|---|
+| `<title>` | "Syntaric \| Healthcare interoperability consultancy" | unchanged |
+| Meta, OG and Twitter description | "Syntaric designs, reviews and builds data integration for hospitals, national health programmes and health IT vendors, using FHIR, openEHR and IHE." | "Syntaric helps hospitals, regions and national health programmes share patient information between their systems, using open standards such as FHIR, openEHR and IHE." |
+
+### 4.2 Hero
+
+| Item | Today | Draft |
+|---|---|---|
+| H1 | "Boutique healthcare interoperability consultancy" | unchanged (decision #2; passed the 5-second test). If run 3 names "interoperability" as an unknown word, the fallback is "Healthcare data consultancy" with the who-for line unchanged |
+| Who-for line | "A small team that designs, reviews and builds data integration for hospitals, national health programmes and health IT vendors. We also make two products, openFHIR and Unio." | "We help hospitals, regions and national health programmes share patient information between their systems, using open standards. We also make two products, openFHIR and Unio." |
+| Buttons | "Contact", "openFHIR and Unio" | unchanged |
+| Caption | "The same allergy record, as sent over FHIR and as stored in openEHR." | "One allergy record, kept the same as it moves from the hospital to the GP." |
+| Field label, upper strand | `AllergyIntolerance.code` | "Penicillin allergy, recorded at the hospital" |
+| Field label, lower strand | `/data[at0001]/items[at0002]` | "The same allergy, in the GP's record" |
+| Field label, small line | `openEHR-EHR-EVALUATION.adverse_reaction_risk.v2` | "Shared between their systems, nothing retyped" |
+
+### 4.3 Proof line
+
+> We sit on the expert panel that reviews new openEHR standards. With RSO
+> Zuid-Limburg, a Dutch regional care network, we wrote the standard for
+> joining up a region's patient records. It was approved in October 2026,
+> and our product Unio is built on it.
+
+Today: "Member of the openEHR Specifications Editorial Committee Experts
+Panel since 2026. We drafted the openEHR Federation specification with RSO
+Zuid-Limburg. The openEHR SEC approved version 1.0.0 in October 2026, and
+our gateway Unio implements it." The full committee name and the version
+move later (credentials line, Unio block).
+
+### 4.4 What you can hire us for (`#services`)
+
+The For / Format / Length / You receive table goes. Each item: heading;
+**when** it fits; **what you get**; a last line with the technical detail;
+a quiet line with the format and length.
+
+**Architecture review**
+When: You have an integration plan, on paper or already running, and want
+an independent second opinion before you commit more to it.
+You get: A written report on what works, what is missing and what to fix
+first, and one follow-up session to go through it.
+Detail: Checked against FHIR, IHE and openEHR.
+Format: Fixed scope · 1-2 weeks
+
+**Project consulting**
+When: Your team is connecting systems, for example to Epic, Cerner
+Millennium or ChipSoft HiX, and wants experienced people working alongside
+it.
+You get: Design and hands-on help inside your team, the architecture
+written down, and regular check-ins.
+Detail: FHIR, openEHR and IHE projects.
+Format: Time and materials · weeks to months
+
+**Strategic advisory**
+When: You want an experienced person to call on whenever decisions about
+health data come up. Think of it as a part-time, or fractional, Chief
+Interoperability Officer.
+You get: A direct line for questions, a monthly planning session, quick
+answers when something is urgent, and a review of your architecture every
+quarter.
+Format: Retainer · ongoing
+
+**Training and workshops**
+When: Your people are new to the health data standards, or need to go
+deeper.
+You get: A session of half a day to two days, remote or on site, built
+around your team's own work.
+Detail: FHIR basics or advanced implementation, openEHR archetypes and
+templates, IHE profiles in practice, or a curriculum built for your team.
+Format: Fixed scope · half a day to 2 days
+
+**Software development**
+When: You need it built, not only designed.
+You get: Working software that connects your systems: translation between
+standards, links to hospital systems such as Epic, Cerner and HiX, and the
+standard ways of exchanging documents and finding patients.
+Detail: FHIR layers and APIs, openEHR-FHIR transformation, IHE profiles
+(XDS, XDW, ATNA, QEDm, PIX, PDQ, PIXm and PDQm). Built in Java (Jakarta EE,
+Spring), .NET or Go.
+Format: Time and materials or fixed scope
+
+Formats line (`id="engagements"`): "Ways to work with us: a fixed scope,
+time and materials, or a retainer."
+
+### 4.5 Selected work (`#expertise`)
+
+**Case 1** (label "RSO Zuid-Limburg · 2026")
+Title: "One view of a patient across a region's care providers"
+> In Zuid-Limburg every care provider keeps its own patient records, on
+> purpose. An application that needed a patient's full history had to ask
+> each of them separately.
+>
+> With RSO Zuid-Limburg and the openEHR standards committee we wrote a
+> specification for federating openEHR repositories, so they answer as
+> one. We built an open reference implementation and our product Unio on
+> it. **The specification was approved in October 2026.**
+
+**Case 2** (label "HL7 Converge & Collaborate, Dublin · 2026")
+Title: "Two health data standards working together, built live in a workshop"
+> We ran the hands-on "Let's Build" session. In one afternoon, participants
+> connected a patient record system to an international exchange
+> standard: stored records came out as an international patient summary,
+> and incoming data was stored in the record.
+>
+> The setup: an openEHR repository, Firely Server and openFHIR, returning a
+> FHIR International Patient Summary.
+
+"One afternoon" confirmed by the owner (2026-11-04).
+
+**Case 3** (label "Proof of concept · 2026")
+Title: "Nursing handover between care organisations, on open standards"
+> When a patient moves from a hospital to a nursing home or home care, the
+> nurses' handover has to go with them. In the Netherlands that handover
+> follows a national standard, eOverdracht.
+>
+> We built a working proof of concept of eOverdracht on a hybrid openEHR
+> and FHIR architecture, using the routing and care-services building
+> blocks of the Dutch Generic Functions programme.
+
+**Credentials line**
+> We have worked with hospitals and health programmes in the Netherlands,
+> the United Kingdom, Iceland, Slovenia and the United States. IHE
+> certified professional; member of the openEHR Specifications Editorial
+> Committee Experts Panel since 2026.
+
+Client list: unchanged.
+
+### 4.6 Products (`#products`)
+
+Heading: "Two products from our consulting work" (unchanged).
+Lead: "We are a consultancy first. Two products came out of our project
+work." (Licences move to each product's last line.)
+
+**openFHIR** (logo beside the heading)
+> openFHIR translates patient records between the way one system stores
+> them and the way another expects to receive them, in both directions.
+>
+> It maps between openEHR and FHIR and implements FHIR Connect, an open
+> specification for describing these mappings, which we co-created. It was
+> the bridge between openEHR and FHIR in the "Let's Build" session at HL7
+> Converge & Collaborate, Dublin 2026, and in our International Patient
+> Summary webinar.
+>
+> Open source (Apache 2.0), with a commercial Enterprise version.
+> open-fhir.com
+
+**Unio** (logo beside the heading)
+> Unio lets an application see a patient's records from every care
+> provider in a region as if they were in one place, while each record
+> stays where it was created.
+>
+> It makes several openEHR repositories answer as one, and implements the
+> openEHR Federation Tier with AQL specification, version 1.0.0, approved
+> by the openEHR SEC in October 2026.
+>
+> Commercial. unio.syntaric.com
+
+Unio screenshot alt: "Unio console: the gateway and the care providers it
+connects, each coloured by whether it answers."
+
+If the gate in 2.4 keeps the figures, their plain labels and captions:
+
+| Figure | Labels | Caption |
+|---|---|---|
+| openFHIR | Rows "What the allergy is", "Is it still active?", "Has it been confirmed?", "How serious is it?"; heads "As one system sends it", "As the patient record stores it" | "One allergy record, field by field, as one system sends it and as the patient record stores it." |
+| Unio | "Find this patient's allergies"; "Hospital A, 3 records"; "Hospital B, 2 records"; "GP practice, not answering"; "5 records, marked incomplete" | "One question reaches three care providers. One does not answer, so the result is marked incomplete." |
+
+### 4.7 Recent writing and talks (`#writing`)
+
+Unchanged: the three newest posts, with their own titles and excerpts. The
+posts are for technical readers, and the jargon check exempts this list.
+Owner option: show three plainer posts instead of the newest.
+
+### 4.8 Contact (`#contact`)
+
+Heading unchanged. Lead:
+> Write to us about a project that needs systems to share data, a plan you
+> want a second opinion on, or openFHIR and Unio. We reply within two
+> working days.
