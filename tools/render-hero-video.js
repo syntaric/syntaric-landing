@@ -10,7 +10,7 @@
  * Writes:
  *   assets/video/hero-field-wide.mp4      1920 x 854, behind the hero from 960 px
  *   assets/video/hero-field-narrow.mp4    780 x 584, a band below the text on phones
- *   assets/video/hero-field-<layout>-poster.png   frame 0
+ * The still frame (phase 0) is not an image: the build inlines it as SVG.
  */
 
 'use strict';
@@ -55,7 +55,6 @@ function main() {
     const ff = spawnSync('ffmpeg', ['-y', '-loglevel', 'error', '-framerate', String(FPS), '-i', path.join(tmp, 'f%04d.png'),
       '-an', '-c:v', 'libx264', '-preset', 'slow', '-crf', '26', '-pix_fmt', 'yuv420p', '-movflags', '+faststart', mp4], { encoding: 'utf8' });
     if (ff.status !== 0) throw new Error(`ffmpeg failed: ${ff.stderr}`);
-    fs.writeFileSync(path.join(OUT, `hero-field-${layout}-poster.png`), render(strands.heroField(snapshot, { layout, phase: 0 }), width));
     fs.rmSync(tmp, { recursive: true, force: true });
     const size = fs.statSync(mp4).size;
     console.log(`  ✓ assets/video/hero-field-${layout}.mp4  ${(size / 1024).toFixed(0)} KB, ${frames} frames`);

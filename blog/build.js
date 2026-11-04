@@ -617,10 +617,13 @@ function main() {
 
   // Strand figures, from the cleaned snapshot.
   const snapshot = loadSnapshot(log);
-  const heroWide = checkFigure('hero-wide', strands.hero(snapshot, { layout: 'wide' }));
-  const heroNarrow = checkFigure('hero-narrow', strands.hero(snapshot, { layout: 'narrow' }));
-  outputs.set(path.join(ROOT, 'partials', 'figures', 'hero-wide.svg'), heroWide + '\n');
-  outputs.set(path.join(ROOT, 'partials', 'figures', 'hero-narrow.svg'), heroNarrow + '\n');
+  // The hero field's still frame (phase 0, the video's first frame): what
+  // visitors see without JavaScript, with reduced motion or Data Saver, and
+  // until the video plays (decision #4: Prototype B, 2026-11-04).
+  const fieldWide = checkFigure('hero-field-wide', strands.heroField(snapshot, { layout: 'wide' }));
+  const fieldNarrow = checkFigure('hero-field-narrow', strands.heroField(snapshot, { layout: 'narrow' }));
+  outputs.set(path.join(ROOT, 'partials', 'figures', 'hero-field-wide.svg'), fieldWide + '\n');
+  outputs.set(path.join(ROOT, 'partials', 'figures', 'hero-field-narrow.svg'), fieldNarrow + '\n');
 
   // index.html: rewrite marker regions only.
   const indexPath = path.join(ROOT, 'index.html');
@@ -629,10 +632,11 @@ function main() {
     nav:    `\n${fill(NAV, { root: '', blogCurrent: '' })}\n`,
     footer: `\n${fill(FOOTER, { root: '' })}\n`,
     'latest-posts': latestPostsHtml(publishedPosts),
-    'hero-figure': `\n                    ${heroWide}\n                    ${heroNarrow}\n                    `,
+    'hero-field-wide': `\n                ${fieldWide}\n                `,
+    'hero-field-narrow': `\n                ${fieldNarrow}\n                `,
   });
   outputs.set(indexPath, homeHtml);
-  log('  ✓ index.html  (marker regions: css, nav, footer, latest-posts, hero-figure)');
+  log('  ✓ index.html  (marker regions: css, nav, footer, latest-posts, hero-field-wide, hero-field-narrow)');
 
   // TODO-OWNER rule: no published file may carry the marker.
   const todo = [];

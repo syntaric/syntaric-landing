@@ -11,7 +11,7 @@ test('a strand is one closed path', () => {
 });
 
 test('output is deterministic', () => {
-  assert.strictEqual(strands.hero(snapshot), strands.hero(snapshot));
+  assert.strictEqual(strands.heroField(snapshot), strands.heroField(snapshot));
   assert.strictEqual(strands.openfhirFigure(snapshot), strands.openfhirFigure(snapshot));
 });
 
@@ -26,16 +26,16 @@ test('t < 1 draws only part of the strand', () => {
   assert.ok(maxX(half) < 55 && maxX(full) > 95);
 });
 
-test('the default hero keeps its text zone clear', () => {
-  assert.doesNotThrow(() => strands.hero(snapshot, { layout: 'wide' }));
+test('the default hero field keeps its text zone clear', () => {
+  assert.doesNotThrow(() => strands.heroField(snapshot, { layout: 'wide' }));
 });
 
-test('hero throws when geometry enters the text zone', () => {
-  assert.throws(() => strands.hero(snapshot, { layout: 'wide', textZone: { x: 0, y: 0, width: 1100, height: 640 } }), /text zone/);
+test('the hero field throws when geometry enters the text zone', () => {
+  assert.throws(() => strands.heroField(snapshot, { layout: 'wide', textZone: { x: 0, y: 0, width: 1300, height: 854 } }), /text zone/);
 });
 
 test('every figure is aria-hidden and has a viewBox', () => {
-  for (const svg of [strands.hero(snapshot), strands.hero(snapshot, { layout: 'narrow' }),
+  for (const svg of [strands.heroField(snapshot), strands.heroField(snapshot, { layout: 'narrow' }),
     strands.openfhirFigure(snapshot), strands.unioFigure(snapshot), strands.divider('note')]) {
     assert.match(svg, /^<svg [^>]*viewBox="0 0 \d+ \d+"[^>]*aria-hidden="true" focusable="false"/);
     assert.doesNotMatch(svg, /<title>/);

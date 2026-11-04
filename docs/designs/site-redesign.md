@@ -1808,6 +1808,13 @@ Step 6).
     or larger text for video), `tools/strands.js` and `docs/strand-rules.md`
     are updated here, before any other figure is drawn.
 
+*   **As built (1.4)**: the owner chose B (the full-bleed strand video) on
+    2026-11-04; the record is `docs/hero-gate.md`. The still frame is
+    inline SVG rather than a PNG poster, so visitors without motion get a
+    sharp vector and no image download. Prototype A's figure code, the
+    preview pages and their generator are deleted; `motion.js` stays for
+    1.6.
+
 #### Commit 1.5: remaining static figures
 
 ##### 49a. `partials/figures/openfhir.svg`, `unio.svg`, `divider.svg` (Create, generated)

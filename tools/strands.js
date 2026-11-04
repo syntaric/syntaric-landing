@@ -181,57 +181,6 @@ function mappingPairs(snapshot) {
 // ─── Figures (layouts: docs/strand-rules.md, approved at the 1.4 and 1.5 gates) ─
 
 /**
- * Hero: two strands carrying a FHIR path and the matching openEHR path,
- * ending aligned. layout 'wide' (from 960 px, behind the text, clear of
- * `textZone`) or 'narrow' (phones, below the text).
- */
-function hero(snapshot, { textZone, t = 1, layout = 'wide', frame } = {}) {
-  // `frame` (video renderer): per-strand progress and the labels' state;
-  // the same choreography motion.js plays (docs/strand-rules.md).
-  const f = frame || { a: t, b: t, labelOpacity: 1, labelDx: 0 };
-  const pair = mappingPairs(snapshot)[0];
-  const L = layout === 'wide'
-    ? { w: 1440, h: 640, zone: textZone || { x: 0, y: 0, width: 760, height: 640 }, size: 22, small: 16,
-        a: [[820, 150], [1400, 300]], b: [[860, 540], [1400, 300]], la: [820, 118], lb: [860, 590], arch: [860, 616], width: 46 }
-    : { w: 390, h: 270, zone: textZone || null, size: 13, small: 10.5,
-        a: [[16, 58], [374, 122]], b: [[16, 196], [374, 122]], la: [16, 36], lb: [16, 236], arch: [16, 256], width: 26 };
-  const off = L.width * (1 + GAP) / 2;
-  const n = perp(norm(sub(L.a[1], L.a[0])));
-  // the two strands end side by side: aligned, one GAP apart
-  const aEnd = add(L.a[1], mul([0, -1], off)); const bEnd = add(L.b[1], mul([0, 1], off));
-  const sa = outline(L.a[0], aEnd, { width: L.width, t: f.a });
-  const sb = outline(L.b[0], bEnd, { width: L.width, t: f.b });
-  const labels = [
-    { x: L.la[0], y: L.la[1], text: pair.fhir, size: L.size },
-    { x: L.lb[0], y: L.lb[1], text: pair.openehr, size: L.size },
-    { x: L.arch[0], y: L.arch[1], text: pair.archetype, size: L.small, fill: '#56697a' },
-  ];
-  if (L.zone) {
-    for (const [name, s] of [['FHIR strand', sa], ['openEHR strand', sb]]) {
-      if (polygonHitsRect(s.polygon, L.zone)) throw new Error(`hero: the ${name} enters the text zone`);
-    }
-    for (const l of labels) {
-      if (rectsOverlap(labelBox(l.x, l.y, l.text, l.size), L.zone)) throw new Error(`hero: label "${l.text}" enters the text zone`);
-    }
-  }
-  void n;
-  // Draw motion: each strand is masked by a stroked copy of its centre line
-  // (pathLength 1). Without motion the stroke is solid, so the mask shows the
-  // whole strand; motion.js animates stroke-dashoffset from 1 to 0.
-  const masks = [['a', sa], ['b', sb]].map(([k, s]) =>
-    `<mask id="hero-${layout}-${k}" maskUnits="userSpaceOnUse" x="0" y="0" width="${L.w}" height="${L.h}">` +
-    `<path class="draw-axis" d="${s.axis}" fill="none" stroke="#fff" stroke-width="${r1(L.width * 1.3)}" pathLength="1"/></mask>`).join('');
-  const body =
-    `<g class="fig-strands" data-motion="draw" data-motion-start="load">` +
-    `<path class="strand" fill="${INK}" mask="url(#hero-${layout}-a)" d="${sa.d}"/>` +
-    `<path class="strand" fill="${INK}" mask="url(#hero-${layout}-b)" d="${sb.d}"/></g>` +
-    `<g class="fig-labels" data-motion="align" data-motion-start="load"` +
-    (frame ? ` opacity="${r1(f.labelOpacity * 100) / 100}" transform="translate(${r1(f.labelDx)} 0)"` : '') + '>' +
-    labels.map(l => label(l.x, l.y, l.text, l.size, { fill: l.fill })).join('') + '</g>';
-  return svgRoot(`fig fig-hero fig-hero--${layout}`, L.w, L.h, body, masks);
-}
-
-/**
  * Full-bleed hero field (Prototype B): the scene behind the whole hero, for a
  * looping video. `phase` (0-1) is the position in the loop; motion is a
  * gentle sway of every strand, periodic, so frame 0 follows the last frame.
@@ -353,6 +302,6 @@ function cardArt() {
 
 module.exports = {
   PROFILE, BLADE, GAP, NOTCH,
-  strand, bundle, outline, hero, heroField, openfhirFigure, unioFigure, divider, cardArt,
+  strand, bundle, outline, heroField, openfhirFigure, unioFigure, divider, cardArt,
   polygonHitsRect, labelBox,
 };
