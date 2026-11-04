@@ -76,6 +76,20 @@ function readTime(md) {
   return `${Math.max(1, Math.round(words / 200))} min read`;
 }
 
+/**
+ * Resolve a front matter image path (relative to the post page, e.g.
+ * "../../blog/<slug>/cover.png") to its absolute URL on syntaric.com.
+ * Fails the build if the file does not exist in the repo.
+ */
+function absoluteImageUrl(image, pageUrl) {
+  const url  = new URL(image, pageUrl);
+  const file = path.join(ROOT, decodeURIComponent(url.pathname));
+  if (!fs.existsSync(file)) {
+    throw new Error(`Cover image not found: ${image} (expected ${path.relative(ROOT, file)})`);
+  }
+  return url.href;
+}
+
 /** Escape HTML for attribute/text use. */
 function esc(str) {
   return String(str)
@@ -238,9 +252,9 @@ function buildPostPage(meta, bodyHtml, toc) {
   const desc     = esc(meta.description || meta.excerpt || '');
   const slug     = meta._slug || meta.slug || '';
   const canonUrl = `https://syntaric.com/blog/${slug}/`;
-  const imgUrl   = meta.image
-    ? `https://syntaric.com/blog/images/${slug}.jpg`
-    : `https://syntaric.com/etc/syntaric_logo_2.png`;
+  const logoUrl  = 'https://syntaric.com/etc/syntaric_logo_2.png';
+  const coverUrl = meta.image ? absoluteImageUrl(meta.image, canonUrl) : '';
+  const imgUrl   = coverUrl || logoUrl;
 
   const tagsHtml = tags.map(t => `                        <span class="sidebar-tag">${esc(t)}</span>`).join('\n');
   const tocHtml  = toc || '';
@@ -260,8 +274,9 @@ function buildPostPage(meta, bodyHtml, toc) {
       "@type": "Organization",
       "name": "Syntaric",
       "@id": "https://syntaric.com/#organization",
-      "logo": { "@type": "ImageObject", "url": imgUrl }
+      "logo": { "@type": "ImageObject", "url": logoUrl }
     },
+    ...(coverUrl ? { "image": coverUrl } : {}),
     "mainEntityOfPage": { "@type": "WebPage", "@id": canonUrl },
     "keywords": tags.join(', ')
   }, null, 2);
@@ -291,13 +306,14 @@ function buildPostPage(meta, bodyHtml, toc) {
     <meta property="og:title" content="${esc(meta.title)} | Syntaric">
     <meta property="og:description" content="${desc}">
     <meta property="og:image" content="${imgUrl}">
+    <meta property="og:image:alt" content="${esc(meta.title)}">
     <meta property="og:site_name" content="Syntaric">
     <meta property="article:published_time" content="${isoDate}">
     <meta property="article:author" content="${esc(meta.author || '')}">
     ${tags.map(t => `<meta property="article:tag" content="${esc(t)}">`).join('\n    ')}
 
     <!-- Twitter Card -->
-    <meta name="twitter:card" content="summary">
+    <meta name="twitter:card" content="${coverUrl ? 'summary_large_image' : 'summary'}">
     <meta name="twitter:title" content="${esc(meta.title)} | Syntaric">
     <meta name="twitter:description" content="${desc}">
     <meta name="twitter:image" content="${imgUrl}">
