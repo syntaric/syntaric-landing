@@ -56,8 +56,8 @@ another item), **moved**, **rewritten**, **replaced**, **dropped**.
 
 | # | Today | New place | Status | Note |
 |---|---|---|---|---|
-| B1 | "10+ Years of experience" | Proof line or Selected work | rewritten | Round "10+" is a tell; exact figure needed (#16) |
-| B2 | "20+ Major projects delivered" | Proof line or Selected work | rewritten | Exact figure needed (#16) |
+| B1 | "10+ Years of experience" | (none) | dropped | Round "10+" is a tell; no exact figure supplied (§3, "Years, project count") |
+| B2 | "20+ Major projects delivered" | (none) | dropped | No exact figure supplied (§3, "Years, project count") |
 | B3 | "openEHR SEC Expert Member" | Proof line | moved | Expanded: openEHR Specifications Editorial Committee Experts Panel, since 2026 |
 | B4 | "IHE Certified Professional" | Selected work, credentials line (D4) | moved | |
 | B5 | "EU & US International reach" | Selected work, credentials line (D4) | rewritten | Name the countries (#16) |

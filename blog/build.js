@@ -314,6 +314,7 @@ ${JS_CLASS_SCRIPT}
 
 ${BLOG_NAV}
 
+    <main>
     <!-- ─── ARTICLE HEADER ─── -->
     <section class="article-hero">
         <div class="container">
@@ -372,6 +373,7 @@ ${tagsHtml}
             </aside>
         </div>
     </div>
+    </main>
 
 ${BLOG_FOOTER}
 
@@ -466,6 +468,7 @@ function buildIndexPage(posts) {
 
 ${BLOG_NAV}
 
+    <main>
     <!-- ─── HEADER ─── -->
     <section class="blog-hero">
         <div class="container">
@@ -482,6 +485,7 @@ ${cards}
             </div>
         </div>
     </section>
+    </main>
 
 ${BLOG_FOOTER}
 
