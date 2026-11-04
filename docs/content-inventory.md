@@ -415,16 +415,17 @@ the still frame, before the video was rendered.
 
 ### 4.3 Proof line
 
-> We sit on the expert panel that reviews new openEHR standards. With RSO
-> Zuid-Limburg, a Dutch regional care network, we wrote the standard for
-> joining up a region's patient records. It was approved in October 2026,
-> and our product Unio is built on it.
-
-Today: "Member of the openEHR Specifications Editorial Committee Experts
+Unchanged, at the owner's request (2026-11-04, after the plain version was
+live): "Member of the openEHR Specifications Editorial Committee Experts
 Panel since 2026. We drafted the openEHR Federation specification with RSO
 Zuid-Limburg. The openEHR SEC approved version 1.0.0 in October 2026, and
-our gateway Unio implements it." The full committee name and the version
-move later (credentials line, Unio block).
+our gateway Unio implements it."
+
+The plain version, live from 2.5 until then: "We sit on the expert panel
+that reviews new openEHR standards. With RSO Zuid-Limburg, a Dutch regional
+care network, we wrote the standard for joining up a region's patient
+records. It was approved in October 2026, and our product Unio is built on
+it."
 
 ### 4.4 What you can hire us for (`#services`)
 

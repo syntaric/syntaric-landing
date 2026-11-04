@@ -230,6 +230,9 @@ site (LinkedIn previews, external testers).
     is switched on. Note: without a pause control the looping video no
     longer meets WCAG 2.2.2 (Pause, Stop, Hide) for visitors who have not
     set reduced motion.
+*   **Proof line restored (owner, 2026-11-04)**: the federation spec goes
+    back to its earlier, technical wording in the proof line only; case 1
+    keeps the plain version.
 *   **2.7** Tests on the finished pass (below), after a push.
 
 ## Verification
