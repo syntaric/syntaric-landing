@@ -224,6 +224,12 @@ site (LinkedIn previews, external testers).
 *   **2.6** ~~Jargon check in `npm run check`~~. **Dropped** by the owner
     (2026-11-04) after seeing the word list; built and removed before
     commit.
+*   **Hero trim (owner, 2026-11-04, after the push)**: the hero caption
+    and the "Pause animation" button are removed; the video still never
+    plays with reduced motion or Data Saver, and pauses if reduced motion
+    is switched on. Note: without a pause control the looping video no
+    longer meets WCAG 2.2.2 (Pause, Stop, Hide) for visitors who have not
+    set reduced motion.
 *   **2.7** Tests on the finished pass (below), after a push.
 
 ## Verification

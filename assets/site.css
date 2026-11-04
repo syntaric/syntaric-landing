@@ -528,35 +528,6 @@ h3 {
     margin-top: var(--s-6);
 }
 
-.hero-caption {
-    margin-top: var(--s-5);
-    max-width: var(--measure);
-    font-size: var(--t-s);
-    color: var(--ink-2);
-}
-
-.hero-pause {
-    margin-top: var(--s-3);
-    min-width: 24px;
-    min-height: 36px;
-    padding: 6px 12px;
-    font: inherit;
-    font-size: var(--t-s);
-    color: var(--ink);
-    background: rgba(246, 243, 238, 0.85);
-    border: 1px solid var(--rule);
-    border-radius: var(--radius);
-    cursor: pointer;
-}
-
-.hero-pause[aria-pressed="true"] {
-    background: var(--panel);
-}
-
-.hero-pause[hidden] {
-    display: none;
-}
-
 @media (min-width: 960px) {
     .hero {
         display: flex;

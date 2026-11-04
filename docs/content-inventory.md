@@ -403,7 +403,7 @@ later". Applied in commits 2.1 (hero) and 2.5 (the rest).
 | H1 | "Boutique healthcare interoperability consultancy" | unchanged (decision #2; passed the 5-second test). If run 3 names "interoperability" as an unknown word, the fallback is "Healthcare data consultancy" with the who-for line unchanged |
 | Who-for line | "A small team that designs, reviews and builds data integration for hospitals, national health programmes and health IT vendors. We also make two products, openFHIR and Unio." | "We help hospitals, regions and national health programmes share patient information between their systems, using open standards. We also make two products, openFHIR and Unio." |
 | Buttons | "Contact", "openFHIR and Unio" | unchanged |
-| Caption | "The same allergy record, as sent over FHIR and as stored in openEHR." | "One record, understood the same way by systems that speak different standards." |
+| Caption | "The same allergy record, as sent over FHIR and as stored in openEHR." | Removed by the owner on 2026-11-04, with the "Pause animation" button (was: "One record, understood the same way by systems that speak different standards.") |
 | Field label, upper strand | `AllergyIntolerance.code` | "Recorded in one standard" |
 | Field label, lower strand | `/data[at0001]/items[at0002]` | "Read in another" |
 | Field label, small line | `openEHR-EHR-EVALUATION.adverse_reaction_risk.v2` | "Same meaning, nothing retyped" |
