@@ -64,6 +64,27 @@ test('GoatCounter and same-site loads pass', () => {
   assert.deepStrictEqual(checkSite(root), []);
 });
 
+test('images, iframes, CSS url() and inline-script URLs from third-party hosts fail', () => {
+  const errors = checkSite(site(
+    '<img src="https://fire.ly/logo.jpg" alt="">' +
+    '<img srcset="/a.webp 1x, https://cdn.example.com/a@2x.webp 2x" alt="">' +
+    '<iframe src="https://www.youtube.com/embed/x"></iframe>' +
+    '<style>.hero { background: url(\'https://open-fhir.com/bg.jpg\'); }</style>' +
+    '<script>loadScript("https://cdnjs.cloudflare.com/x.js")</script>'
+  )).join('\n');
+  for (const host of ['fire.ly', 'cdn.example.com', 'www.youtube.com', 'open-fhir.com', 'cdnjs.cloudflare.com']) {
+    assert.match(errors, new RegExp(`third-party host ${host.replace(/\./g, '\\.')}`));
+  }
+});
+
+test('the documented Vimeo exception and JSON-LD URLs pass', () => {
+  const root = site(
+    '<iframe src="https://player.vimeo.com/video/1183048650?h=317159c3bc&amp;dnt=1"></iframe>' +
+    '<script type="application/ld+json">{"url": "https://schema.org/"}</script>'
+  );
+  assert.deepStrictEqual(checkSite(root), []);
+});
+
 test('a missing home anchor fails', () => {
   const root = site('');
   const file = path.join(root, 'index.html');

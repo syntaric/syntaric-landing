@@ -1503,6 +1503,13 @@ chosen (decision E1 below).
 *   **Why**: Goal 10. Lands here, after pdf.js is self-hosted (0.5) and the
     hero and client-logo hotlinks are removed (0.6).
 
+*   **As built (0.7)**: the Unio screenshot is a `<picture>` with AVIF and
+    WebP at 800 and 1600 px (18-70 KB, from a 380 KB PNG; encoded once
+    with Pillow and `pillow-avif-plugin`, not a project dependency).
+    `images/` is now empty and gone. The host rule (31a) also covers
+    `srcset`, `<source>`, `<video poster>` and skips JSON-LD; its one
+    exception is the webinar's Vimeo URL.
+
 #### Commit 1.1: redrawn logos and icons
 
 The owner signs off both marks in this commit. No strand rule is derived

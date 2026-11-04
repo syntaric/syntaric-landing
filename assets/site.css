@@ -731,6 +731,7 @@ figcaption {
     border-radius: var(--radius);
 }
 
+.shot picture,
 .shot img {
     display: block;
     width: 100%;

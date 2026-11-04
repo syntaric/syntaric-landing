@@ -6,7 +6,8 @@
  * - every URL in tools/sitemap-baseline.txt is in sitemap.xml
  * - the 8 home anchors exist
  * - no home figure carries more than 8 KB of text
- * - no <script src> or <link href> loads from a third-party host
+ * - nothing loads from a third-party host (scripts, styles, images,
+ *   iframes, media, CSS url(), URLs in inline scripts), except HOST_EXCEPTIONS
  *
  * Usage: node tools/check-links.js [root]   (exit 1 on any error)
  */
@@ -22,6 +23,8 @@ const HOME_ANCHORS = ['services', 'engagements', 'expertise', 'products', 'openf
 const FIGURE_TEXT_LIMIT = 8 * 1024;
 // Goal 10: no third-party loads besides analytics (GoatCounter script and beacon).
 const ALLOWED_HOSTS = new Set(['syntaric.com', 'gc.zgo.at', 'syntaric.goatcounter.com']);
+// Documented exceptions (decision E2): URL prefixes allowed despite the host rule.
+const HOST_EXCEPTIONS = ['https://player.vimeo.com/video/1183048650'];
 
 // Generated pages: index.html, blog/index.html and blog/<slug>/index.html.
 function listPages(root) {
@@ -59,18 +62,34 @@ function linksIn(html) {
 }
 
 /**
- * Resources a page loads through markup: <script src> and every <link href>
- * (stylesheet, preload, preconnect, icon...). Commit 0.7 extends this to
- * images, iframes, media, CSS url() and URLs inside inline scripts.
+ * Everything a page loads: <script src>, every <link href>, <img src> and
+ * srcset, <source src> and srcset, <iframe src>, <video src> and poster,
+ * CSS url() inside <style>, and absolute http(s) URLs inside inline
+ * scripts (JSON-LD is data, not a load, and is skipped).
  */
 function loadsIn(html) {
   const loads = [];
-  const re = /<(script|link)\b([^>]*)>/gi;
+  const push = (tag, url) => { if (url) loads.push({ tag, url: url.replace(/&amp;/g, '&') }); };
+  const attr = (attrs, name) => { const m = attrs.match(new RegExp(`\\s${name}="([^"]*)"`)); return m && m[1]; };
+  const tagRe = /<(script|link|img|source|iframe|video)\b([^>]*)>/gi;
   let m;
-  while ((m = re.exec(html)) !== null) {
-    const attr = m[1].toLowerCase() === 'script' ? 'src' : 'href';
-    const value = m[2].match(new RegExp(`\\s${attr}="([^"]*)"`));
-    if (value && value[1]) loads.push({ tag: m[1].toLowerCase(), url: value[1].replace(/&amp;/g, '&') });
+  while ((m = tagRe.exec(html)) !== null) {
+    const tag = m[1].toLowerCase();
+    const attrs = m[2];
+    if (tag === 'link') push(tag, attr(attrs, 'href'));
+    else push(tag, attr(attrs, 'src'));
+    if (tag === 'video') push(tag, attr(attrs, 'poster'));
+    const srcset = attr(attrs, 'srcset');
+    if (srcset) for (const part of srcset.split(',')) push(tag, part.trim().split(/\s+/)[0]);
+  }
+  for (const style of html.match(/<style\b[^>]*>[\s\S]*?<\/style>/gi) || []) {
+    const urlRe = /url\(\s*['"]?([^'")]+)['"]?\s*\)/g;
+    while ((m = urlRe.exec(style)) !== null) push('style', m[1]);
+  }
+  const scriptRe = /<script\b([^>]*)>([\s\S]*?)<\/script>/gi;
+  while ((m = scriptRe.exec(html)) !== null) {
+    if (/\stype="application\/ld\+json"/.test(m[1]) || /\ssrc="/.test(m[1])) continue;
+    for (const url of m[2].match(/https?:\/\/[^\s'"`)<>]+/g) || []) push('script', url);
   }
   return loads;
 }
@@ -124,7 +143,8 @@ function checkSite(root) {
     for (const { tag, url } of loadsIn(read(path.join(root, rel)))) {
       let host;
       try { host = new URL(url, SITE + pageUrlPath(rel)).hostname; } catch { continue; }
-      if (!ALLOWED_HOSTS.has(host)) errors.push(`${rel}: <${tag}> loads from third-party host ${host}`);
+      if (ALLOWED_HOSTS.has(host) || HOST_EXCEPTIONS.some(prefix => url.startsWith(prefix))) continue;
+      errors.push(`${rel}: <${tag}> loads from third-party host ${host}`);
     }
   }
 
