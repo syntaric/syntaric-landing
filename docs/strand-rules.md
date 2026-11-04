@@ -71,7 +71,7 @@ and the others at the 1.5 review. All text comes from `data/snapshot.json`.
 | `openfhirFigure` | 360 × 314 | none | `allergy-mapping`, all 4 pairs | one row per pair: FHIR path left, fire strand with notch, openEHR path right; heads give the resource and the archetype |
 | `unioFigure` | 360 × 290 | none | `unio-federation` (synthetic) | query top left; three strands fan from (14, 150) to the right; repository names and row counts at the right; the unreachable one drawn in the hairline tint; result bottom left |
 | `divider` | 1200 × 28 | none | a note passed by the build | hairline strand (width 4, tint `#bdc2c5`); mono 12 note right-aligned in `--ink-3` |
-| `cardArt` | part of the 1200 × 627 card | none | none | a two-strand bundle from (720, 560) to (1160, 110), width 120 |
+| `cardArt` | part of the 1200 × 627 card | none | none | the hero field's look without labels (1.7 review): a faint bundle across the card (width 120, `#e4e3e1`), a light bundle on the right (width 54, `#c9cdd0`) and the two hooked data strands (width 40, `#9ba4ac`) meeting at (1150, 330), all right of x 680 except the faint bundle |
 
 Divider placements (proposal): one before Selected work, one before Products
 and one before Contact (regions `divider-1` … `divider-3`).

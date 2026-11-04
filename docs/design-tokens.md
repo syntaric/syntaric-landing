@@ -122,6 +122,21 @@ Defined, not yet used (Stage 1).
     at < 640 / 640 / 960 px. Covers at 16:9, `object-fit: cover`. No
     shadows, card borders or hover lift; the title underlines on hover.
 
+## Share card (commit 1.7, decision E9)
+
+1200 × 627 PNG, rendered by `tools/share-card.js` with resvg from the TTF
+copies of the faces in `tools/fonts/`.
+
+| Element | Value |
+|---|---|
+| Ground | `--ground` |
+| Logo | the feather, 56 high at (72, 64), with "Syntaric" in Next Bold 34 beside it |
+| Title | Next Bold 50, line-height 60, first baseline 270, at most 620 wide (about 25 characters by the face's average advance of 0.497 em), at most 3 lines, ellipsis after the third |
+| Kicker | Mono 22 in `--ink-3`, baseline 566: "Healthcare interoperability consultancy" on posts; `syntaric.com` on the home card (its title already says it); the blog's description on the blog card |
+| Art | `cardArt()`, the hero field's look without labels: a faint bundle (8 % navy, `#e4e3e1`) across the card, a light bundle (`#c9cdd0`) and the two hooked data strands (40 % navy, `#9ba4ac`) right of the title area |
+
+Approved by the owner on 2026-11-04 (commit 1.7), after one change: the art follows the hero field in light tints instead of two full-navy blades.
+
 ## Not in the mockups yet
 
 These follow from the tokens above and are reviewed with the screenshots of
@@ -129,4 +144,3 @@ the commit that builds them:
 
 *   Selected work, Products (Unio), Recent writing and talks, Contact and
     the footer (commit 0.6).
-*   Share-card layout (commit 1.7, decision E9).

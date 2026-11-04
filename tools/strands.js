@@ -341,9 +341,26 @@ function divider(note) {
   return svgRoot('fig fig-divider', W, H, body);
 }
 
-/** Share-card art: two navy strands for the right part of a 1200x627 card. */
+/**
+ * Share-card art (1.7 review): the hero field's look on a 1200 x 627 card,
+ * without labels. A faint bundle across the card (it may pass behind the
+ * title), a light bundle and the two data strands on the right, clear of the
+ * title area (x < 680), in light navy tints.
+ */
 function cardArt() {
-  return `<g class="card-art">${bundle(2, [720, 560], [1160, 110], { width: 120 }).join('')}</g>`;
+  const out = [];
+  const pair = (from, to, width, fill) => {
+    const n = perp(norm(sub(to, from))); const step = width * (1 + GAP);
+    for (const k of [-0.5, 0.5]) {
+      out.push(`<path class="strand" fill="${fill}" d="${outline(add(from, mul(n, k * step)), add(to, mul(n, k * step)), { width }).d}"/>`);
+    }
+  };
+  pair([-80, 640], [1280, 40], 120, '#e4e3e1');
+  pair([800, 720], [1280, 250], 54, '#c9cdd0');
+  const off = 40 * (1 + GAP) / 2;
+  out.push(`<path class="strand" fill="#9ba4ac" d="${outline([730, 170], [1150, 330 - off], { width: 40, hook: 'right' }).d}"/>`);
+  out.push(`<path class="strand" fill="#9ba4ac" d="${outline([750, 500], [1150, 330 + off], { width: 40, hook: 'left' }).d}"/>`);
+  return `<g class="card-art">${out.join('')}</g>`;
 }
 
 module.exports = {

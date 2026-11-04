@@ -23,6 +23,7 @@ const { replaceRegions } = require('../tools/markers');
 const { imageSize } = require('../tools/image-size');
 const { cleanSnapshot, textSize } = require('../tools/data-rules');
 const strands = require('../tools/strands');
+const { renderCard } = require('../tools/share-card');
 
 // ─── Paths ────────────────────────────────────────────────────────────────────
 
@@ -237,7 +238,9 @@ function buildPostPage(meta, bodyHtml, toc, markdownBody) {
   const canonUrl = `https://syntaric.com/blog/${slug}/`;
   const logoUrl  = 'https://syntaric.com/assets/brand/syntaric-512.png';
   const coverUrl = meta.image ? absoluteImageUrl(meta.image, canonUrl) : '';
-  const imgUrl   = coverUrl || logoUrl;
+  // share card (commit 1.7): published posts get their own; drafts use the home card
+  const imgUrl   = meta.publish === false ? 'https://syntaric.com/assets/share/home.png' : `${canonUrl}share.png`;
+  void coverUrl;
   const cover    = meta.image ? coverImage(meta.image, canonUrl) : null;
 
   const tagsHtml = tags.map(t => `                        <li>${esc(t)}</li>`).join('\n');
@@ -261,7 +264,7 @@ function buildPostPage(meta, bodyHtml, toc, markdownBody) {
       "@id": "https://syntaric.com/#organization",
       "logo": { "@type": "ImageObject", "url": logoUrl }
     },
-    ...(coverUrl ? { "image": coverUrl } : {}),
+    "image": imgUrl,
     "mainEntityOfPage": { "@type": "WebPage", "@id": canonUrl },
     "keywords": tags.join(', ')
   }, null, 2);
@@ -283,6 +286,8 @@ ${JS_CLASS_SCRIPT}
     <meta property="og:title" content="${esc(meta.title)} | Syntaric">
     <meta property="og:description" content="${desc}">
     <meta property="og:image" content="${imgUrl}">
+    <meta property="og:image:width" content="1200">
+    <meta property="og:image:height" content="627">
     <meta property="og:image:alt" content="${esc(meta.title)}">
     <meta property="og:site_name" content="Syntaric">
     <meta property="article:published_time" content="${isoDate}">
@@ -290,7 +295,7 @@ ${JS_CLASS_SCRIPT}
     ${tags.map(t => `<meta property="article:tag" content="${esc(t)}">`).join('\n    ')}
 
     <!-- Twitter Card -->
-    <meta name="twitter:card" content="${coverUrl ? 'summary_large_image' : 'summary'}">
+    <meta name="twitter:card" content="summary_large_image">
     <meta name="twitter:title" content="${esc(meta.title)} | Syntaric">
     <meta name="twitter:description" content="${desc}">
     <meta name="twitter:image" content="${imgUrl}">
@@ -434,14 +439,17 @@ function buildIndexPage(posts) {
     <meta property="og:url" content="https://syntaric.com/blog/">
     <meta property="og:title" content="Blog | Syntaric">
     <meta property="og:description" content="${esc(blogDesc)}">
-    <meta property="og:image" content="https://syntaric.com/etc/syntaric_logo_2.png">
+    <meta property="og:image" content="https://syntaric.com/assets/share/blog.png">
+    <meta property="og:image:width" content="1200">
+    <meta property="og:image:height" content="627">
+    <meta property="og:image:alt" content="Syntaric blog">
     <meta property="og:site_name" content="Syntaric">
 
     <!-- Twitter Card -->
-    <meta name="twitter:card" content="summary">
+    <meta name="twitter:card" content="summary_large_image">
     <meta name="twitter:title" content="Blog | Syntaric">
     <meta name="twitter:description" content="${esc(blogDesc)}">
-    <meta name="twitter:image" content="https://syntaric.com/etc/syntaric_logo_2.png">
+    <meta name="twitter:image" content="https://syntaric.com/assets/share/blog.png">
 
     <!-- JSON-LD: Blog -->
     <script type="application/ld+json">${blogJsonLd}</script>
@@ -520,6 +528,13 @@ function checkFigure(name, svg) {
   const size = textSize(svg);
   if (size > FIGURE_TEXT_LIMIT) throw new Error(`Figure "${name}" has ${size} bytes of text (limit ${FIGURE_TEXT_LIMIT})`);
   return svg;
+}
+
+/** True if `file` exists with exactly this content (string or Buffer). */
+function sameAsDisk(file, content) {
+  if (!fs.existsSync(file)) return false;
+  const disk = fs.readFileSync(file);
+  return Buffer.isBuffer(content) ? disk.equals(content) : disk.toString('utf8') === content;
 }
 
 // ─── Main ─────────────────────────────────────────────────────────────────────
@@ -615,6 +630,12 @@ function main() {
   outputs.set(path.join(ROOT, 'sitemap.xml'), sitemap);
   log(`  ✓ sitemap.xml  (${publishedPosts.length + 2} URLs)`);
 
+  // Share cards (commit 1.7): PNG buffers, compared byte for byte.
+  outputs.set(path.join(ROOT, 'assets', 'share', 'home.png'), renderCard({ title: 'Boutique healthcare interoperability consultancy', kicker: 'syntaric.com' }));
+  outputs.set(path.join(ROOT, 'assets', 'share', 'blog.png'), renderCard({ title: 'Blog', kicker: 'Articles from our FHIR, openEHR and IHE projects' }));
+  for (const p of publishedPosts) outputs.set(path.join(BLOG_DIR, p.slug, 'share.png'), renderCard({ title: p.meta.title }));
+  log(`  ✓ share cards  (${publishedPosts.length + 2})`);
+
   // Strand figures, from the cleaned snapshot.
   const snapshot = loadSnapshot(log);
   // The hero field's still frame (phase 0, the video's first frame): what
@@ -656,7 +677,7 @@ function main() {
 
   // TODO-OWNER rule: no published file may carry the marker.
   const todo = [];
-  for (const [file, content] of outputs) if (content.includes('TODO-OWNER')) todo.push(file);
+  for (const [file, content] of outputs) if (typeof content === 'string' && content.includes('TODO-OWNER')) todo.push(file);
   for (const file of todoScanExtras()) {
     if (!outputs.has(file) && fs.readFileSync(file, 'utf8').includes('TODO-OWNER')) todo.push(file);
   }
@@ -664,8 +685,7 @@ function main() {
   if (CHECK) {
     const differ = [];
     for (const [file, content] of outputs) {
-      const onDisk = fs.existsSync(file) ? fs.readFileSync(file, 'utf8') : null;
-      if (onDisk !== content) differ.push(file);
+      if (!sameAsDisk(file, content)) differ.push(file);
     }
     for (const f of differ) console.log(`differs from build: ${path.relative(ROOT, f)}`);
     for (const f of todo)   console.log(`contains TODO-OWNER: ${path.relative(ROOT, f)}`);
@@ -679,7 +699,7 @@ function main() {
 
   for (const [file, content] of outputs) {
     fs.mkdirSync(path.dirname(file), { recursive: true });
-    if (!fs.existsSync(file) || fs.readFileSync(file, 'utf8') !== content) fs.writeFileSync(file, content, 'utf8');
+    if (!sameAsDisk(file, content)) fs.writeFileSync(file, content);
   }
   for (const f of todo) console.log(`  ! contains TODO-OWNER: ${path.relative(ROOT, f)}`);
   console.log('\nDone.');

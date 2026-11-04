@@ -1917,6 +1917,16 @@ Step 6).
 
 ##### 55. `assets/share/home.png`, `assets/share/blog.png`, `blog/<slug>/share.png` (Create, generated)
 
+*   **As built (1.7)**: 19 cards (home, blog, 17 posts), rendered by the
+    build and compared byte for byte by `--check`. The title is bold, so a
+    third face is added: `tools/fonts/atkinson-hyperlegible-next-bold.ttf`
+    (the wght 700 instance). The blog card's kicker is "Articles from our
+    FHIR, openEHR and IHE projects"; the home card's is "syntaric.com".
+*   **1.7 review (owner, 2026-11-04)**: the first cards had two full-navy
+    blades; the owner asked for lighter strands like the hero field. The
+    art is now a faint bundle across the card, a light bundle and the two
+    hooked data strands in 40 % navy, right of the title. Approved.
+
 ### Verification Plan
 
 *   **Build**: `npm run build` completes with no errors.
