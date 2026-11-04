@@ -58,7 +58,7 @@ another item), **moved**, **rewritten**, **replaced**, **dropped**.
 |---|---|---|---|---|
 | B1 | "10+ Years of experience" | Proof line or Selected work | rewritten | Round "10+" is a tell; exact figure needed (#16) |
 | B2 | "20+ Major projects delivered" | Proof line or Selected work | rewritten | Exact figure needed (#16) |
-| B3 | "openEHR SEC Expert Member" | Proof line (C1) | moved | Expanded: openEHR Specification Editorial Committee; membership date needed (#16) |
+| B3 | "openEHR SEC Expert Member" | Proof line | moved | Expanded: openEHR Specifications Editorial Committee Experts Panel, since 2026 |
 | B4 | "IHE Certified Professional" | Selected work, credentials line (D4) | moved | |
 | B5 | "EU & US International reach" | Selected work, credentials line (D4) | rewritten | Name the countries (#16) |
 
@@ -175,8 +175,15 @@ Section order is decisions #8-#11. Lines in *italics* are notes, not copy.
 *One concrete proof and one named outcome, within the first two phone
 screens (brief 5.2). Draft structure; the facts are yours.*
 
-> Member of the openEHR Specification Editorial Committee since 2026.
-> TODO-OWNER: one named outcome, e.g. "[client] [result] after [what Syntaric did]".
+> Member of the openEHR Specifications Editorial Committee Experts Panel
+> since 2026. We drafted the openEHR Federation specification with RSO
+> Zuid-Limburg. The openEHR SEC approved version 1.0.0 in October 2026, and
+> our gateway Unio implements it.
+
+*Sources: blog posts "Joining the openEHR SEC Experts Panel" (2026-05-13),
+"Federating openEHR CDRs" (2026-09-28) and "openEHR Federation Spec 1.0 is
+Approved, and Unio is Out" (2026-10-19). The SEC role is the Experts Panel,
+not the committee itself. Chosen by the owner on 2026-11-04.*
 
 ### 2.4 What you can hire us for (`#services`)
 
@@ -241,8 +248,8 @@ materials · retainer.
 
 **Credentials line:**
 
-> IHE certified professional. Member of the openEHR Specification Editorial
-> Committee since 2026. Work in TODO-OWNER: countries.
+> IHE certified professional. Member of the openEHR Specifications Editorial
+> Committee Experts Panel since 2026. Work in TODO-OWNER: countries.
 
 *Today's "10+ years" and "20+ projects" become exact figures if you want
 them shown: TODO-OWNER: years, number of projects, or drop.*
@@ -349,7 +356,7 @@ LPRES, CumuluZ.
 
 | Fact | Where | Decision |
 |---|---|---|
-| One named outcome (client, result, what Syntaric did) | Proof line | #8 |
+| (none: all supplied on 2026-11-04) | | |
 
 ### Needed for commit 0.6
 

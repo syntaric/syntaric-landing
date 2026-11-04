@@ -1,0 +1,212 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <script>document.documentElement.classList.add('js')</script>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="robots" content="noindex, nofollow">
+    <title>Healthcare interoperability consultancy</title>
+    <link rel="preload" href="/assets/fonts/atkinson-hyperlegible-next.woff2" as="font" type="font/woff2" crossorigin>
+    <!--
+      Peer-test mockup, redesign commit 0.5a. Unlisted, noindex, not in the
+      sitemap; deleted in the commit after the tests. The token values in
+      :root are candidates: once both tests pass they are frozen in
+      docs/design-tokens.md. The figure is drawn by hand from the openFHIR
+      mark; it is not produced by tools/strands.js.
+    -->
+    <style>
+        @font-face { font-family: 'Atkinson Hyperlegible Next'; src: url('/assets/fonts/atkinson-hyperlegible-next.woff2') format('woff2'); font-weight: 200 800; font-display: swap; }
+        @font-face { font-family: 'Atkinson Hyperlegible Mono'; src: url('/assets/fonts/atkinson-hyperlegible-mono.woff2') format('woff2'); font-weight: 400; font-display: swap; }
+        @font-face { font-family: 'Atkinson Next Fallback'; src: local('Arial'), local('Liberation Sans'), local('Helvetica'); size-adjust: 100%; ascent-override: 98.4%; descent-override: 31.6%; line-gap-override: 0%; }
+        @font-face { font-family: 'Atkinson Mono Fallback'; src: local('Courier New'), local('Liberation Mono'), local('Courier'); size-adjust: 105.3%; ascent-override: 93.4%; descent-override: 30%; line-gap-override: 0%; }
+
+        :root {
+            /* Colour: one ink, its tints, one ground. Text tints >= 4.5:1 on the ground. */
+            --ground: #f6f3ee;
+            --ink: #122e49;          /* 12.5:1 */
+            --ink-2: #40556a;        /* 80% navy, 7.0:1: secondary text */
+            --ink-3: #56697a;        /* 70% navy, 5.1:1: labels, meta */
+            --rule: #bdc2c5;         /* 25% navy: rules and borders, never text */
+            --hair: #dbdbda;         /* 12% navy: hairlines */
+            --panel: #ece9e3;        /* 5% navy: quiet panels */
+
+            /* Type: one text face at several sizes, one mono for data. */
+            --font: 'Atkinson Hyperlegible Next', 'Atkinson Next Fallback', sans-serif;
+            --mono: 'Atkinson Hyperlegible Mono', 'Atkinson Mono Fallback', monospace;
+            --t-xs: 0.8125rem;       /* 13px: mono labels */
+            --t-s: 0.9375rem;        /* 15px */
+            --t-m: 1.0625rem;        /* 17px: body */
+            --t-l: 1.375rem;         /* 22px: item names */
+            --t-xl: 1.75rem;         /* 28px: section headings */
+            --t-hero: clamp(2.125rem, 5.2vw + 0.9rem, 3.5rem);  /* 34px at 390, 56px from ~1100 */
+
+            /* Space: 4 px steps. */
+            --s-1: 4px; --s-2: 8px; --s-3: 12px; --s-4: 16px; --s-5: 24px;
+            --s-6: 32px; --s-7: 48px; --s-8: 64px; --s-9: 96px;
+
+            /* Motion vocabulary (unused in the static mockup). */
+            --ease: cubic-bezier(0.2, 0, 0, 1);
+            --dur-short: 200ms;
+            --dur-long: 900ms;
+
+            --measure: 36rem;
+            --page: 72rem;
+            --radius: 4px;
+        }
+
+        *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+        html { -webkit-text-size-adjust: 100%; }
+        body { font-family: var(--font); font-size: var(--t-m); line-height: 1.55; color: var(--ink); background: var(--ground); -webkit-font-smoothing: antialiased; }
+        a { color: inherit; }
+        .wrap { max-width: var(--page); margin: 0 auto; padding: 0 var(--s-5); }
+
+        /* Header */
+        header { border-bottom: 1px solid var(--hair); }
+        .bar { display: flex; align-items: center; justify-content: space-between; gap: var(--s-4); min-height: 64px; }
+        .mark { display: flex; align-items: center; gap: var(--s-3); text-decoration: none; font-weight: 700; font-size: 1.125rem; letter-spacing: -0.01em; }
+        .mark img { width: 26px; height: 30px; }
+        .mark-blind { display: inline-block; width: 120px; height: 18px; background: var(--hair); border-radius: 2px; }
+        .bar nav { display: flex; align-items: center; gap: var(--s-5); font-size: var(--t-s); }
+        .bar nav a { text-decoration: none; color: var(--ink-2); }
+        .bar nav a.contact { color: var(--ground); background: var(--ink); padding: var(--s-2) var(--s-4); border-radius: var(--radius); }
+        .bar nav .full { display: none; }
+        .menu { font: inherit; font-size: var(--t-s); color: var(--ink); background: none; border: 1px solid var(--rule); border-radius: var(--radius); padding: 6px 10px; min-height: 36px; }
+        @media (min-width: 960px) { .bar nav .full { display: inline; } .menu { display: none; } }
+
+        /* Hero */
+        .hero { padding: var(--s-7) 0 var(--s-7); }
+        .hero h1 { font-size: var(--t-hero); line-height: 1.08; font-weight: 700; letter-spacing: -0.02em; max-width: 14ch; }
+        .hero .who { margin-top: var(--s-5); max-width: var(--measure); font-size: 1.1875rem; line-height: 1.5; color: var(--ink-2); }
+        .actions { margin-top: var(--s-6); display: flex; align-items: center; flex-wrap: wrap; gap: var(--s-4) var(--s-5); }
+        .btn { display: inline-block; font-weight: 700; text-decoration: none; color: var(--ground); background: var(--ink); padding: 14px 26px; border-radius: var(--radius); }
+        .text-link { color: var(--ink); text-decoration: underline; text-decoration-color: var(--rule); text-underline-offset: 4px; text-decoration-thickness: 1px; }
+
+        /* Proof line */
+        .proof { border-top: 1px solid var(--ink); border-bottom: 1px solid var(--hair); padding: var(--s-5) 0; }
+        .proof p { max-width: 44rem; font-size: 1.1875rem; line-height: 1.45; }
+        @media (min-width: 640px) { .proof p { font-size: var(--t-l); line-height: 1.4; } }
+
+        /* Hire list */
+        section.hire { padding: var(--s-8) 0 var(--s-7); }
+        h2 { font-size: var(--t-xl); line-height: 1.2; letter-spacing: -0.01em; }
+        .items { margin-top: var(--s-6); list-style: none; border-top: 1px solid var(--hair); }
+        .items > li { padding: var(--s-5) 0; border-bottom: 1px solid var(--hair); }
+        .items h3 { font-size: var(--t-l); line-height: 1.25; }
+        .facts { margin-top: var(--s-3); display: grid; grid-template-columns: 6.5rem 1fr; gap: var(--s-2) var(--s-4); font-size: var(--t-s); color: var(--ink-2); }
+        .facts dt { font-family: var(--mono); font-size: var(--t-xs); color: var(--ink-3); padding-top: 2px; }
+        @media (min-width: 960px) {
+            .items { display: grid; grid-template-columns: 1fr 1fr; column-gap: var(--s-7); }
+            .items > li:nth-child(odd) { padding-right: var(--s-5); }
+        }
+        .more { margin-top: var(--s-5); font-size: var(--t-s); color: var(--ink-3); }
+
+        /* openFHIR block */
+        section.product { padding: var(--s-7) 0 var(--s-8); border-top: 1px solid var(--hair); }
+        .product-grid { display: grid; gap: var(--s-6); }
+        @media (min-width: 960px) { .product-grid { grid-template-columns: 1fr 1.1fr; align-items: center; } }
+        .product .lead { margin-top: var(--s-4); max-width: var(--measure); color: var(--ink-2); }
+        .product .lead strong { color: var(--ink); }
+        .product .out { display: inline-block; margin-top: var(--s-5); }
+        figure { margin: 0; }
+        .map-fig { width: 100%; height: auto; max-width: 560px; display: block; }
+        .map-fig text { font-family: var(--mono); font-size: 11px; fill: var(--ink); }
+        .map-fig .fig-head { fill: var(--ink-3); font-size: 10px; }
+        figcaption { margin-top: var(--s-4); font-size: var(--t-s); color: var(--ink-2); max-width: var(--measure); }
+        .note { padding: var(--s-6) 0 var(--s-8); font-family: var(--mono); font-size: var(--t-xs); color: var(--ink-3); }
+    </style>
+</head>
+<body>
+    <header>
+        <div class="wrap bar">
+            <span class="mark" aria-label="Company name hidden"><span class="mark-blind"></span></span>
+            <nav aria-label="Main">
+                <a class="full" href="#services">Services</a>
+                <a class="full" href="#expertise">Selected work</a>
+                <a class="full" href="#products">Products</a>
+                <a class="full" href="#writing">Writing</a>
+                <a href="/blog/">Blog</a>
+                <a class="contact" href="#contact">Contact</a>
+                <button class="menu" type="button" aria-expanded="false">Menu</button>
+            </nav>
+        </div>
+    </header>
+
+    <main>
+        <section class="hero">
+            <div class="wrap">
+                <h1>Boutique healthcare interoperability consultancy</h1>
+                <p class="who">A small team that designs, reviews and builds data integration for hospitals, national health programmes and health IT vendors. We also make two products, openFHIR and Unio.</p>
+                <div class="actions">
+                    <a class="btn" href="#contact">Contact</a>
+                    <a class="text-link" href="#products">openFHIR and Unio</a>
+                </div>
+            </div>
+        </section>
+
+        <section class="proof" aria-label="Proof">
+            <div class="wrap">
+                <p>Member of the openEHR Specifications Editorial Committee Experts Panel since 2026. We drafted the openEHR Federation specification with RSO Zuid-Limburg. The openEHR SEC approved version 1.0.0 in October 2026, and our gateway Unio implements it.</p>
+            </div>
+        </section>
+
+        <section class="hire" id="services">
+            <div class="wrap">
+                <h2>What you can hire us for</h2>
+                <ul class="items">
+                    <li>
+                        <h3>Architecture review</h3>
+                        <dl class="facts">
+                            <dt>For</dt><dd>Teams with an integration architecture in place or on paper.</dd>
+                            <dt>Format</dt><dd>Fixed scope</dd>
+                            <dt>Length</dt><dd>1–2 weeks</dd>
+                            <dt>You receive</dt><dd>A written report of findings, gaps and prioritised recommendations, a check against FHIR, IHE and openEHR, and one follow-up question session.</dd>
+                        </dl>
+                    </li>
+                    <li>
+                        <h3>Project consulting</h3>
+                        <dl class="facts">
+                            <dt>For</dt><dd>A team running a FHIR, openEHR or IHE integration project, including integrations with Epic, Cerner Millennium and ChipSoft HiX.</dd>
+                            <dt>Format</dt><dd>Time and materials; we work inside your team.</dd>
+                            <dt>Length</dt><dd>Weeks to months</dd>
+                            <dt>You receive</dt><dd>Design and implementation support, architecture documentation and regular check-ins with your team.</dd>
+                        </dl>
+                    </li>
+                </ul>
+                <p class="more">Also: strategic advisory, training and workshops, software development.</p>
+            </div>
+        </section>
+
+        <section class="product" id="products">
+            <div class="wrap product-grid">
+                <div>
+                    <h2>openFHIR</h2>
+                    <p class="lead">openFHIR maps data between openEHR and FHIR in both directions, so an openEHR repository can exchange data with FHIR systems. It implements <strong>FHIR Connect</strong>, an open specification for describing openEHR–FHIR mappings, which we co-created.</p>
+                    <a class="text-link out" href="https://open-fhir.com">open-fhir.com</a>
+                </div>
+                <figure>
+                    <svg class="map-fig" viewBox="0 0 360 314" width="360" height="314" aria-hidden="true" focusable="false" xmlns="http://www.w3.org/2000/svg">
+                    <defs><linearGradient id="fire" x1="0" y1="0" x2="1" y2="0"><stop offset="0" stop-color="#c32a30"/><stop offset=".55" stop-color="#df5c34"/><stop offset="1" stop-color="#fe933a"/></linearGradient></defs>
+                    <text class="fig-head" x="0" y="12">FHIR R4 · AllergyIntolerance</text>
+                    <text class="fig-head" x="360" y="28" text-anchor="end">openEHR-EHR-EVALUATION.adverse_reaction_risk.v2</text>
+                    <text class="fig-fhir" x="0" y="56">AllergyIntolerance.code</text>
+                    <path d="M10.0,61.0 C128.0,83.1 264.6,86.3 350.0,87.0 C248.1,77.6 112.3,64.3 10.0,61.0Z" fill="url(#fire)"/>
+                    <text class="fig-ehr" x="360" y="100" text-anchor="end">/data[at0001]/items[at0002]</text>
+                    <text class="fig-fhir" x="0" y="122">AllergyIntolerance.clinicalStatus</text>
+                    <path d="M10.0,127.0 C128.0,149.1 264.6,152.3 350.0,153.0 C248.1,143.6 112.3,130.3 10.0,127.0Z" fill="url(#fire)"/>
+                    <text class="fig-ehr" x="360" y="166" text-anchor="end">/data[at0001]/items[at0130]</text>
+                    <text class="fig-fhir" x="0" y="188">AllergyIntolerance.verificationStatus</text>
+                    <path d="M10.0,193.0 C128.0,215.1 264.6,218.3 350.0,219.0 C248.1,209.6 112.3,196.3 10.0,193.0Z" fill="url(#fire)"/>
+                    <text class="fig-ehr" x="360" y="232" text-anchor="end">/data[at0001]/items[at0063]</text>
+                    <text class="fig-fhir" x="0" y="254">AllergyIntolerance.criticality</text>
+                    <path d="M10.0,259.0 C128.0,281.1 264.6,284.3 350.0,285.0 C248.1,275.6 112.3,262.3 10.0,259.0Z" fill="url(#fire)"/>
+                    <text class="fig-ehr" x="360" y="298" text-anchor="end">/data[at0001]/items[at0101]</text>
+                    </svg>
+                    <figcaption>The same allergy record, as sent over FHIR and as stored in openEHR. Paths from an openFHIR mapping file.</figcaption>
+                </figure>
+            </div>
+        </section>
+    </main>
+
+    <div class="wrap note">Mockup for the peer test. Not the live site.</div>
+</body>
+</html>
