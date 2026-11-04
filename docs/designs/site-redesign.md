@@ -1780,6 +1780,19 @@ Step 6).
     a 1280 px layout, which the budget does not need. The notch is not
     drawn (see `docs/strand-rules.md`, Known limits).
 
+*   **Revised (1.3, Prototype B)**: on 2026-11-04 the owner pointed out
+    that B, as first built (the hero figure rendered to video), did not test
+    what "dynamic" meant in `concept_context.md` (line 33): a full-width
+    background video like fire.ly's `pt-video-holder`. B is now a
+    full-bleed strand field (`tools/strands.js` `heroField()`): a faint 8 %
+    navy bundle across the whole hero, behind the text (under the 1.2:1
+    text-zone limit), a 20 % bundle and the two data strands with their
+    labels right of the text zone, all swaying in a seamless 8 s loop.
+    Still drawn from the feather and the snapshot; no stock footage. From
+    960 px it is the hero's background (1920 × 854, 261 KB); on phones a
+    full-width band below the text (780 × 584, 152 KB). The first B videos
+    are deleted.
+
 #### Commit 1.4: gate
 
 *   Owner views both on an older iPhone and a mid-range Android inside the

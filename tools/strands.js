@@ -231,6 +231,69 @@ function hero(snapshot, { textZone, t = 1, layout = 'wide', frame } = {}) {
   return svgRoot(`fig fig-hero fig-hero--${layout}`, L.w, L.h, body, masks);
 }
 
+/**
+ * Full-bleed hero field (Prototype B): the scene behind the whole hero, for a
+ * looping video. `phase` (0-1) is the position in the loop; motion is a
+ * gentle sway of every strand, periodic, so frame 0 follows the last frame.
+ *
+ * Layers, back to front: a wide two-strand bundle in an 8 % navy tint that may
+ * pass behind the text (under the 1.2:1 text-zone limit); a 20 % bundle and
+ * the two data strands, which stay out of the text zone in every frame.
+ * layout 'wide': 1920 x 854, the text zone is the left 1080 units (the text
+ * column's share of the viewport at 1280-1920 px). layout 'narrow': a
+ * 780 x 584 band below the text on phones, no text zone.
+ */
+function heroField(snapshot, { layout = 'wide', phase = 0, textZone } = {}) {
+  const pair = mappingPairs(snapshot)[0];
+  const TAU = Math.PI * 2;
+  const wave = (amp, offset) => amp * Math.sin(TAU * phase + offset);
+  const L = layout === 'wide'
+    ? { w: 1920, h: 854, zone: textZone || { x: 0, y: 0, width: 1080, height: 854 },
+        back: { from: [-120, 760], to: [2040, 90], width: 170, amp: 46, fill: '#e4e3e1' },
+        mid: { from: [1180, 900], to: [2010, 300], width: 72, amp: 30, fill: '#c9cdd0' },
+        data: { a: [[1160, 250], [1860, 470]], b: [[1190, 700], [1860, 470]], width: 52, amp: 9, fill: '#56697a' },
+        la: [1160, 212], lb: [1190, 760], arch: [1190, 792], size: 26, small: 19 }
+    : { w: 780, h: 584, zone: textZone || null,
+        back: { from: [-80, 560], to: [860, 40], width: 110, amp: 30, fill: '#e4e3e1' },
+        mid: { from: [320, 640], to: [820, 330], width: 44, amp: 20, fill: '#c9cdd0' },
+        data: { a: [[24, 120], [756, 262]], b: [[24, 430], [756, 262]], width: 40, amp: 5, fill: INK },
+        la: [24, 84], lb: [24, 492], arch: [24, 526], size: 24, small: 18 };
+  const sway = (p, amp, off) => [p[0], p[1] + wave(amp, off)];
+  const shapes = [];
+  const bundleOf = (spec, off) => {
+    const step = spec.width * (1 + GAP);
+    const n = perp(norm(sub(spec.to, spec.from)));
+    return [-0.5, 0.5].map(k => outline(add(sway(spec.from, spec.amp, off), mul(n, k * step)),
+      add(sway(spec.to, spec.amp, off + 1.3), mul(n, k * step)),
+      { width: spec.width, bow: BLADE.bow + 0.03 * Math.sin(TAU * phase + off + 0.7) }));
+  };
+  const back = bundleOf(L.back, 0);
+  const mid = bundleOf(L.mid, 2.1);
+  const off = L.data.width * (1 + GAP) / 2;
+  const da = outline(sway(L.data.a[0], L.data.amp, 4.2), sway(add(L.data.a[1], [0, -off]), L.data.amp, 5.5),
+    { width: L.data.width, bow: BLADE.bow + 0.02 * Math.sin(TAU * phase + 4.9) });
+  const db = outline(sway(L.data.b[0], L.data.amp, 4.6), sway(add(L.data.b[1], [0, off]), L.data.amp, 5.5),
+    { width: L.data.width, bow: BLADE.bow + 0.02 * Math.sin(TAU * phase + 5.3) });
+  const labels = [
+    { x: L.la[0], y: L.la[1], text: pair.fhir, size: L.size },
+    { x: L.lb[0], y: L.lb[1], text: pair.openehr, size: L.size },
+    { x: L.arch[0], y: L.arch[1], text: pair.archetype, size: L.small, fill: '#56697a' },
+  ];
+  if (L.zone) {
+    for (const [name, s] of [['middle bundle', mid[0]], ['middle bundle', mid[1]], ['FHIR strand', da], ['openEHR strand', db]]) {
+      if (polygonHitsRect(s.polygon, L.zone)) throw new Error(`heroField: the ${name} enters the text zone (phase ${phase})`);
+    }
+    for (const l of labels) {
+      if (rectsOverlap(labelBox(l.x, l.y, l.text, l.size), L.zone)) throw new Error(`heroField: label "${l.text}" enters the text zone`);
+    }
+  }
+  for (const s of back) shapes.push(`<path class="strand" fill="${L.back.fill}" d="${s.d}"/>`);
+  for (const s of mid) shapes.push(`<path class="strand" fill="${L.mid.fill}" d="${s.d}"/>`);
+  shapes.push(`<path class="strand" fill="${L.data.fill}" d="${da.d}"/>`, `<path class="strand" fill="${L.data.fill}" d="${db.d}"/>`);
+  const body = shapes.join('') + labels.map(l => label(l.x, l.y, l.text, l.size, { fill: l.fill })).join('');
+  return svgRoot(`fig fig-field fig-field--${layout}`, L.w, L.h, body);
+}
+
 /** openFHIR: the mapping pairs, each FHIR path joined to its openEHR path by a fire strand. */
 function openfhirFigure(snapshot, { t = 1 } = {}) {
   const pairs = mappingPairs(snapshot);
@@ -290,6 +353,6 @@ function cardArt() {
 
 module.exports = {
   PROFILE, BLADE, GAP, NOTCH,
-  strand, bundle, outline, hero, openfhirFigure, unioFigure, divider, cardArt,
+  strand, bundle, outline, hero, heroField, openfhirFigure, unioFigure, divider, cardArt,
   polygonHitsRect, labelBox,
 };

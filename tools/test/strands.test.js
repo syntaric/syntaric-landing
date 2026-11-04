@@ -41,3 +41,11 @@ test('every figure is aria-hidden and has a viewBox', () => {
     assert.doesNotMatch(svg, /<title>/);
   }
 });
+
+test('the full-bleed field keeps its text zone clear in every frame of the loop', () => {
+  for (let i = 0; i < 48; i++) assert.doesNotThrow(() => strands.heroField(snapshot, { layout: 'wide', phase: i / 48 }));
+});
+
+test('the field loop is seamless: phase 0 and phase 1 draw the same frame', () => {
+  assert.strictEqual(strands.heroField(snapshot, { phase: 0 }), strands.heroField(snapshot, { phase: 1 }));
+});
