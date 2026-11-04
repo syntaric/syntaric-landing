@@ -1669,6 +1669,17 @@ Starts only after the sign-off in commit 1.1.
     owner approves the hero at the 1.4 gate and the rest at the 1.5 review.
 *   **Why**: a person can check a drawing against the rules.
 
+*   **As built (1.2)**: measurements, method and figure layouts are in
+    `docs/strand-rules.md`. The notch sits at its measured position (0.52
+    of the strand, on the outer edge), not at the tip, where the strand is
+    too thin to notch. `pathLength="1"` belongs to the centre-line copy
+    used as the draw mask, which is added with the motion in 1.3; the
+    static frame has no mask. `hero()` has two layouts, `wide` and
+    `narrow`, because one viewBox cannot keep mono labels legible both
+    behind the text at 1440 px and below it at 390 px. In
+    `sources.json` the synthetic repositories use `label`, not `name`,
+    which the data rules remove as a patient field.
+
 #### Commit 1.3: hero static frame and both prototypes
 
 Only the hero is drawn in this commit. The openFHIR, Unio and divider

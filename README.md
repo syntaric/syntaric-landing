@@ -137,6 +137,23 @@ git push
 
 ---
 
+## Figure data
+
+The strand figures (Stage 1) show real FHIR and openEHR paths. Their text
+comes from `data/snapshot.json`, which is built from the allow-list in
+`data/sources.json`:
+
+```bash
+npm run snapshot    # re-read the allow-listed sources into data/snapshot.json
+```
+
+Run it only when a source changes, then commit `data/snapshot.json`. The
+tool never reads `~/Documents/syntaric/_clients/`. The build filters the
+snapshot on every run (`tools/data-rules.js`). Strand rules and figure
+layouts: `docs/strand-rules.md`.
+
+---
+
 ## After each deploy
 
 1. Run `tools/check-deploy.sh`. It checks that every baseline URL returns 200

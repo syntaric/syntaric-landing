@@ -7,12 +7,14 @@
     "test": "node --test \"tools/test/*.test.js\"",
     "check": "node --test \"tools/test/*.test.js\" && node blog/build.js --check && node tools/check-links.js",
     "build:blog": "npm run build",
-    "blog": "npm run build"
+    "blog": "npm run build",
+    "snapshot": "node tools/snapshot.js"
   },
   "dependencies": {
     "marked": "12.0.2"
   },
   "devDependencies": {
-    "@resvg/resvg-js": "2.6.2"
+    "@resvg/resvg-js": "2.6.2",
+    "js-yaml": "5.5.0"
   }
 }
