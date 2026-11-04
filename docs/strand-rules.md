@@ -66,8 +66,8 @@ and the others at the 1.5 review. All text comes from `data/snapshot.json`.
 
 | Figure | viewBox | Text zone | Reads | Labels |
 |---|---|---|---|---|
-| `heroField`, layout `wide` (from 960 px, behind the text; still frame and video) | 1920 × 854 | x 0-1080, full height (the build fails if a strand or label enters it in any frame) | `hero-labels` (written, plain words; decision P2, 2026-11-04) | upper label above the upper data strand at (1160, 212); lower label and note below the lower strand at (1190, 760) and (1190, 792); text face 26 and 19, all in ink |
-| `heroField`, layout `narrow` (phones, below the text) | 780 × 584 | none | same | at (24, 84), (24, 494) and (24, 530); text face 30 and 22 (15 and 11 px on a 390 px phone) |
+| `heroField`, layout `wide` (from 960 px, behind the text; still frame and video) | 1920 × 854 | x 0-1080, full height (the build fails if a strand or label enters it in any frame) | `hero-labels` (written, plain words; decision P2, 2026-11-04) | upper label above the upper data strand at (1160, 212); lower label and note below the lower strand at (1190, 760) and (1190, 792); mono 26 and 19, all in ink (the text face was tried in 2.1; the owner kept mono) |
+| `heroField`, layout `narrow` (phones, below the text) | 780 × 584 | none | same | at (24, 84), (24, 494) and (24, 530); mono 30 and 22 (15 and 11 px on a 390 px phone) |
 | `openfhirFigure` | 360 × 314 | none | `allergy-mapping`, all 4 pairs | one row per pair: FHIR path left, fire strand with notch, openEHR path right; heads give the resource and the archetype |
 | `unioFigure` | 360 × 290 | none | `unio-federation` (synthetic) | query top left; three strands fan from (14, 150) to the right; repository names and row counts at the right; the unreachable one drawn in the hairline tint; result bottom left |
 | `divider` | 1200 × 28 | none | none | hairline strand (width 4, tint `#bdc2c5`); its mono note was removed in the plain-language pass (P1) |

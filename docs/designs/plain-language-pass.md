@@ -42,7 +42,7 @@ a new brand; a new page structure; stock photography.
 |---|---|---|
 | P1 | Code in the figures | Plain labels only; no real paths anywhere on the home page (technical detail lives on open-fhir.com, unio.syntaric.com and the blog) |
 | P2 | Hero | The full-bleed strand video stays; its labels change from FHIR resource and path names to plain words from the healthcare domain |
-| P3 | Typefaces | Remove the mono face from the page, and test a warmer face pairing against Atkinson at a gate |
+| P3 | Typefaces | Remove the mono face from the page, and test a warmer face pairing against Atkinson at a gate. **Revised the same day:** after seeing 2.2 built, the owner judged the faces better as they were. Atkinson Next and Mono stay everywhere, including the hero labels; 2.2 was reverted before commit and the face gate (2.3) is dropped |
 | P4 | Visuals to bring back | Real product images (Unio console, an openFHIR image) and the openFHIR and Unio logos with each product. Not client logos (E4 stands), not photos |
 | P5 | Copy | Plain first, technical second: every block leads with what changes for a hospital or programme; standard names follow in a second sentence or are explained on first use |
 
@@ -102,6 +102,11 @@ block per entry, `origin: "written"`), so `tools/strands.js` still reads
 all figure text from one place and the size limit still applies.
 
 ## Typefaces (P3)
+
+> [!NOTE]
+> Superseded on 2026-11-04: the owner keeps Atkinson Hyperlegible Next and
+> Mono as they were (see P3 and commits 2.2 and 2.3). The steps below are
+> kept as the record of what was proposed.
 
 1.  **Mono out:** every mono use on the home page and the share cards
     moves to the text face (labels in `--ink-3`, the text size one step
@@ -184,11 +189,12 @@ site (LinkedIn previews, external testers).
         in one standard", "Read in another", "Same meaning, nothing
         retyped"; caption "One record, understood the same way by systems
         that speak different standards."
-*   **2.2** Mono out of the page and the share cards; mono files deleted if
-    unused.
-*   **2.3** Face gate: preview page with Control, A and B; owner picks.
-    Then apply the winner (fonts, fallbacks, tokens, cards, videos); the
-    preview is deleted in the same commit.
+*   **2.2** ~~Mono out of the page and the share cards~~. **Dropped**
+    (P3 revised, 2026-11-04): built, shown to the owner, reverted before
+    commit. The hero labels go back to mono (still frame approved first,
+    then the videos re-rendered).
+*   **2.3** ~~Face gate~~. **Dropped** (P3 revised): the owner keeps
+    Atkinson Hyperlegible Next and Mono.
 *   **2.4** Product visuals: logos, the Unio screenshot, the openFHIR image
     (owner input), and the gate on figures.
 *   **2.5** Plain copy applied to the rest of the page (who-for line, proof

@@ -50,8 +50,8 @@ test('the field loop is seamless: phase 0 and phase 1 draw the same frame', () =
   assert.strictEqual(strands.heroField(snapshot, { phase: 0 }), strands.heroField(snapshot, { phase: 1 }));
 });
 
-test('the hero field shows the written plain labels, in the text face', () => {
+test('the hero field shows the written plain labels', () => {
   const svg = strands.heroField(snapshot);
   for (const t of Object.values(snapshot.entries['hero-labels'].values)) assert.ok(svg.includes(t), t);
-  assert.doesNotMatch(svg, /Mono|\[at\d|AllergyIntolerance/);
+  assert.doesNotMatch(svg, /\[at\d|AllergyIntolerance/);
 });

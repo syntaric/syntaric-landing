@@ -28,20 +28,20 @@ const OUT = path.join(ROOT, 'assets', 'video');
 const FPS = 30;
 const LOOP = 8000;   // ms; heroField motion is periodic over one loop
 const GROUND = '#f6f3ee';
-const TEXT_TTF = path.join(ROOT, 'tools', 'fonts', 'atkinson-hyperlegible-next.ttf');
+const MONO_TTF = path.join(ROOT, 'tools', 'fonts', 'atkinson-hyperlegible-mono.ttf');
 const LIMIT = 1.5 * 1024 * 1024;   // #15: hero video budget
 
 function render(svg, width) {
-  // the SVG carries a font-family list; resvg is given the text face's TTF directly
-  svg = svg.replace(/font-family="[^"]*"/g, 'font-family="Atkinson Hyperlegible Next"')
+  // the SVG carries a font-family list; resvg is given the mono TTF directly
+  svg = svg.replace(/font-family="[^"]*"/g, 'font-family="Atkinson Hyperlegible Mono"')
     .replace(/<svg ([^>]*)>/, `<svg $1><rect width="100%" height="100%" fill="${GROUND}"/>`);
   const r = new Resvg(svg, { fitTo: { mode: 'width', value: width },
-    font: { fontFiles: [TEXT_TTF], loadSystemFonts: false, defaultFontFamily: 'Atkinson Hyperlegible Next' } });
+    font: { fontFiles: [MONO_TTF], loadSystemFonts: false, defaultFontFamily: 'Atkinson Hyperlegible Mono' } });
   return r.render().asPng();
 }
 
 function main() {
-  if (!fs.existsSync(TEXT_TTF)) throw new Error(`Missing ${path.relative(ROOT, TEXT_TTF)} (TTF copy of the text face for resvg)`);
+  if (!fs.existsSync(MONO_TTF)) throw new Error(`Missing ${path.relative(ROOT, MONO_TTF)} (TTF copy of the mono face for resvg)`);
   const snapshot = cleanSnapshot(JSON.parse(fs.readFileSync(path.join(ROOT, 'data', 'snapshot.json'), 'utf8'))).snapshot;
   fs.mkdirSync(OUT, { recursive: true });
   for (const [layout, width] of [['wide', 1920], ['narrow', 780]]) {

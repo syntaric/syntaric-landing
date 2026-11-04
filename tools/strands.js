@@ -228,8 +228,8 @@ function mappingPairs(snapshot) {
  * looping video. `phase` (0-1) is the position in the loop; motion is a
  * gentle sway of every strand, periodic, so frame 0 follows the last frame.
  *
- * Labels are plain words in the text face (plain-language pass, decision P2),
- * from the written "hero-labels" entry of the snapshot.
+ * Labels are plain words in the mono face (plain-language pass, decision P2;
+ * the owner kept mono, 2026-11-04), from the written "hero-labels" entry.
  *
  * Layers, back to front: a wide two-strand bundle in an 8 % navy tint that may
  * pass behind the text (under the 1.2:1 text-zone limit); a 20 % bundle and
@@ -282,13 +282,13 @@ function heroField(snapshot, { layout = 'wide', phase = 0, textZone, hooks = tru
       if (polygonHitsRect(s.polygon, L.zone)) throw new Error(`heroField: the ${name} enters the text zone (phase ${phase})`);
     }
     for (const l of labels) {
-      if (rectsOverlap(labelBox(l.x, l.y, l.text, l.size, 'start', 'text'), L.zone)) throw new Error(`heroField: label "${l.text}" enters the text zone`);
+      if (rectsOverlap(labelBox(l.x, l.y, l.text, l.size), L.zone)) throw new Error(`heroField: label "${l.text}" enters the text zone`);
     }
   }
   for (const s of back) shapes.push(`<path class="strand" fill="${L.back.fill}" d="${s.d}"/>`);
   for (const s of mid) shapes.push(`<path class="strand" fill="${L.mid.fill}" d="${s.d}"/>`);
   shapes.push(`<path class="strand" fill="${L.data.fill}" d="${da.d}"/>`, `<path class="strand" fill="${L.data.fill}" d="${db.d}"/>`);
-  const body = shapes.join('') + labels.map(l => label(l.x, l.y, l.text, l.size, { fill: l.fill, face: 'text' })).join('');
+  const body = shapes.join('') + labels.map(l => label(l.x, l.y, l.text, l.size, { fill: l.fill })).join('');
   return svgRoot(`fig fig-field fig-field--${layout}`, L.w, L.h, body);
 }
 
