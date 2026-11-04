@@ -233,7 +233,7 @@ function buildPostPage(meta, bodyHtml, toc, markdownBody) {
   const desc     = esc(meta.description || meta.excerpt || '');
   const slug     = meta._slug || meta.slug || '';
   const canonUrl = `https://syntaric.com/blog/${slug}/`;
-  const logoUrl  = 'https://syntaric.com/etc/syntaric_logo_2.png';
+  const logoUrl  = 'https://syntaric.com/assets/brand/syntaric-512.png';
   const coverUrl = meta.image ? absoluteImageUrl(meta.image, canonUrl) : '';
   const imgUrl   = coverUrl || logoUrl;
   const cover    = meta.image ? coverImage(meta.image, canonUrl) : null;

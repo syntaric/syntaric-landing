@@ -1558,6 +1558,19 @@ reconciled at Step 6).
     re-checked against the SVG fill; if they differ, the SVG value is used
     in `assets/site.css`.
 
+*   **As built (1.1)**: `syntaric.svg` is not a trace. The two flame
+    paths of the openFHIR logo, filled with `#122e49`, cover
+    `etc/icon_only.png` at 98.9% (edges within 1.6 px at 377 px), so the
+    feather uses the designer's own vector paths (decision #5: the same
+    form). The openFHIR comparison of item 33 therefore has no differences.
+    `unio.svg` is traced from the PNG: outlines fitted with cubic curves at
+    0.55 px tolerance, the ring as two filled arcs with the sampled
+    gradient; 98.9% overlap, edges within 1 px at 1664 px. `openfhir.svg`
+    is the `color-dark-horizontal` variant (navy wordmark for light
+    grounds; the "light" variant has a white wordmark). The navy in the
+    PNG is exactly `#122e49`. Both marks signed off by the owner on
+    2026-11-04.
+
 #### Commit 1.2: construction-rule tooling and data snapshot
 
 Starts only after the sign-off in commit 1.1.
