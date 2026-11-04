@@ -816,43 +816,33 @@ figcaption {
     color: var(--ink-2);
 }
 
-/* Static mapping excerpt (until commit 1.5): mono; pairs stacked on
-   phones, side by side from 640 px. Lines break only at <wbr>. */
-.excerpt {
-    font-family: var(--mono);
-    font-size: var(--t-xs);
+/* Product figures (commit 1.5): drawn by tools/strands.js from the snapshot. */
+.product-figure svg {
+    display: block;
+    width: 100%;
+    max-width: 560px;
+    height: auto;
 }
 
-.excerpt-head,
-.excerpt li {
-    display: grid;
-    grid-template-columns: minmax(0, 1fr);
-    gap: var(--s-1) var(--s-4);
+/* Dividers (commit 1.5): a hairline strand with a mono margin note; they
+   replace the hairline above the section that follows. */
+.divider {
+    padding-top: var(--s-6);
 }
 
-.excerpt-head {
-    padding-bottom: var(--s-2);
-    color: var(--ink-3);
-    border-bottom: 1px solid var(--ink);
+.divider svg {
+    display: block;
+    width: 100%;
+    height: auto;
 }
 
-.excerpt ol {
-    list-style: none;
+.divider + .section {
+    border-top: none;
 }
 
-.excerpt li {
-    padding: var(--s-3) 0;
-    border-bottom: 1px solid var(--hair);
-}
-
-.excerpt .ehr {
-    color: var(--ink-2);
-}
-
-@media (min-width: 640px) {
-    .excerpt-head,
-    .excerpt li {
-        grid-template-columns: 1fr 1fr;
+@media (max-width: 639px) {
+    .divider .fig-label {
+        display: none;
     }
 }
 

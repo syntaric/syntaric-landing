@@ -1839,6 +1839,15 @@ Step 6).
 *   **Gate**: owner reviews the complete static system on a phone before
     the scroll motion is added.
 
+*   **As built (1.5)**: the openFHIR figure replaces the static excerpt;
+    the Unio figure takes the place of the console screenshot, so both
+    product blocks share one layout (the screenshot files stay in
+    `assets/img/` until the owner's review decides). Three dividers sit
+    before Selected work, Products and Contact (`divider-1` … `divider-3`);
+    their notes are the other three mapping pairs, shown from 640 px. The
+    figures are static; their motion is commit 1.6. Awaiting the owner's
+    review on a phone: the synthetic Unio text and the notch.
+
 #### Commit 1.6: scroll moments
 
 ##### 50. `index.html`, `assets/site.css` (Modify)

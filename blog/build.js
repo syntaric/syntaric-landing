@@ -625,6 +625,19 @@ function main() {
   outputs.set(path.join(ROOT, 'partials', 'figures', 'hero-field-wide.svg'), fieldWide + '\n');
   outputs.set(path.join(ROOT, 'partials', 'figures', 'hero-field-narrow.svg'), fieldNarrow + '\n');
 
+  const openfhirFig = checkFigure('openfhir', strands.openfhirFigure(snapshot));
+  const unioFig = checkFigure('unio', strands.unioFigure(snapshot));
+  // Divider notes: the other mapping pairs, as plain "FHIR path · openEHR path".
+  const { expandPaths } = require('../tools/data-rules');
+  const mapping = snapshot.entries['allergy-mapping'];
+  const dividers = mapping.values.slice(1, 4).map((v, i) => {
+    const e = expandPaths(v, mapping.header);
+    return checkFigure(`divider-${i + 1}`, strands.divider(`${e.fhir} · ${e.openehr}`));
+  });
+  outputs.set(path.join(ROOT, 'partials', 'figures', 'openfhir.svg'), openfhirFig + '\n');
+  outputs.set(path.join(ROOT, 'partials', 'figures', 'unio.svg'), unioFig + '\n');
+  dividers.forEach((d, i) => outputs.set(path.join(ROOT, 'partials', 'figures', `divider-${i + 1}.svg`), d + '\n'));
+
   // index.html: rewrite marker regions only.
   const indexPath = path.join(ROOT, 'index.html');
   const homeHtml = replaceRegions(fs.readFileSync(indexPath, 'utf8'), {
@@ -634,9 +647,12 @@ function main() {
     'latest-posts': latestPostsHtml(publishedPosts),
     'hero-field-wide': `\n                ${fieldWide}\n                `,
     'hero-field-narrow': `\n                ${fieldNarrow}\n                `,
+    'openfhir-figure': `\n                        ${openfhirFig}\n                        `,
+    'unio-figure': `\n                        ${unioFig}\n                        `,
+    ...Object.fromEntries(dividers.map((d, i) => [`divider-${i + 1}`, d])),
   });
   outputs.set(indexPath, homeHtml);
-  log('  ✓ index.html  (marker regions: css, nav, footer, latest-posts, hero-field-wide, hero-field-narrow)');
+  log('  ✓ index.html  (marker regions: css, nav, footer, latest-posts, hero, openfhir, unio, dividers)');
 
   // TODO-OWNER rule: no published file may carry the marker.
   const todo = [];

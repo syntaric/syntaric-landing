@@ -105,7 +105,7 @@ They merge into one list, "What you can hire us for" (§2.4).
 | P5 | openFHIR feature list (5 bullets: bidirectional mapping, REST and queues, Docker, Atlas, FHIR Connect) | open-fhir.com | dropped | Feature lists stay on the product site (brief 5.6) |
 | P6 | `images/openfhir-img.png` | (none) | dropped | Base64 noise, trademark tiles (item 25) |
 | P7 | "Explore openFHIR" → open-fhir.com | Link out | kept | |
-| P8 | Unio screenshot `images/unio-img.png` with alt text | Unio block, in a navy-tint frame | kept | Re-encoded in 0.7 |
+| P8 | Unio screenshot `images/unio-img.png` with alt text | (none since 1.5: the Unio figure takes its place) | replaced, owner to confirm | Re-encoded in 0.7; files kept in `assets/img/` until the 1.5 review |
 | P9 | Unio tag, heading "One patient record across all your openEHR repositories", description | Outcome sentence | rewritten | Kept close: it is a model line (brief 4.6) |
 | P10 | Unio feature list (5 bullets) | unio.syntaric.com | dropped | Brief 5.6 |
 | P11 | "Explore Unio" → unio.syntaric.com | Link out | kept | |
