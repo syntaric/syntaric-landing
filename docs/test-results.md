@@ -51,7 +51,8 @@ specific template tell. A single named tell fails the run; log it as a fix.
 | 4 | | | | | | | | | |
 | 5 | | | | | | | | | |
 
-**Result:** pass / fail. Tells to fix:
+**Result:** pass, reported by the owner on 2026-11-04. Per-peer answers
+not recorded in this table. Tells to fix: none reported.
 
 ### 5-second comprehension test
 
@@ -73,9 +74,13 @@ person (the "boutique" H1 risk under #2).
 | 2 | | | | | |
 | 3 | | | | | |
 
-**Result:** pass / fail.
+**Result:** pass, reported by the owner on 2026-11-04. Per-person answers
+not recorded in this table.
 
 ### Outcome
+
+Both passed: values frozen in `docs/design-tokens.md`; mockups deleted
+(source at commit `2a685c8`).
 
 - If both pass: the mockup's `:root` values are frozen in
   `docs/design-tokens.md` (item 23b), the mockups are deleted, and commit
