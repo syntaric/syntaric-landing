@@ -2,15 +2,6 @@
 <html lang="en">
 <head>
 <script>document.documentElement.classList.add('js')</script>
-<!-- Google tag (gtag.js) -->
-<script async src="https://www.googletagmanager.com/gtag/js?id=G-ZSP30ZJ4NV"></script>
-<script>
-  window.dataLayer = window.dataLayer || [];
-  function gtag(){dataLayer.push(arguments);}
-  gtag('js', new Date());
-
-  gtag('config', 'G-ZSP30ZJ4NV');
-</script>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Data First: Use-Case Driven Interoperability | Syntaric</title>
@@ -73,9 +64,8 @@
     <link rel="icon" type="image/svg+xml" href="../../favicon.svg" />
     <link rel="shortcut icon" href="../../favicon.ico" />
     <link rel="apple-touch-icon" sizes="180x180" href="../../apple-touch-icon.png" />
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=DM+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="preload" href="/assets/fonts/atkinson-hyperlegible-next.woff2" as="font" type="font/woff2" crossorigin>
+    <script data-goatcounter="https://syntaric.goatcounter.com/count" async src="https://gc.zgo.at/count.js"></script>
     <style>
 /*
  * assets/site.css — the single stylesheet source (decision #13).
@@ -84,6 +74,44 @@
  * The three marker comments split the file; keep each on its own line.
  * No nested CSS (older WebViews), no animation-timeline.
  */
+
+/* ─── FONTS ───────────────────────────────────────────────── */
+/* Self-hosted, subset to Latin-1 + Latin Extended-A + common punctuation
+   (assets/fonts/OFL.txt). The fallback faces are local fonts scaled to the
+   web font's metrics, so the swap moves text by almost nothing. */
+@font-face {
+    font-family: 'Atkinson Hyperlegible Next';
+    src: url('/assets/fonts/atkinson-hyperlegible-next.woff2') format('woff2');
+    font-weight: 200 800;
+    font-style: normal;
+    font-display: swap;
+}
+
+@font-face {
+    font-family: 'Atkinson Hyperlegible Mono';
+    src: url('/assets/fonts/atkinson-hyperlegible-mono.woff2') format('woff2');
+    font-weight: 400;
+    font-style: normal;
+    font-display: swap;
+}
+
+@font-face {
+    font-family: 'Atkinson Next Fallback';
+    src: local('Arial'), local('ArialMT'), local('Liberation Sans'), local('Helvetica');
+    size-adjust: 100%;
+    ascent-override: 98.4%;
+    descent-override: 31.6%;
+    line-gap-override: 0%;
+}
+
+@font-face {
+    font-family: 'Atkinson Mono Fallback';
+    src: local('Courier New'), local('CourierNewPSMT'), local('Liberation Mono'), local('Courier');
+    size-adjust: 105.3%;
+    ascent-override: 93.4%;
+    descent-override: 30%;
+    line-gap-override: 0%;
+}
 
 *, *::before, *::after {
     margin: 0;
@@ -117,7 +145,7 @@ html {
 }
 
 body {
-    font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+    font-family: 'Atkinson Hyperlegible Next', 'Atkinson Next Fallback', sans-serif;
     color: var(--ink);
     background: var(--surface);
     line-height: 1.6;
@@ -442,7 +470,7 @@ footer {
 .article-body li { font-size: 1.05rem; line-height: 1.7; color: var(--ink-light); }
 .article-body li strong { color: var(--ink); }
 .article-body pre { background: var(--ink); color: #e2e8f0; border-radius: var(--radius); padding: 20px 24px; overflow-x: auto; margin: 1.5rem 0; font-size: 0.9rem; line-height: 1.6; }
-.article-body code { font-family: 'JetBrains Mono', 'Fira Code', 'Cascadia Code', monospace; }
+.article-body code { font-family: 'Atkinson Hyperlegible Mono', 'Atkinson Mono Fallback', monospace; }
 .article-body p code, .article-body li code { background: var(--surface-3); color: var(--accent); padding: 2px 6px; border-radius: 4px; font-size: 0.9em; }
 .article-body img { max-width: 100%; border-radius: var(--radius); border: 1px solid var(--border); margin: 0 0 1.5rem;}
 .article-body hr { border: none; border-top: 1px solid var(--border); margin: 2.5rem 0; }

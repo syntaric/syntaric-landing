@@ -46,6 +46,24 @@ test('a missing baseline URL fails', () => {
   assert.match(checkSite(root).join('\n'), /baseline URL missing: https:\/\/syntaric.com\/blog\/gone\//);
 });
 
+test('a script or stylesheet from a third-party host fails', () => {
+  const errors = checkSite(site(
+    '<script src="https://www.googletagmanager.com/gtag/js"></script>' +
+    '<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter">'
+  ));
+  assert.strictEqual(errors.length, 2);
+  assert.match(errors[0], /<script> loads from third-party host www\.googletagmanager\.com/);
+  assert.match(errors[1], /<link> loads from third-party host fonts\.googleapis\.com/);
+});
+
+test('GoatCounter and same-site loads pass', () => {
+  const root = site(
+    '<script data-goatcounter="https://syntaric.goatcounter.com/count" async src="https://gc.zgo.at/count.js"></script>' +
+    '<link rel="preload" href="/index.html" as="document"><link rel="canonical" href="https://syntaric.com/blog/post/">'
+  );
+  assert.deepStrictEqual(checkSite(root), []);
+});
+
 test('a missing home anchor fails', () => {
   const root = site('');
   const file = path.join(root, 'index.html');

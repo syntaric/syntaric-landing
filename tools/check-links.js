@@ -6,9 +6,9 @@
  * - every URL in tools/sitemap-baseline.txt is in sitemap.xml
  * - the 8 home anchors exist
  * - no home figure carries more than 8 KB of text
+ * - no <script src> or <link href> loads from a third-party host
  *
  * Usage: node tools/check-links.js [root]   (exit 1 on any error)
- * The third-party host rule is added in commits 0.4 and 0.7.
  */
 
 'use strict';
@@ -19,6 +19,8 @@ const path = require('path');
 const SITE = 'https://syntaric.com';
 const HOME_ANCHORS = ['services', 'engagements', 'expertise', 'products', 'openfhir', 'unio', 'collaborators', 'contact'];
 const FIGURE_TEXT_LIMIT = 8 * 1024;
+// Goal 10: no third-party loads besides analytics (GoatCounter script and beacon).
+const ALLOWED_HOSTS = new Set(['syntaric.com', 'gc.zgo.at', 'syntaric.goatcounter.com']);
 
 // Generated pages: index.html, blog/index.html and blog/<slug>/index.html.
 function listPages(root) {
@@ -53,6 +55,23 @@ function linksIn(html) {
   let m;
   while ((m = re.exec(markup)) !== null) links.push(m[2].replace(/&amp;/g, '&'));
   return links;
+}
+
+/**
+ * Resources a page loads through markup: <script src> and every <link href>
+ * (stylesheet, preload, preconnect, icon...). Commit 0.7 extends this to
+ * images, iframes, media, CSS url() and URLs inside inline scripts.
+ */
+function loadsIn(html) {
+  const loads = [];
+  const re = /<(script|link)\b([^>]*)>/gi;
+  let m;
+  while ((m = re.exec(html)) !== null) {
+    const attr = m[1].toLowerCase() === 'script' ? 'src' : 'href';
+    const value = m[2].match(new RegExp(`\\s${attr}="([^"]*)"`));
+    if (value && value[1]) loads.push({ tag: m[1].toLowerCase(), url: value[1].replace(/&amp;/g, '&') });
+  }
+  return loads;
 }
 
 /** Map a site URL path to a file in the repo, or null if none exists. */
@@ -97,6 +116,14 @@ function checkSite(root) {
     const sitemap = fs.existsSync(sitemapFile) ? read(sitemapFile) : '';
     for (const url of read(baselineFile).split('\n').map(s => s.trim()).filter(Boolean)) {
       if (!sitemap.includes(`<loc>${url}</loc>`)) errors.push(`sitemap.xml: baseline URL missing: ${url}`);
+    }
+  }
+
+  for (const rel of listPages(root)) {
+    for (const { tag, url } of loadsIn(read(path.join(root, rel)))) {
+      let host;
+      try { host = new URL(url, SITE + pageUrlPath(rel)).hostname; } catch { continue; }
+      if (!ALLOWED_HOSTS.has(host)) errors.push(`${rel}: <${tag}> loads from third-party host ${host}`);
     }
   }
 

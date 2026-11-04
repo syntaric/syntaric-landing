@@ -1187,6 +1187,14 @@ named next to the number.
 *   **Proposed Changes**: Next as a variable font (weight axis), Mono at
     regular weight only; both subset to Basic Latin, Latin-1 Supplement and
     Latin Extended-A. Licence text alongside.
+*   **As built**: the subset also keeps the punctuation the pages use
+    (en and em dashes, curly quotes, ellipsis, bullet, euro sign); arrows
+    and emoji fall back to system fonts. Next 37.2 KB, Mono 10.4 KB.
+    Fallback faces measured against Liberation Sans (Arial metrics):
+    Next needs no size adjustment (ascent 98.4%, descent 31.6%); Mono
+    against Courier New 105.3%. Source: the `google/fonts` repository
+    (`ofl/atkinsonhyperlegiblenext`, `ofl/atkinsonhyperlegiblemono`),
+    subset with fontTools.
 *   **Why**: decision #7; no Google Fonts IP transfer (decision #12).
 
 ##### 17a. `assets/site.css` (Modify)

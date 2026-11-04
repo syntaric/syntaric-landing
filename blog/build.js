@@ -185,6 +185,12 @@ const BLOG_NAV    = fill(NAV, { root: '/', blogCurrent: ' aria-current="page"' }
 const BLOG_FOOTER = fill(FOOTER, { root: '/' });
 const BLOG_STYLE  = `<style>\n${CSS.shared}\n\n${CSS.blog}\n    </style>`;
 
+/** Text-face preload and GoatCounter (decision #12), on every blog page. */
+const FONT_AND_ANALYTICS = [
+  '<link rel="preload" href="/assets/fonts/atkinson-hyperlegible-next.woff2" as="font" type="font/woff2" crossorigin>',
+  '<script data-goatcounter="https://syntaric.goatcounter.com/count" async src="https://gc.zgo.at/count.js"></script>',
+].join('\n    ');
+
 /** Adds `js` to <html> before first paint; CSS uses it for the mobile menu. */
 const JS_CLASS_SCRIPT = `<script>document.documentElement.classList.add('js')</script>`;
 // ─── Post page template ───────────────────────────────────────────────────────
@@ -232,15 +238,6 @@ function buildPostPage(meta, bodyHtml, toc) {
 <html lang="en">
 <head>
 ${JS_CLASS_SCRIPT}
-<!-- Google tag (gtag.js) -->
-<script async src="https://www.googletagmanager.com/gtag/js?id=G-ZSP30ZJ4NV"></script>
-<script>
-  window.dataLayer = window.dataLayer || [];
-  function gtag(){dataLayer.push(arguments);}
-  gtag('js', new Date());
-
-  gtag('config', 'G-ZSP30ZJ4NV');
-</script>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>${esc(meta.title)} | Syntaric</title>
@@ -273,9 +270,7 @@ ${JS_CLASS_SCRIPT}
     <link rel="icon" type="image/svg+xml" href="../../favicon.svg" />
     <link rel="shortcut icon" href="../../favicon.ico" />
     <link rel="apple-touch-icon" sizes="180x180" href="../../apple-touch-icon.png" />
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=DM+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    ${FONT_AND_ANALYTICS}
     ${BLOG_STYLE}
 </head>
 <body>
@@ -496,9 +491,7 @@ function buildIndexPage(posts) {
     <link rel="shortcut icon" href="../favicon.ico" />
     <link rel="apple-touch-icon" sizes="180x180" href="../apple-touch-icon.png" />
     <link rel="manifest" href="../site.webmanifest" />
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=DM+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    ${FONT_AND_ANALYTICS}
     ${BLOG_STYLE}
 </head>
 <body>
