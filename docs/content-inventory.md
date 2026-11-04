@@ -92,7 +92,7 @@ They merge into one list, "What you can hire us for" (§2.4).
 | D2 | (none) | 2-3 case studies | new | Owner input #8 |
 | D3 | Six check-mark groups: university hospitals, national programmes, NHS trusts, regional network, specialised clinics, vendor integrations | Client list `id="collaborators"`, grouped hospitals / national programmes / vendors | merged | One list with the marquee (A6) and collaborators (E2-E10); brief 5.4 |
 | D4 | (none) | Credentials line: IHE certified, openEHR SEC, countries | new | Carries B3-B5 |
-| D5 | "Standards-Based Architecture" label and `images/architecture.svg` | Mapping excerpt (4 FHIR → openEHR path pairs) with caption | replaced | Generic boxes, off-palette, SMIL dots (brief 2.10) |
+| D5 | "Standards-Based Architecture" label and `images/architecture.svg` | (none since 2.4: the mapping excerpt became the openFHIR figure in 1.5, which the openFHIR product image replaced) | dropped | Generic boxes, off-palette, SMIL dots (brief 2.10); code paths are off the home page (P1) |
 
 ### Products (`#products`, `#openfhir`, `#unio`)
 
@@ -103,9 +103,9 @@ They merge into one list, "What you can hire us for" (§2.4).
 | P3 | openFHIR tag "Our Product", heading "openFHIR: Bridging openEHR and FHIR" | openFHIR block heading | rewritten | |
 | P4 | openFHIR description "…seamless bidirectional interoperability…"; "co-creators of the FHIR Connect specification and founders of openFHIR" | Outcome sentence; FHIR Connect line | rewritten | "seamless" dropped; claims kept |
 | P5 | openFHIR feature list (5 bullets: bidirectional mapping, REST and queues, Docker, Atlas, FHIR Connect) | open-fhir.com | dropped | Feature lists stay on the product site (brief 5.6) |
-| P6 | `images/openfhir-img.png` | (none) | dropped | Base64 noise, trademark tiles (item 25) |
+| P6 | `images/openfhir-img.png` | openFHIR product image: Atlas on a desktop screen, from open-fhir.com (since 2.4) | replaced | The old image had base64 noise and trademark tiles (item 25); the owner picked the Atlas image on 2026-11-04 |
 | P7 | "Explore openFHIR" → open-fhir.com | Link out | kept | |
-| P8 | Unio screenshot `images/unio-img.png` with alt text | (none since 1.5: the Unio figure takes its place) | replaced | Owner confirmed at the 1.5 review (2026-11-04); files deleted |
+| P8 | Unio screenshot `images/unio-img.png` with alt text | Unio console screenshot, back since 2.4 (`assets/img/unio-topology*`) | kept | Removed at the 1.5 review, restored in the plain-language pass (P4, 2026-11-04) |
 | P9 | Unio tag, heading "One patient record across all your openEHR repositories", description | Outcome sentence | rewritten | Kept close: it is a model line (brief 4.6) |
 | P10 | Unio feature list (5 bullets) | unio.syntaric.com | dropped | Brief 5.6 |
 | P11 | "Explore Unio" → unio.syntaric.com | Link out | kept | |

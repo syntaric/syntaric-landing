@@ -197,6 +197,19 @@ site (LinkedIn previews, external testers).
     Atkinson Hyperlegible Next and Mono.
 *   **2.4** Product visuals: logos, the Unio screenshot, the openFHIR image
     (owner input), and the gate on figures.
+    *   **As built (2.4)**: owner choices on 2026-11-04: the openFHIR image
+        is "Atlas on a monitor" from open-fhir.com (`atlas-left-1200.png`,
+        trimmed to 833 × 1006, AVIF and WebP at 600 and 833 px, 24-49 KB;
+        transparent background, no frame, at most 26rem wide), picked from
+        six images on that site; images replace the figures. The Unio
+        console screenshot is restored from `c0aa3b6` in its thin frame.
+        Both logos include the product name, so each logo is the product
+        heading (`<h3><img alt>`), 32 px tall, openFHIR 40 px so the names
+        match. Removed: `openfhirFigure`, `unioFigure`, their partials and
+        tests, the `allergy-mapping` and `unio-federation` data entries,
+        `assets/motion.js`, the `motion-ok` head script (the `js` class
+        stays for the phone nav) and the motion start-state CSS. The
+        snapshot tooling stays; it now carries only `hero-labels`.
 *   **2.5** Plain copy applied to the rest of the page (who-for line, proof
     line, hire items without the For/Format/Length table, cases, products,
     credentials, contact), meta and OG descriptions included.

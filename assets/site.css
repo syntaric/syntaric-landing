@@ -375,29 +375,6 @@ footer {
     }
 }
 
-/* ─── MOTION START STATES ───────────────────────────────────── */
-/* Only under html.js.motion-ok (set before first paint, removed if
-   assets/motion.js never starts). Without the class every figure shows its
-   finished state. motion.js animates from these values. */
-html.js.motion-ok .draw-axis {
-    stroke-dasharray: 1 1;
-    stroke-dashoffset: 1;
-}
-
-html.js.motion-ok [data-motion="align"] {
-    opacity: 0;
-    transform: translateX(-12px);
-}
-
-[data-motion="fanout"] > * {
-    transform-box: fill-box;
-    transform-origin: left center;
-}
-
-html.js.motion-ok [data-motion="fanout"] > * {
-    opacity: 0;
-}
-
 /* Overrides of the nav and footer rules above for the new tokens. */
 body {
     font-family: var(--font);
@@ -802,7 +779,11 @@ h3 {
     display: block;
     height: 32px;
     width: auto;
-    margin-bottom: var(--s-4);
+}
+
+/* the openFHIR logo is wider for its height; 40 px gives the two names the same size */
+.product-logo--openfhir {
+    height: 40px;
 }
 
 figure {
@@ -816,12 +797,25 @@ figcaption {
     color: var(--ink-2);
 }
 
-/* Product figures (commit 1.5): drawn by tools/strands.js from the snapshot. */
-.product-figure svg {
+/* Product images (plain-language pass, 2.4): the openFHIR Atlas on a
+   screen (transparent background, no frame) and the Unio console in a
+   thin frame (#7). */
+.product-image picture,
+.product-image img {
     display: block;
     width: 100%;
-    max-width: 560px;
     height: auto;
+}
+
+#openfhir .product-image {
+    max-width: 26rem;
+}
+
+.shot {
+    padding: var(--s-2);
+    background: var(--panel);
+    border: 1px solid var(--rule);
+    border-radius: var(--radius);
 }
 
 /* Dividers (commit 1.5): a hairline strand; they replace the hairline above

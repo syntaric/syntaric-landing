@@ -1,36 +1,5 @@
 {
   "entries": {
-    "allergy-mapping": {
-      "source": "~/development/OPENFHIR/ZIB-EHDS-hackathon/infrastructure/fhirconnect/EHDS/allergies/eps.adverse_reaction_risk.v2.yml",
-      "licence": "Apache-2.0",
-      "origin_url": "https://github.com/openFHIR",
-      "header": {
-        "structureDefinition": "http://hl7.org/fhir/StructureDefinition/AllergyIntolerance",
-        "archetype": "openEHR-EHR-EVALUATION.adverse_reaction_risk.v2"
-      },
-      "values": [
-        {
-          "name": "substance",
-          "fhir": "$resource.code",
-          "openehr": "$archetype/data[at0001]/items[at0002]"
-        },
-        {
-          "name": "clinicalStatus",
-          "fhir": "$resource.clinicalStatus",
-          "openehr": "$archetype/data[at0001]/items[at0130]"
-        },
-        {
-          "name": "verificationStatus",
-          "fhir": "$resource.verificationStatus",
-          "openehr": "$archetype/data[at0001]/items[at0063]"
-        },
-        {
-          "name": "criticality",
-          "fhir": "$resource.criticality",
-          "openehr": "$archetype/data[at0001]/items[at0101]"
-        }
-      ]
-    },
     "hero-labels": {
       "origin": "written",
       "licence": "Syntaric",
@@ -38,28 +7,6 @@
         "upper": "Recorded in one standard",
         "lower": "Read in another",
         "note": "Same meaning, nothing retyped"
-      }
-    },
-    "unio-federation": {
-      "origin": "synthetic",
-      "licence": "Syntaric",
-      "values": {
-        "query": "AQL · EVALUATION.adverse_reaction_risk.v2",
-        "repositories": [
-          {
-            "label": "cdr-north",
-            "status": "3 rows"
-          },
-          {
-            "label": "cdr-south",
-            "status": "2 rows"
-          },
-          {
-            "label": "cdr-west",
-            "status": "unreachable"
-          }
-        ],
-        "result": "5 rows · partial"
       }
     }
   }

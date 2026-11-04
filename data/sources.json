@@ -2,14 +2,6 @@
   "_comment": "Allow-list for tools/snapshot.js (redesign item 38, decision E6). Only these sources feed data/snapshot.json; the build never reads outside the repo.",
   "entries": [
     {
-      "id": "allergy-mapping",
-      "path": "~/development/OPENFHIR/ZIB-EHDS-hackathon/infrastructure/fhirconnect/EHDS/allergies/eps.adverse_reaction_risk.v2.yml",
-      "select": ["substance", "clinicalStatus", "verificationStatus", "criticality"],
-      "licence": "Apache-2.0",
-      "origin_url": "https://github.com/openFHIR",
-      "use": "openfhir figure"
-    },
-    {
       "id": "hero-labels",
       "origin": "written",
       "licence": "Syntaric",
@@ -18,21 +10,6 @@
         "upper": "Recorded in one standard",
         "lower": "Read in another",
         "note": "Same meaning, nothing retyped"
-      }
-    },
-    {
-      "id": "unio-federation",
-      "origin": "synthetic",
-      "licence": "Syntaric",
-      "use": "unio figure. Written by the implementer; approved by the owner at the 1.5 review, 2026-11-04.",
-      "values": {
-        "query": "AQL · EVALUATION.adverse_reaction_risk.v2",
-        "repositories": [
-          { "label": "cdr-north", "status": "3 rows" },
-          { "label": "cdr-south", "status": "2 rows" },
-          { "label": "cdr-west", "status": "unreachable" }
-        ],
-        "result": "5 rows · partial"
       }
     }
   ]

@@ -650,12 +650,8 @@ function main() {
   outputs.set(path.join(ROOT, 'partials', 'figures', 'hero-field-wide.svg'), fieldWide + '\n');
   outputs.set(path.join(ROOT, 'partials', 'figures', 'hero-field-narrow.svg'), fieldNarrow + '\n');
 
-  const openfhirFig = checkFigure('openfhir', strands.openfhirFigure(snapshot));
-  const unioFig = checkFigure('unio', strands.unioFigure(snapshot));
   // Dividers: the same hairline strand three times, without notes (P1).
   const dividers = [1, 2, 3].map(i => checkFigure(`divider-${i}`, strands.divider()));
-  outputs.set(path.join(ROOT, 'partials', 'figures', 'openfhir.svg'), openfhirFig + '\n');
-  outputs.set(path.join(ROOT, 'partials', 'figures', 'unio.svg'), unioFig + '\n');
   dividers.forEach((d, i) => outputs.set(path.join(ROOT, 'partials', 'figures', `divider-${i + 1}.svg`), d + '\n'));
 
   // index.html: rewrite marker regions only.
@@ -667,12 +663,10 @@ function main() {
     'latest-posts': latestPostsHtml(publishedPosts),
     'hero-field-wide': `\n                ${fieldWide}\n                `,
     'hero-field-narrow': `\n                ${fieldNarrow}\n                `,
-    'openfhir-figure': `\n                        ${openfhirFig}\n                        `,
-    'unio-figure': `\n                        ${unioFig}\n                        `,
     ...Object.fromEntries(dividers.map((d, i) => [`divider-${i + 1}`, d])),
   });
   outputs.set(indexPath, homeHtml);
-  log('  ✓ index.html  (marker regions: css, nav, footer, latest-posts, hero, openfhir, unio, dividers)');
+  log('  ✓ index.html  (marker regions: css, nav, footer, latest-posts, hero, dividers)');
 
   // TODO-OWNER rule: no published file may carry the marker.
   const todo = [];

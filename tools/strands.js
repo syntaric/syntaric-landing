@@ -6,8 +6,7 @@
  * method in docs/strand-rules.md). Pure functions; they return SVG strings
  * and are deterministic, so the build can compare output byte for byte.
  *
- * No parameter exists for blur, glow, gradients other than the openFHIR fire
- * gradient, or particles (brief 2.1).
+ * No parameter exists for blur, glow, gradients or particles (brief 2.1).
  */
 
 'use strict';
@@ -35,8 +34,6 @@ const NOTCH = { mouth: 0.604, depth: 0.442, at: 0.52 };
 const HOOK = { tip: 0.46, back: 0.45, ahead: 0.18, depth: 0.29 };
 
 const INK = '#122e49';
-const FIRE = ['#c32a30', '#df5c34', '#fe933a'];
-const UNIO = { navy: '#0c2842', teal: '#11888a', deep: '#1a6372', hair: '#dbdbda' };
 const MONO = "'Atkinson Hyperlegible Mono', 'Atkinson Mono Fallback', monospace";
 const MONO_ADVANCE = 0.632; // em, Atkinson Hyperlegible Mono (OS/2 xAvgCharWidth)
 const TEXT = "'Atkinson Hyperlegible Next', 'Atkinson Next Fallback', sans-serif";
@@ -212,15 +209,6 @@ function svgRoot(cls, w, h, body, defs = '') {
     (defs ? `<defs>${defs}</defs>` : '') + body + '</svg>';
 }
 
-// ─── Data access ──────────────────────────────────────────────────────────────
-
-function mappingPairs(snapshot) {
-  const { expandPaths } = require('./data-rules');
-  const e = snapshot.entries['allergy-mapping'];
-  if (!e) throw new Error('snapshot: entry "allergy-mapping" is missing');
-  return e.values.map(v => expandPaths(v, e.header));
-}
-
 // ─── Figures (layouts: docs/strand-rules.md, approved at the 1.4 and 1.5 gates) ─
 
 /**
@@ -292,57 +280,6 @@ function heroField(snapshot, { layout = 'wide', phase = 0, textZone, hooks = tru
   return svgRoot(`fig fig-field fig-field--${layout}`, L.w, L.h, body);
 }
 
-/** openFHIR: the mapping pairs, each FHIR path joined to its openEHR path by a fire strand. */
-function openfhirFigure(snapshot, { t = 1, hooks = true } = {}) {
-  const pairs = mappingPairs(snapshot);
-  const W = 360, top = 44, row = 66, H = top + row * pairs.length + 6;
-  const defs = `<linearGradient id="fire" x1="0" y1="0" x2="1" y2="0"><stop offset="0" stop-color="${FIRE[0]}"/><stop offset=".55" stop-color="${FIRE[1]}"/><stop offset="1" stop-color="${FIRE[2]}"/></linearGradient>`;
-  let body = label(0, 12, 'FHIR R4 · ' + pairs[0].fhir.split('.')[0], 10, { fill: '#56697a', cls: 'fig-head' }) +
-    label(W, 28, pairs[0].archetype, 10, { anchor: 'end', fill: '#56697a', cls: 'fig-head' });
-  // Draw motion (commit 1.6): each strand is masked by a stroked copy of its
-  // centre line (pathLength 1). Without motion the stroke is solid, so the
-  // mask shows the whole strand; motion.js animates stroke-dashoffset 1 -> 0.
-  let masks = '';
-  body += '<g class="fig-strands" data-motion="draw" data-motion-start="view">';
-  pairs.forEach((p, i) => {
-    const y = top + i * row;
-    const o = outline([10, y + 17], [W - 10, y + 43], { width: 13, t, hook: hooks ? 'right' : null });
-    masks += `<mask id="ofhir-draw-${i}" maskUnits="userSpaceOnUse" x="0" y="0" width="${W}" height="${H}">` +
-      `<path class="draw-axis" d="${o.axis}" fill="none" stroke="#fff" stroke-width="20" pathLength="1"/></mask>`;
-    body += `<path class="strand" fill="url(#fire)" mask="url(#ofhir-draw-${i})" d="${o.d}"/>`;
-  });
-  body += '</g><g class="fig-labels">';
-  pairs.forEach((p, i) => {
-    const y = top + i * row;
-    body += label(0, y + 12, p.fhir, 11) + label(W, y + 56, p.openehr, 11, { anchor: 'end' });
-  });
-  body += '</g>';
-  return svgRoot('fig fig-openfhir', W, H, body, defs + masks);
-}
-
-/** Unio: one query fanning out to three repositories, one unreachable, the result partial. */
-function unioFigure(snapshot, { t = 1 } = {}) {
-  const e = snapshot.entries['unio-federation'];
-  if (!e) throw new Error('snapshot: entry "unio-federation" is missing');
-  const v = e.values;
-  const W = 360, H = 290, origin = [14, 150];
-  const ends = [[300, 66], [300, 150], [300, 234]];
-  const fills = [UNIO.navy, UNIO.teal, UNIO.deep];
-  let body = label(0, 18, v.query, 11) + '<g class="fig-strands" data-motion="fanout" data-motion-start="view">';
-  v.repositories.forEach((r, i) => {
-    const down = r.status === 'unreachable';
-    body += `<path class="strand${down ? ' strand--down' : ''}" fill="${down ? UNIO.hair : fills[i]}" d="${outline(origin, ends[i], { width: 18, t }).d}"/>`;
-  });
-  body += '</g><g class="fig-labels">';
-  v.repositories.forEach((r, i) => {
-    const down = r.status === 'unreachable';
-    body += label(W, ends[i][1] - 16, r.label, 11, { anchor: 'end' }) +
-      label(W, ends[i][1] + 22, r.status, 10, { anchor: 'end', fill: down ? '#56697a' : INK });
-  });
-  body += label(0, H - 8, v.result, 11) + '</g>';
-  return svgRoot('fig fig-unio', W, H, body);
-}
-
 /** Divider: a hairline strand (its margin note went in the plain-language pass, P1). */
 function divider() {
   const W = 1200, H = 28;
@@ -374,6 +311,6 @@ function cardArt() {
 
 module.exports = {
   PROFILE, BLADE, GAP, NOTCH, HOOK,
-  strand, bundle, outline, heroField, openfhirFigure, unioFigure, divider, cardArt,
+  strand, bundle, outline, heroField, divider, cardArt,
   polygonHitsRect, labelBox,
 };

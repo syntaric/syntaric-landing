@@ -12,7 +12,6 @@ test('a strand is one closed path', () => {
 
 test('output is deterministic', () => {
   assert.strictEqual(strands.heroField(snapshot), strands.heroField(snapshot));
-  assert.strictEqual(strands.openfhirFigure(snapshot), strands.openfhirFigure(snapshot));
 });
 
 test('a bundle has one path per strand', () => {
@@ -36,7 +35,7 @@ test('the hero field throws when geometry enters the text zone', () => {
 
 test('every figure is aria-hidden and has a viewBox', () => {
   for (const svg of [strands.heroField(snapshot), strands.heroField(snapshot, { layout: 'narrow' }),
-    strands.openfhirFigure(snapshot), strands.unioFigure(snapshot), strands.divider()]) {
+    strands.divider()]) {
     assert.match(svg, /^<svg [^>]*viewBox="0 0 \d+ \d+"[^>]*aria-hidden="true" focusable="false"/);
     assert.doesNotMatch(svg, /<title>/);
   }
