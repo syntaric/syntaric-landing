@@ -26,15 +26,19 @@ const ALLOWED_HOSTS = new Set(['syntaric.com', 'gc.zgo.at', 'syntaric.goatcounte
 // Documented exceptions (decision E2): URL prefixes allowed despite the host rule.
 const HOST_EXCEPTIONS = ['https://player.vimeo.com/video/1183048650'];
 
-// Generated pages: index.html, blog/index.html and blog/<slug>/index.html.
+// Generated pages: index.html, and <section>/index.html and
+// <section>/<slug>/index.html for the blog and careers.
 function listPages(root) {
   const pages = ['index.html'];
-  const blog = path.join(root, 'blog');
-  for (const e of fs.readdirSync(blog, { withFileTypes: true })) {
-    if (!e.isDirectory() || e.name === 'posts') continue;
-    if (fs.existsSync(path.join(blog, e.name, 'index.html'))) pages.push(`blog/${e.name}/index.html`);
+  for (const [section, sources] of [['blog', 'posts'], ['careers', 'roles']]) {
+    const dir = path.join(root, section);
+    if (!fs.existsSync(dir)) continue;
+    for (const e of fs.readdirSync(dir, { withFileTypes: true })) {
+      if (!e.isDirectory() || e.name === sources) continue;
+      if (fs.existsSync(path.join(dir, e.name, 'index.html'))) pages.push(`${section}/${e.name}/index.html`);
+    }
+    if (fs.existsSync(path.join(dir, 'index.html'))) pages.push(`${section}/index.html`);
   }
-  if (fs.existsSync(path.join(blog, 'index.html'))) pages.push('blog/index.html');
   return pages;
 }
 

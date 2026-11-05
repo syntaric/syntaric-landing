@@ -15,7 +15,7 @@ const BUILD = path.join(REPO, 'blog', 'build.js');
 
 function copyRepo() {
   const root = fs.mkdtempSync(path.join(os.tmpdir(), 'build-check-'));
-  for (const item of ['index.html', 'sitemap.xml', 'assets', 'partials', 'blog', 'data']) {
+  for (const item of ['index.html', 'sitemap.xml', 'assets', 'partials', 'blog', 'careers', 'data']) {
     fs.cpSync(path.join(REPO, item), path.join(root, item), { recursive: true });
   }
   // Bring the copy in line with the current sources first.

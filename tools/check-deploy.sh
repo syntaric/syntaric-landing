@@ -37,6 +37,14 @@ for md in "$ROOT"/blog/posts/*.md; do
   expect 404 "$BASE/blog/posts/$name.html"
 done
 
+# Careers: the listing returns 200, the role sources 404.
+expect 200 "$BASE/careers/"
+for md in "$ROOT"/careers/roles/*.md; do
+  name="$(basename "$md" .md)"
+  expect 404 "$BASE/careers/roles/$name.md"
+  expect 404 "$BASE/careers/roles/$name.html"
+done
+
 # Must return 404: private files and build inputs.
 for path in \
   /blog/articles-to-copy.csv \

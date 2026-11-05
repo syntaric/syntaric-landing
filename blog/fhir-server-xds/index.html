@@ -360,6 +360,35 @@ nav {
     }
 }
 
+/* ─── HIRING STRIP ────────────────────────────────────────── */
+/* Above the header while a role is open (partials/hiring-strip.html);
+   it scrolls away, the header stays sticky. Phones get the short text. */
+.hiring-strip {
+    background: var(--panel);
+    border-bottom: 1px solid var(--hair);
+    font-size: var(--t-xs);
+    line-height: 1.4;
+    color: var(--ink-2);
+}
+
+.hiring-strip p {
+    padding: 7px 0;
+    text-align: center;
+}
+
+.hiring-strip a {
+    color: var(--ink);
+    text-decoration: underline;
+    text-decoration-color: var(--rule);
+    text-underline-offset: 3px;
+}
+
+@media (max-width: 640px) {
+    .hiring-strip-long {
+        display: none;
+    }
+}
+
 /* ─── FOOTER ──────────────────────────────────────────────── */
 footer {
     background: var(--ink);
@@ -981,10 +1010,87 @@ header {
 .post-meta {
     margin-top: var(--s-3);
 }
+
+/* ─── CAREERS ───────────────────────────────────────────────── */
+/* Careers pages reuse the post and listing styles above. */
+.roles-list {
+    list-style: none;
+    max-width: 44rem;
+}
+
+.roles-list li {
+    border-bottom: 1px solid var(--hair);
+}
+
+.role-card {
+    display: block;
+    padding: var(--s-6) 0;
+    color: inherit;
+    text-decoration: none;
+}
+
+.roles-list li:first-child .role-card {
+    padding-top: 0;
+}
+
+.role-card .post-title {
+    margin-top: 0;
+    font-size: var(--t-xl);
+    line-height: 1.2;
+}
+
+.role-card .post-excerpt {
+    font-size: var(--t-m);
+}
+
+.role-card:hover .post-title {
+    text-decoration: underline;
+    text-decoration-color: var(--rule);
+    text-underline-offset: 4px;
+}
+
+.roles-none,
+.roles-how {
+    max-width: var(--measure);
+}
+
+.roles-how {
+    margin-top: var(--s-8);
+    padding-top: var(--s-5);
+    border-top: 1px solid var(--ink);
+}
+
+.roles-how h2 {
+    font-size: var(--t-l);
+    line-height: 1.25;
+}
+
+.roles-how p {
+    margin-top: var(--s-3);
+    color: var(--ink-2);
+}
+
+.role-facts dt {
+    margin-top: var(--s-3);
+}
+
+.role-facts dt:first-child {
+    margin-top: 0;
+}
+
+.role-facts dd {
+    font-size: var(--t-s);
+    line-height: 1.5;
+}
     </style>
 </head>
 <body>
 
+    <div class="hiring-strip">
+        <div class="container">
+            <p>We're hiring<span class="hiring-strip-long">: a software architect, and an integration specialist</span>. <a href="/careers/" data-goatcounter-click="strip-careers">See open roles</a></p>
+        </div>
+    </div>
     <header>
         <nav class="container" aria-label="Main">
             <a href="/" class="logo">
@@ -1201,6 +1307,7 @@ capable architecture that meets all our requirements.</p>
                         <li><a href="/#products">Products</a></li>
                         <li><a href="/#writing">Writing</a></li>
                         <li><a href="/blog/">Blog</a></li>
+                        <li><a href="/careers/">Careers</a></li>
                         <li><a href="/#contact">Contact</a></li>
                     </ul>
                 </nav>

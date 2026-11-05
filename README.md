@@ -16,6 +16,7 @@ assets/
 partials/
   nav.html          Shared header and mobile menu
   footer.html       Shared footer
+  hiring-strip.html "We're hiring" strip above the header
 tools/
   markers.js        Marker-region replacement used by the build
   check-links.js    Link, anchor and sitemap-baseline check
@@ -29,6 +30,11 @@ images/             Diagrams and product images
 blog/
   build.js          Site build script
   posts/            Markdown source files (edit these; not published)
+  index.html        Generated — do not edit by hand
+  <slug>/
+    index.html      Generated — do not edit by hand
+careers/
+  roles/            Markdown source for each open role (not published)
   index.html        Generated — do not edit by hand
   <slug>/
     index.html      Generated — do not edit by hand
@@ -65,6 +71,7 @@ anything inside is overwritten on the next build.
 | `<!-- @css -->…<!-- /@css -->` | `assets/site.css` (`@shared` + `@page home`) |
 | `<!-- @nav -->…<!-- /@nav -->` | `partials/nav.html` |
 | `<!-- @footer -->…<!-- /@footer -->` | `partials/footer.html` |
+| `<!-- @careers-line -->…<!-- /@careers-line -->` | the number of open roles in `careers/roles/` |
 
 To change styles, edit `assets/site.css`. Its three marker comments,
 `/* @shared */`, `/* @page home */` and `/* @page blog */`, split it: the
@@ -134,6 +141,46 @@ git add blog/posts/ blog/index.html blog/<your-slug>/ sitemap.xml
 git commit -m "Add post: your post title"
 git push
 ```
+
+---
+
+## Posting a job
+
+Add `careers/roles/YYYY-MM-DD-role-slug.md`:
+
+```yaml
+---
+title: Software developer, products
+slug: software-developer
+summary: One or two sentences for the listing card.
+description: Under 155 characters, for search results and link previews.
+location: Remote within Europe, with occasional travel
+employment: Full-time, employed or as a contractor
+employmentType: [FULL_TIME, CONTRACTOR]
+pay: €3,500 gross per month
+salary: 3500
+salaryUnit: MONTH
+order: 1
+date: 2026-11-05
+publish: true
+---
+```
+
+`order` (optional) sets the position on the listing, lowest first. The body is Markdown, as in a blog post. The build writes
+`careers/<slug>/index.html` with JobPosting data for Google's job search
+(`salary`, `salaryUnit` and `employmentType` feed it; the applicant countries
+for "remote within Europe" are `EUROPE` in `blog/build.js`), a share card,
+the `/careers/` listing and the sitemap entry. The home page's contact section
+shows the number of open roles.
+
+While at least one role is open, every page except the careers pages shows
+the strip in `partials/hiring-strip.html` above the header. Its wording names
+the roles, so update it when the roles change; it disappears by itself when
+no role is open.
+
+To close a role, set `publish: false` (the page stays, marked `noindex`, and
+leaves the listing and the sitemap) or delete the file and its generated
+`careers/<slug>/` folder.
 
 ---
 

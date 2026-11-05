@@ -8,6 +8,7 @@ exclude:
   - partials/
   - docs/
   - blog/posts/
+  - careers/roles/
   - blog/articles-to-copy.csv
   - etc/syntaric_12.2025.pdf
   - node_modules/

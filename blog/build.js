@@ -2,9 +2,11 @@
 /**
  * Syntaric site builder
  *
- * Reads blog/posts/*.md, assets/site.css and partials/*.html, then writes:
+ * Reads blog/posts/*.md, careers/roles/*.md, assets/site.css and
+ * partials/*.html, then writes:
  *   - blog/<slug>/index.html  (one per post)
  *   - blog/index.html          (listing page)
+ *   - careers/<slug>/index.html and careers/index.html (open roles)
  *   - sitemap.xml
  *   - the marker regions of index.html (css, nav, footer); everything
  *     outside the markers is hand-edited (decision #13)
@@ -33,6 +35,8 @@ const ROOT_ARG  = ARGS.indexOf('--root');
 const ROOT      = ROOT_ARG >= 0 ? path.resolve(ARGS[ROOT_ARG + 1]) : path.resolve(__dirname, '..');
 const BLOG_DIR  = path.join(ROOT, 'blog');
 const POSTS_DIR = path.join(BLOG_DIR, 'posts');
+const CAREERS_DIR = path.join(ROOT, 'careers');
+const ROLES_DIR   = path.join(CAREERS_DIR, 'roles');
 
 // ─── Helpers ──────────────────────────────────────────────────────────────────
 
@@ -211,10 +215,19 @@ const CSS     = loadCss();
 const NAV     = loadPartial('nav.html');
 const FOOTER  = loadPartial('footer.html');
 const POST_CONTACT = loadPartial('post-contact.html');
+const HIRING_STRIP = loadPartial('hiring-strip.html');
+const ROLES   = loadRoles();
+
+/** The strip above the header, while at least one role is open. */
+function hiring(root) {
+  return ROLES.some(r => r.published) ? fill(HIRING_STRIP, { root }) + '\n' : '';
+}
 
 /** Nav and footer for blog pages: root-absolute links, Blog marked current. */
-const BLOG_NAV    = fill(NAV, { root: '/', blogCurrent: ' aria-current="page"' });
+const BLOG_NAV    = fill(NAV, { root: '/', blogCurrent: ' aria-current="page"', hiring: hiring('/') });
 const BLOG_FOOTER = fill(FOOTER, { root: '/' });
+/** Careers pages share the blog footer; no header item is current, no strip. */
+const CAREERS_NAV = fill(NAV, { root: '/', blogCurrent: '', hiring: '' });
 const BLOG_STYLE  = `<style>\n${CSS.shared}\n\n${CSS.blog}\n    </style>`;
 
 /** Text-face preload and GoatCounter (decision #12), on every blog page. */
@@ -493,6 +506,288 @@ ${BLOG_FOOTER}
 </html>`;
 }
 
+// ─── Careers ──────────────────────────────────────────────────────────────────
+// One page per role, so each can carry JobPosting data (Google reads it only
+// on a role's own page), and a listing at /careers/. Both use the blog styles.
+
+/** "Remote within Europe": the countries applicants may live in (JobPosting). */
+const EUROPE = [
+  'Austria', 'Belgium', 'Bulgaria', 'Croatia', 'Cyprus', 'Czechia', 'Denmark', 'Estonia',
+  'Finland', 'France', 'Germany', 'Greece', 'Hungary', 'Ireland', 'Italy', 'Latvia',
+  'Lithuania', 'Luxembourg', 'Malta', 'Netherlands', 'Poland', 'Portugal', 'Romania',
+  'Slovakia', 'Slovenia', 'Spain', 'Sweden', 'Iceland', 'Liechtenstein', 'Norway',
+  'Switzerland', 'United Kingdom',
+];
+
+const CAREERS_DESC = 'Open roles at Syntaric, a small healthcare interoperability consultancy. Remote within Europe.';
+
+/**
+ * Role front matter is full YAML (block lists, timestamps), because editors
+ * rewrite it that way. Dates are cut to YYYY-MM-DD.
+ */
+function parseRoleFrontmatter(src) {
+  src = src.replace(/\r\n/g, '\n').replace(/\r/g, '\n');
+  const match = src.match(/^---\n([\s\S]*?)\n---\n([\s\S]*)$/);
+  if (!match) throw new Error('Missing or malformed frontmatter (expected --- ... ---)');
+  const meta = require('js-yaml').load(match[1]) || {};
+  for (const key of ['date', 'updated']) {
+    if (meta[key] instanceof Date) meta[key] = meta[key].toISOString();
+    if (meta[key]) meta[key] = String(meta[key]).slice(0, 10);
+  }
+  return { meta, body: match[2] };
+}
+
+/**
+ * Every role in careers/roles/*.md, in listing order: front matter `order`
+ * (lowest first), then slug. Read once, before the nav is filled.
+ */
+function loadRoles() {
+  if (!fs.existsSync(ROLES_DIR)) return [];
+  const roles = fs.readdirSync(ROLES_DIR).filter(f => f.endsWith('.md')).map(file => {
+    const { meta, body } = parseRoleFrontmatter(fs.readFileSync(path.join(ROLES_DIR, file), 'utf8'));
+    const slug = meta.slug || file.replace(/^\d{4}-\d{2}-\d{2}-/, '').replace(/\.md$/, '');
+    meta._slug = slug;
+    for (const key of ['title', 'summary', 'location', 'employment', 'pay', 'salary', 'date']) {
+      if (!meta[key]) throw new Error(`careers/roles/${file}: front matter needs "${key}"`);
+    }
+    return { meta, body, slug, published: meta.publish !== false };
+  });
+  return roles.sort((a, b) => (Number(a.meta.order) || 99) - (Number(b.meta.order) || 99) || a.slug.localeCompare(b.slug));
+}
+
+/** mailto: link for applications, with the role as the subject. */
+function applyHref(meta) {
+  return `mailto:info@syntaric.com?subject=${encodeURIComponent(meta.title)}`;
+}
+
+function buildRolePage(meta, bodyHtml) {
+  const slug     = meta._slug;
+  const canonUrl = `https://syntaric.com/careers/${slug}/`;
+  const desc     = esc(meta.description || meta.summary || '');
+  const imgUrl   = meta.publish === false ? 'https://syntaric.com/assets/share/home.png' : `${canonUrl}share.png`;
+  const types    = Array.isArray(meta.employmentType) ? meta.employmentType : [meta.employmentType].filter(Boolean);
+
+  const jsonLd = JSON.stringify({
+    "@context": "https://schema.org",
+    "@type": "JobPosting",
+    "title": meta.title,
+    "description": bodyHtml,
+    "datePosted": meta.date,
+    "employmentType": types,
+    "hiringOrganization": {
+      "@type": "Organization",
+      "name": "Syntaric",
+      "@id": "https://syntaric.com/#organization",
+      "sameAs": "https://syntaric.com/",
+      "logo": "https://syntaric.com/assets/brand/syntaric-512.png"
+    },
+    "jobLocationType": "TELECOMMUTE",
+    "applicantLocationRequirements": EUROPE.map(name => ({ "@type": "Country", "name": name })),
+    "baseSalary": {
+      "@type": "MonetaryAmount",
+      "currency": "EUR",
+      "value": { "@type": "QuantitativeValue", "value": Number(meta.salary), "unitText": meta.salaryUnit || 'MONTH' }
+    },
+    "directApply": false
+  }, null, 2);
+
+  return `<!DOCTYPE html>
+<html lang="en">
+<head>
+${JS_CLASS_SCRIPT}
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>${esc(meta.title)} | Careers | Syntaric</title>
+    <meta name="description" content="${desc}">
+    <meta name="robots" content="${meta.publish === false ? 'noindex, nofollow' : 'index, follow'}">
+    <link rel="canonical" href="${canonUrl}">
+
+    <!-- Open Graph -->
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="${canonUrl}">
+    <meta property="og:title" content="${esc(meta.title)} | Syntaric">
+    <meta property="og:description" content="${desc}">
+    <meta property="og:image" content="${imgUrl}">
+    <meta property="og:image:width" content="1200">
+    <meta property="og:image:height" content="627">
+    <meta property="og:image:alt" content="${esc(meta.title)}">
+    <meta property="og:site_name" content="Syntaric">
+
+    <!-- Twitter Card -->
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="${esc(meta.title)} | Syntaric">
+    <meta name="twitter:description" content="${desc}">
+    <meta name="twitter:image" content="${imgUrl}">
+
+    <!-- JSON-LD: JobPosting -->
+    <script type="application/ld+json">${jsonLd}</script>
+
+    <link rel="icon" type="image/png" href="../../favicon-96x96.png" sizes="96x96" />
+    <link rel="icon" type="image/svg+xml" href="../../favicon.svg" />
+    <link rel="shortcut icon" href="../../favicon.ico" />
+    <link rel="apple-touch-icon" sizes="180x180" href="../../apple-touch-icon.png" />
+    ${FONT_AND_ANALYTICS}
+    ${BLOG_STYLE}
+</head>
+<body>
+
+${CAREERS_NAV}
+
+    <main>
+    <!-- ─── ROLE HEADER ─── -->
+    <section class="article-hero">
+        <div class="container">
+            <nav class="breadcrumb" aria-label="Breadcrumb">
+                <a href="/">Home</a>
+                <span aria-hidden="true">/</span>
+                <a href="/careers/">Careers</a>
+                <span aria-hidden="true">/</span>
+                <span class="breadcrumb-current">${esc(meta.title)}</span>
+            </nav>
+            <p class="label">Open role</p>
+            <h1>${esc(meta.title)}</h1>
+            <p class="article-meta">
+                <span>${esc(meta.location)}</span>
+                <span>${esc(meta.employment)}</span>
+                <span class="article-meta-name">${esc(meta.pay)}</span>
+            </p>
+        </div>
+    </section>
+
+    <!-- ─── ROLE ─── -->
+    <div class="container">
+        <div class="article-layout">
+            <article class="article-body">
+${bodyHtml}
+            <aside class="post-contact" aria-label="Apply">
+                <p>Interested? Write to us at info@syntaric.com.</p>
+                <div class="post-contact-links">
+                    <a class="btn" href="${applyHref(meta)}" data-goatcounter-click="apply-${slug}">Apply by email</a>
+                    <a class="text-link" href="/careers/">All open roles</a>
+                </div>
+            </aside>
+            </article>
+
+            <aside class="article-sidebar">
+                <div class="sidebar-section">
+                    <p class="label sidebar-title">At a glance</p>
+                    <dl class="role-facts">
+                        <dt class="label">Where</dt><dd>${esc(meta.location)}</dd>
+                        <dt class="label">Type</dt><dd>${esc(meta.employment)}</dd>
+                        <dt class="label">Pay</dt><dd>${esc(meta.pay)}</dd>
+                        <dt class="label">Posted</dt><dd>${esc(formatDate(meta.date))}</dd>
+                    </dl>
+                </div>
+
+                <div class="sidebar-section">
+                    <p class="label sidebar-title">Apply</p>
+                    <a href="${applyHref(meta)}" class="text-link">info@syntaric.com</a>
+                </div>
+
+                <div class="sidebar-section">
+                    <p class="label sidebar-title">Share</p>
+                    <a href="https://www.linkedin.com/sharing/share-offsite/?url=${encodeURIComponent(canonUrl)}" target="_blank" rel="noopener" class="text-link">Share on LinkedIn</a>
+                </div>
+            </aside>
+        </div>
+    </div>
+    </main>
+
+${BLOG_FOOTER}
+
+</body>
+</html>`;
+}
+
+function buildCareersIndex(roles) {
+  const items = roles.map(r => `
+                <li>
+                    <a href="/careers/${r.slug}/" class="role-card">
+                        <h2 class="post-title">${esc(r.meta.title)}</h2>
+                        <p class="post-excerpt">${esc(r.meta.summary || '')}</p>
+                        <p class="label post-meta">${esc(r.meta.location)} · ${esc(r.meta.pay)}</p>
+                    </a>
+                </li>`).join('');
+  const list = roles.length
+    ? `<ul class="roles-list">${items}
+            </ul>`
+    : `<p class="roles-none">We have no open roles right now. If you would like to work with us anyway, write to <a class="text-link" href="mailto:info@syntaric.com">info@syntaric.com</a>.</p>`;
+
+  return `<!DOCTYPE html>
+<html lang="en">
+<head>
+    ${JS_CLASS_SCRIPT}
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Careers | Syntaric</title>
+    <meta name="description" content="${esc(CAREERS_DESC)}">
+    <meta name="robots" content="index, follow">
+    <link rel="canonical" href="https://syntaric.com/careers/">
+
+    <!-- Open Graph -->
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://syntaric.com/careers/">
+    <meta property="og:title" content="Careers | Syntaric">
+    <meta property="og:description" content="${esc(CAREERS_DESC)}">
+    <meta property="og:image" content="https://syntaric.com/careers/share.png">
+    <meta property="og:image:width" content="1200">
+    <meta property="og:image:height" content="627">
+    <meta property="og:image:alt" content="Careers at Syntaric">
+    <meta property="og:site_name" content="Syntaric">
+
+    <!-- Twitter Card -->
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="Careers | Syntaric">
+    <meta name="twitter:description" content="${esc(CAREERS_DESC)}">
+    <meta name="twitter:image" content="https://syntaric.com/careers/share.png">
+
+    <link rel="icon" type="image/png" href="../favicon-96x96.png" sizes="96x96" />
+    <link rel="icon" type="image/svg+xml" href="../favicon.svg" />
+    <link rel="shortcut icon" href="../favicon.ico" />
+    <link rel="apple-touch-icon" sizes="180x180" href="../apple-touch-icon.png" />
+    <link rel="manifest" href="../site.webmanifest" />
+    ${FONT_AND_ANALYTICS}
+    ${BLOG_STYLE}
+</head>
+<body>
+
+${CAREERS_NAV}
+
+    <main>
+    <!-- ─── HEADER ─── -->
+    <section class="blog-hero">
+        <div class="container">
+            <h1>Careers</h1>
+            <p class="blog-hero-desc">We are a small healthcare interoperability consultancy. We help hospitals, regional care networks and national health programmes share patient data, and we build two products, openFHIR and Unio. We work remotely, across Europe.</p>
+        </div>
+    </section>
+
+    <!-- ─── ROLES ─── -->
+    <section class="blog-posts">
+        <div class="container">
+            ${list}
+
+            <div class="roles-how">
+                <h2>How we hire</h2>
+                <p>Email info@syntaric.com with your CV or LinkedIn profile and a few lines about something you have worked on. Then: a 30-minute call to get to know each other, a technical conversation about real work, and meeting the team. We reply to every application within a week.</p>
+            </div>
+        </div>
+    </section>
+    </main>
+
+${BLOG_FOOTER}
+
+</body>
+</html>`;
+}
+
+/** Home page, contact section: a line pointing to the open roles. */
+function careersLineHtml(roles) {
+  const n = roles.length;
+  const text = n === 0 ? 'No open roles right now' : `${n} open role${n === 1 ? '' : 's'}`;
+  return `<dt>Careers</dt><dd><a href="careers/" data-goatcounter-click="contact-careers">${text}</a></dd>`;
+}
+
 // ─── Home page: latest posts ──────────────────────────────────────────────────
 
 /** The 3 newest published posts, by front matter date; ties by slug, descending. */
@@ -605,8 +900,19 @@ function main() {
   outputs.set(path.join(BLOG_DIR, 'index.html'), buildIndexPage(publishedPosts));
   log(`  ✓ blog/index.html  (${publishedPosts.length} post${publishedPosts.length !== 1 ? 's' : ''})`);
 
+  // Careers: one page per role (careers/roles/*.md), and the listing.
+  for (const { meta, body, slug, published } of ROLES) {
+    currentPageUrl = `https://syntaric.com/careers/${slug}/`;
+    outputs.set(path.join(CAREERS_DIR, slug, 'index.html'), buildRolePage(meta, marked.parse(body)));
+    log(`  ✓ careers/${slug}/index.html${published ? '' : '  (draft — not listed)'}`);
+  }
+  const openRoles = ROLES.filter(r => r.published);
+  outputs.set(path.join(CAREERS_DIR, 'index.html'), buildCareersIndex(openRoles));
+  log(`  ✓ careers/index.html  (${openRoles.length} open role${openRoles.length !== 1 ? 's' : ''})`);
+
   // sitemap.xml (published only). Dates come from front matter, never the
-  // clock, so --check gives the same answer on any day. "/" has no lastmod.
+  // clock, so --check gives the same answer on any day. "/" and "/careers/"
+  // have no lastmod (the listing changes when a role is removed, too).
   const postDates = publishedPosts.map(p => lastModified(p.meta, p.slug));
   const blogDate  = postDates.slice().sort().pop();
   const postUrls = publishedPosts.map((p, i) => `
@@ -615,6 +921,13 @@ function main() {
     <lastmod>${postDates[i]}</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.7</priority>
+  </url>`).join('');
+  const roleUrls = openRoles.map(r => `
+  <url>
+    <loc>https://syntaric.com/careers/${r.slug}/</loc>
+    <lastmod>${lastModified(r.meta, r.slug)}</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
   </url>`).join('');
 
   const sitemap = `<?xml version="1.0" encoding="UTF-8"?>
@@ -630,15 +943,22 @@ function main() {
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
   </url>${postUrls}
+  <url>
+    <loc>https://syntaric.com/careers/</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>${roleUrls}
 </urlset>`;
   outputs.set(path.join(ROOT, 'sitemap.xml'), sitemap);
-  log(`  ✓ sitemap.xml  (${publishedPosts.length + 2} URLs)`);
+  log(`  ✓ sitemap.xml  (${publishedPosts.length + openRoles.length + 3} URLs)`);
 
   // Share cards (commit 1.7): PNG buffers, compared byte for byte.
   outputs.set(path.join(ROOT, 'assets', 'share', 'home.png'), renderCard({ title: 'Boutique healthcare interoperability consultancy', kicker: 'syntaric.com' }));
   outputs.set(path.join(ROOT, 'assets', 'share', 'blog.png'), renderCard({ title: 'Blog', kicker: 'Articles from our FHIR, openEHR and IHE projects' }));
   for (const p of publishedPosts) outputs.set(path.join(BLOG_DIR, p.slug, 'share.png'), renderCard({ title: p.meta.title }));
-  log(`  ✓ share cards  (${publishedPosts.length + 2})`);
+  outputs.set(path.join(CAREERS_DIR, 'share.png'), renderCard({ title: 'Careers', kicker: 'Open roles at Syntaric' }));
+  for (const r of openRoles) outputs.set(path.join(CAREERS_DIR, r.slug, 'share.png'), renderCard({ title: r.meta.title, kicker: 'Open role at Syntaric' }));
+  log(`  ✓ share cards  (${publishedPosts.length + openRoles.length + 3})`);
 
   // Strand figures, from the cleaned snapshot.
   const snapshot = loadSnapshot(log);
@@ -658,15 +978,16 @@ function main() {
   const indexPath = path.join(ROOT, 'index.html');
   const homeHtml = replaceRegions(fs.readFileSync(indexPath, 'utf8'), {
     css:    `\n    <style>\n${CSS.shared}\n\n${CSS.home}\n    </style>\n    `,
-    nav:    `\n${fill(NAV, { root: '', blogCurrent: '' })}\n`,
+    nav:    `\n${fill(NAV, { root: '', blogCurrent: '', hiring: hiring('') })}\n`,
     footer: `\n${fill(FOOTER, { root: '' })}\n`,
     'latest-posts': latestPostsHtml(publishedPosts),
+    'careers-line': careersLineHtml(openRoles),
     'hero-field-wide': `\n                ${fieldWide}\n                `,
     'hero-field-narrow': `\n                ${fieldNarrow}\n                `,
     ...Object.fromEntries(dividers.map((d, i) => [`divider-${i + 1}`, d])),
   });
   outputs.set(indexPath, homeHtml);
-  log('  ✓ index.html  (marker regions: css, nav, footer, latest-posts, hero, dividers)');
+  log('  ✓ index.html  (marker regions: css, nav, footer, latest-posts, careers-line, hero, dividers)');
 
   // TODO-OWNER rule: no published file may carry the marker.
   const todo = [];
